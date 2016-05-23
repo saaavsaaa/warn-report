@@ -6,8 +6,6 @@ import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.client.producer.SendStatus;
 import com.alibaba.rocketmq.common.message.Message;
 import io.netty.util.internal.ConcurrentSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -19,7 +17,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by ldb on 2016/5/17.
  */
 public final class ProducerClient {
-    private static final Logger logger = LoggerFactory.getLogger(ProducerClient.class);
     private static AtomicReference<ProducerDouble> ar = new AtomicReference<ProducerDouble>();
     private volatile static ProducerDouble producer = null;
     private static ProducerPropeties properties = null;
@@ -34,9 +31,9 @@ public final class ProducerClient {
             producer = new ProducerDouble(properties.getAddresses(), properties.getProducerGroup());
             producer.start(properties.getRepeatDelay(), properties.getRepeatPeriod());
         } catch (MQClientException e) {
-            logger.error("reason : ProducerClient instance error", e);
+            System.out.println("reason : ProducerClient instance error" + e.getErrorMessage());
         } catch (IllegalArgumentException e) {
-            logger.error("reason : rocket.properties srv.addresses don't be assigned or repeat error", e);
+            System.out.println("reason : rocket.properties srv.addresses don't be assigned or repeat error" + e.getMessage());
         }
         return producer;
     }
@@ -44,7 +41,7 @@ public final class ProducerClient {
     public static boolean send(final String key, final String content) {
         ProducerClient.getInstance();
         Message msg = ProducerDouble.buildMessage(properties.getTopic(), properties.getTag(), key, content);
-        logger.info("case : send to rocket, topic : {}, tag : {}, key : {}, content : {}", properties.getTopic(), properties.getTag(), key, content);
+        System.out.println(String.format("case : send to rocket, topic : %s, tag : %s, key : %s, content : %s", properties.getTopic(), properties.getTag(), key, content));
         return producer.send(msg);
     }
 
@@ -52,18 +49,20 @@ public final class ProducerClient {
         if (producer != null) {
             return producer;
         }
-        ar.compareAndSet(null, buildProducer());
+        ar.compareAndSet(producer, buildProducer());
         
         return producer;
     }
 
     public static void main(String[] args) {
-        send("a1", "{'a12':'121'}");
+        int a = 2;
+        for (int i = 0; i < a; i++) {
+            send("a1", "{'a12':'121'}");
+        }
     }
 }
 
 class ProducerDouble {
-    private static final Logger logger = LoggerFactory.getLogger(ProducerDouble.class);
     final ConcurrentSet<DefaultMQProducer> producers = new ConcurrentSet<DefaultMQProducer>();
     final ConcurrentSet<Message> errorSendeds = new ConcurrentSet<Message>();
 
@@ -72,7 +71,7 @@ class ProducerDouble {
 
     public ProducerDouble(final List<String> addresses, final String producerGroup) throws MQClientException {
         if (addresses == null || addresses.isEmpty()) {
-            logger.error("case : Producer init error, reason : the arg addresses should have value");
+            System.out.println("case : Producer init error, reason : the arg addresses should have value");
             throw new IllegalArgumentException(" the arg addresses should have value ! ");
         }
         for (int i = 0; i < addresses.size(); i++) {
@@ -94,7 +93,7 @@ class ProducerDouble {
 
     boolean send(final Message msg) {
         if (producers.isEmpty()) {
-            logger.error("case : Producer send error, reason : there isn't producer which could be used");
+            System.out.println("case : Producer send error, reason : there isn't producer which could be used");
             throw new IllegalArgumentException(" there isn't producer which could be used  ! ");
         }
 
@@ -102,12 +101,11 @@ class ProducerDouble {
         for (DefaultMQProducer one : producers) {
             try {
                 SendResult sendResult = one.send(msg);
-                logger.error("==============ip : {} , send key: {}, topic :{}", one.getClientIP(), msg.getKeys(),msg.getTopic());
                 if (sendResult.getSendStatus() != SendStatus.SEND_OK){
                     errorSendeds.add(msg);
                 }
             } catch (Exception e) {
-                logger.error("reason : producer send error", e);
+                System.out.println("reason : producer send error" + e.getMessage());
                 if (errorProducer == null) {
                     errorProducer = one;
                 } else {
@@ -136,7 +134,7 @@ class ProducerDouble {
                 errorSendeds.remove(msg);
             }
         } catch (Exception e) {
-            logger.error("reason : sendRepeat producer send error", e);
+            System.out.println("reason : sendRepeat producer send error" + e.getMessage());
         }
     }
 

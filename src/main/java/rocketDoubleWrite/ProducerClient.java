@@ -25,6 +25,17 @@ public final class ProducerClient {
     	buildProducer();
     }
 
+    public static ProducerClient getInstance()
+    {
+        return Nested.instance;
+    }
+
+    //在第一次被引用时被加载
+    static class Nested
+    {
+        private static ProducerClient instance = new ProducerClient();
+    }
+
     private static ProducerDouble buildProducer() {
         try {
             properties = new ProducerPropeties();
@@ -45,14 +56,20 @@ public final class ProducerClient {
         return producer.send(msg);
     }
 
-    private static ProducerDouble getInstance() {
+    /*private static synchronized ProducerDouble getInstance() {
         if (producer != null) {
             return producer;
         }
+        ProducerDouble pd = ar.get();
+        System.out.println("ProducerDouble : " + pd);
+        System.out.println("producer new start : " + producer);
         ar.compareAndSet(producer, buildProducer());
-        
+        System.out.println("producer new end : " + producer);
+        pd = ar.get();
+        System.out.println("ProducerDouble : " + pd);
+
         return producer;
-    }
+    }*/
 
     public static void main(String[] args) {
         int a = 2;

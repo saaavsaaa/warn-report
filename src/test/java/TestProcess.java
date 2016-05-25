@@ -19,10 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
-/**
- * Created by kyj on 2016/3/14.
- */
 public class TestProcess {
 
     //sh mqadmin updateTopic -b 192.168.3.62 -n 192.168.3.62:9876 -t 'testTopic'

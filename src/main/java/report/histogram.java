@@ -3,9 +3,6 @@ package report;
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
 
-/**
- * Created by ldb on 2016/5/12.
- */
 public class histogram {
 
     final MetricRegistry metrics = new MetricRegistry();

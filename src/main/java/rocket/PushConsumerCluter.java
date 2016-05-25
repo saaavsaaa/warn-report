@@ -8,9 +8,6 @@ import io.netty.util.internal.ConcurrentSet;
 
 import java.util.List;
 
-/**
- * Created by kyj on 2016/3/14.
- */
 public class PushConsumerCluter {
     /*final ConcurrentSet<DefaultMQPushConsumer> consumers = new ConcurrentSet<DefaultMQPushConsumer>();
 

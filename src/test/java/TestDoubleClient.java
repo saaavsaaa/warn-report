@@ -6,9 +6,6 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CountDownLatch;
 
-/**
- * Created by ldb on 2016/5/23.
- */
 public class TestDoubleClient {
     @Test
     public void send(){

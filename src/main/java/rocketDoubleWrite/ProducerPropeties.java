@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-/**
- * Created by ldb on 2016/5/18.
- */
 public class ProducerPropeties {
     private String producerGroup;
     private String topic;

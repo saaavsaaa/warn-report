@@ -1,9 +1,6 @@
 import encrypt.DescEncrypt;
 import org.junit.Test;
 
-/**
- * Created by ldb on 2016/5/13.
- */
 public class TestDescEncrypt {
 
     @Test

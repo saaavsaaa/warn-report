@@ -13,9 +13,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * Created by ldb on 2016/5/17.
- */
 public final class ProducerClient {
     private static AtomicReference<ProducerDouble> ar = new AtomicReference<ProducerDouble>();
     private volatile static ProducerDouble producer = null;

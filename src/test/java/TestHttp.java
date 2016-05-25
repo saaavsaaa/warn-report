@@ -5,10 +5,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URLEncoder;
 
-/**
- * Created by Administrator on 2015-01-04.
- */
-public class TestXian {
+public class TestHttp {
     private static final String URL = "http://localhost:9190/";
     final String loginToken = "115d522ca69ea091c63f09f5d7e5bc9c";
     final String loginUserID = "1";

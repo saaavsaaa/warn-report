@@ -6,9 +6,6 @@ import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
 
-/**
- * Created by kyj on 2016/3/14.
- */
 public class PushConsumer {
     final DefaultMQPushConsumer consumer;
 

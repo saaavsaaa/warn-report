@@ -11,9 +11,6 @@ import rocket.PullConsumerCluter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ldb on 2016/5/16.
- */
 public class TestRocketCluter {
     @Test
     public void TestSend() throws MQClientException, InterruptedException, RemotingException, MQBrokerException {

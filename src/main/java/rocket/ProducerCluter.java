@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 /**
- * Created by ldb on 2016/5/16.
+ *
  * 最终解决办法，主从切换
  * 最简单办法，记录失败消息，定时重发
  * 需要加日志

@@ -115,6 +115,7 @@ class ProducerDouble {
         for (DefaultMQProducer one : producers) {
             try {
                 SendResult sendResult = one.send(msg);
+                System.out.println(String.format("send : ip : %s, send NamesrvAddr : %s, send key: %s, topic :%s", one.getClientIP(), one.getNamesrvAddr(), msg.getKeys(), msg.getTopic()));
                 if (sendResult.getSendStatus() != SendStatus.SEND_OK){
                     errorSendeds.add(msg);
                 }
@@ -181,6 +182,7 @@ class ProducerDouble {
                     for (Message sended : errorSendeds) {
                         for (DefaultMQProducer one : producers) {
                             sendRepeat(one, sended);
+                            System.out.println(String.format("send : ip : %s, send NamesrvAddr : %s, send key: %s, topic :%s", one.getClientIP(), one.getNamesrvAddr(), sended.getKeys(), sended.getTopic()));
                         }
                     }
                 }

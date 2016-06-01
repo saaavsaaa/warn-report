@@ -1,207 +1,82 @@
 package rocketDoubleWrite;
 
 import com.alibaba.rocketmq.client.exception.MQClientException;
-import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
-import com.alibaba.rocketmq.client.producer.SendResult;
-import com.alibaba.rocketmq.client.producer.SendStatus;
 import com.alibaba.rocketmq.common.message.Message;
-import io.netty.util.internal.ConcurrentSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-
+/**
+ * Created by ldb on 2016/5/17.
+ */
 public final class ProducerClient {
-    private static AtomicReference<ProducerDouble> ar = new AtomicReference<ProducerDouble>();
-    private volatile static ProducerDouble producer = null;
+    private static final Logger logger = LoggerFactory.getLogger(ProducerClient.class);
+    
+    private volatile static IProducer producer = new ProducerSingle();
     private static ProducerPropeties properties = null;
 
-    private ProducerClient(){
+    
+    private ProducerClient(){ 
     	buildProducer();
+    }  
+    
+    public static ProducerClient getInstance()  
+    {  
+        return Nested.instance;       
+    }  
+      
+    //在第一次被引用时被加载  
+    static class Nested  
+    {  
+        private static ProducerClient instance = new ProducerClient();  
     }
-
-    public static ProducerClient getInstance()
-    {
-        return Nested.instance;
-    }
-
-    //在第一次被引用时被加载
-    static class Nested
-    {
-        private static ProducerClient instance = new ProducerClient();
-    }
-
-    private static ProducerDouble buildProducer() {
+    
+    
+    private static IProducer buildProducer() {
         try {
             properties = new ProducerPropeties();
-            producer = new ProducerDouble(properties.getAddresses(), properties.getProducerGroup());
+            producer = producer.init(properties.getAddresses(), properties.getProducerGroup());
             producer.start(properties.getRepeatDelay(), properties.getRepeatPeriod());
         } catch (MQClientException e) {
-            System.out.println("reason : ProducerClient instance error" + e.getErrorMessage());
+            logger.error("reason : ProducerClient instance error", e);
         } catch (IllegalArgumentException e) {
-            System.out.println("reason : rocket.properties srv.addresses don't be assigned or repeat error" + e.getMessage());
+            logger.error("reason : rocket.properties srv.addresses don't be assigned or repeat error", e);
         }
         return producer;
     }
 
     public static boolean send(final String key, final String content) {
         ProducerClient.getInstance();
-        Message msg = ProducerDouble.buildMessage(properties.getTopic(), properties.getTag(), key, content);
-        System.out.println(String.format("case : send to rocket, topic : %s, tag : %s, key : %s, content : %s", properties.getTopic(), properties.getTag(), key, content));
+        return send(key, content, properties.getTopic());
+    }
+
+    public static boolean send(final String key, final String content, final String topic) {
+        ProducerClient.getInstance();
+        return send(key, content, topic, properties.getTag());
+    }
+
+    public static boolean send(final String key, final String content, final String topic, final String tag) {
+        ProducerClient.getInstance();
+        Message msg = buildMessage(topic, tag, key, content);
+        logger.info("case : send to rocket, topic : {}, tag : {}, key : {}, content : {}", topic, tag, key, content);
         return producer.send(msg);
     }
 
-    /*private static synchronized ProducerDouble getInstance() {
-        if (producer != null) {
-            return producer;
-        }
-        ProducerDouble pd = ar.get();
-        System.out.println("ProducerDouble : " + pd);
-        System.out.println("producer new start : " + producer);
-        ar.compareAndSet(producer, buildProducer());
-        System.out.println("producer new end : " + producer);
-        pd = ar.get();
-        System.out.println("ProducerDouble : " + pd);
-
-        return producer;
-    }*/
-
-    public static void main(String[] args) {
-        int a = 2;
-        for (int i = 0; i < a; i++) {
-            send("a1", "{'a12':'121'}");
-        }
-    }
-}
-
-class ProducerDouble {
-    final ConcurrentSet<DefaultMQProducer> producers = new ConcurrentSet<DefaultMQProducer>();
-    final ConcurrentSet<Message> errorSendeds = new ConcurrentSet<Message>();
-
-    private int repeatDelay;
-    private int repeatPeriod;
-
-    public ProducerDouble(final List<String> addresses, final String producerGroup) throws MQClientException {
-        if (addresses == null || addresses.isEmpty()) {
-            System.out.println("case : Producer init error, reason : the arg addresses should have value");
-            throw new IllegalArgumentException(" the arg addresses should have value ! ");
-        }
-        for (int i = 0; i < addresses.size(); i++) {
-        	producers.add(buildProducer(addresses.get(i), producerGroup + i));
-        }
-        /*this.repeatDelay = repeatDelay;
-        this.repeatPeriod = repeatPeriod;
-        repeat();*/
-    }
-
-    void start(final int repeatDelay, final int repeatPeriod) throws MQClientException {
-        for (DefaultMQProducer one : producers) {
-            one.start();
-        }
-        this.repeatDelay = repeatDelay;
-        this.repeatPeriod = repeatPeriod;
-        repeat();
-    }
-
-    boolean send(final Message msg) {
-        if (producers.isEmpty()) {
-            System.out.println("case : Producer send error, reason : there isn't producer which could be used");
-            throw new IllegalArgumentException(" there isn't producer which could be used  ! ");
-        }
-
-        DefaultMQProducer errorProducer = null;
-        for (DefaultMQProducer one : producers) {
-            try {
-                SendResult sendResult = one.send(msg);
-                System.out.println(String.format("send : ip : %s, send NamesrvAddr : %s, send key: %s, topic :%s", one.getClientIP(), one.getNamesrvAddr(), msg.getKeys(), msg.getTopic()));
-                if (sendResult.getSendStatus() != SendStatus.SEND_OK){
-                    errorSendeds.add(msg);
-                }
-            } catch (Exception e) {
-                System.out.println("reason : producer send error" + e.getMessage());
-                if (errorProducer == null) {
-                    errorProducer = one;
-                } else {
-                    return false;
-                }
-            }
-        }
-
-        if (errorProducer != null) {
-            errorSendeds.add(msg);
-        }
-        return true;
-    }
-
-    /*重试全部重发，保证两个队列都是全的，完全消费任意队列都可以完整消费
-    private void addErrorProducer(final DefaultMQProducer errorProducer, final Message msg){
-        ConcurrentSet<Message> es = errorSendeds.get(errorProducer);
-        es.add(msg);
-        errorSendeds.putIfAbsent(errorProducer, es);
-    }*/
-
-    void sendRepeat(final DefaultMQProducer producer, final Message msg) {
-        try {
-            SendResult sendResult = producer.send(msg);
-            if (sendResult.getSendStatus() == SendStatus.SEND_OK) {
-                errorSendeds.remove(msg);
-            }
-        } catch (Exception e) {
-            System.out.println("reason : sendRepeat producer send error" + e.getMessage());
-        }
-    }
-
-    void shutdown() {
-        if (producers.isEmpty()) {
-            throw new IllegalArgumentException(" there isn't producer which could be used  ! ");
-        }
-        for (DefaultMQProducer one : producers) {
-            one.shutdown();
-        }
-    }
-
-    private DefaultMQProducer buildProducer(final String address, final String producerGroup) {
-        DefaultMQProducer producer = new DefaultMQProducer(producerGroup);
-        producer.setInstanceName(Long.toString(System.currentTimeMillis()));
-        producer.setNamesrvAddr(address);
-        producer.setCompressMsgBodyOverHowmuch(Integer.MAX_VALUE);
-        return producer;
-    }
-
-    private void repeat() {
-        int poolSize = 1;
-        int delay = repeatDelay;
-        int period = repeatPeriod;
-
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(poolSize);
-        Runnable runnable = new Runnable() {
-            public void run() {
-                if (!errorSendeds.isEmpty()) {
-                    for (Message sended : errorSendeds) {
-                        for (DefaultMQProducer one : producers) {
-                            sendRepeat(one, sended);
-                            System.out.println(String.format("send : ip : %s, send NamesrvAddr : %s, send key: %s, topic :%s", one.getClientIP(), one.getNamesrvAddr(), sended.getKeys(), sended.getTopic()));
-                        }
-                    }
-                }
-            }
-        };
-        executor.scheduleAtFixedRate(runnable, delay, period, TimeUnit.MILLISECONDS);
-    }
-
-    static Message buildMessage(final String topic, final String tag, final String key, final String messageBody) {
+    private static Message buildMessage(final String topic, final String tag
+            , final String key, final String messageBody) {
         Message msg = new Message();
         msg.setTopic(topic);
 
-        if (tag != null && tag.length() > 0) {
+        if(tag != null && tag.length() > 0) {
             msg.setTags(tag);
         }
-        if (key != null && key.length() > 0) {
+        if(key != null && key.length() > 0) {
             msg.setKeys(key);
         }
         msg.setBody(messageBody.getBytes());
         return msg;
+    }
+
+    public static void main(String[] args) {
+        send("201606011", "{'a12':'121'}", "testTopic", "*");
     }
 }

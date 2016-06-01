@@ -25,7 +25,7 @@ public class TestProcess {
 
     @Test
     public void TestSend() throws MQClientException, InterruptedException, RemotingException, MQBrokerException {
-        final String address = "192.168.1.45:9876";
+        final String address = "192.168.1.44:9876;192.168.1.45:9876";
         final String producerGroup = "pg";
         final String topic = "topicTest";
         final String tag = "";
@@ -40,8 +40,8 @@ public class TestProcess {
 
     @Test
     public void TestReceive() throws InterruptedException, RemotingException, MQBrokerException, MQClientException {
-        final String address = "192.168.1.44:9876";//"192.168.1.45:9876";
-        final String topic = "topicTest";
+        final String address = "192.168.1.45:9876";//"192.168.1.45:9876";
+        final String topic = "testTopic2";
 
 
         MessageListenerConcurrently listener = new MessageListenerConcurrently() {
@@ -60,7 +60,7 @@ public class TestProcess {
             }
         };
 
-        final String consumerGroup = "cgr23";
+        final String consumerGroup = "cgr1";
         final String subExpression = "*";
         PushConsumer consumer = null;
         try {

@@ -5,6 +5,7 @@ import rocketDoubleWrite.ProducerClient;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestDoubleClient {
     @Test
@@ -16,6 +17,7 @@ public class TestDoubleClient {
     }
 
     private void runTasks(int nThreads, final Runnable task) throws InterruptedException {
+        final AtomicInteger count = new AtomicInteger();
         final CountDownLatch startGate = new CountDownLatch(1);
         final CountDownLatch endGate = new CountDownLatch(nThreads);
         for (int i = 0; i < nThreads; i++) {
@@ -26,6 +28,7 @@ public class TestDoubleClient {
                         startGate.await();
                         try{
                             task.run();
+                            System.out.println(count.incrementAndGet());
                         }
                         finally{
                             endGate.countDown();
@@ -50,10 +53,11 @@ public class TestDoubleClient {
     public void test() throws InterruptedException {
         Runnable runnable = new Runnable() {
             public void run() {
-                boolean isSuccess = ProducerClient.send("a1", "{'a12':'121'}");
+                boolean isSuccess = ProducerClient.send("2016060117000", "{'a12':'121'}");
                 System.out.print(isSuccess + "\n");
             }
         };
         runTasks(100, runnable);
+        Thread.sleep(100000);
     }
 }

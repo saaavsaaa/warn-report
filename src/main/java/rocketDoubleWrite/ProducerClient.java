@@ -13,10 +13,9 @@ public final class ProducerClient {
     
     private volatile static IProducer producer = new ProducerSingle();
     private static ProducerProperties properties = null;
-
     
     private ProducerClient(){
-        logger.info("case : ProducerClient instance");
+        System.out.println("case : ProducerClient instance");
     	buildProducer();
     }  
     
@@ -24,7 +23,7 @@ public final class ProducerClient {
     {  
         return Nested.instance;       
     }  
-      
+
     //在第一次被引用时被加载  
     static class Nested  
     {  

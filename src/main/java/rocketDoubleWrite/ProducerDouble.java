@@ -27,7 +27,7 @@ public class ProducerDouble implements IProducer {
     }
 
     @Override
-    public ProducerDouble init(List<String> addresses, String producerGroup) {
+    public void init(List<String> addresses, String producerGroup) {
         if (addresses == null || addresses.isEmpty()) {
             System.out.println("case : Producer init error, reason : the arg addresses should have value");
             throw new IllegalArgumentException(" the arg addresses should have value ! ");
@@ -35,7 +35,6 @@ public class ProducerDouble implements IProducer {
         for (int i = 0; i < addresses.size(); i++) {
             producers.add(buildProducer(addresses.get(i), producerGroup + i));
         }
-        return this;
     }
 
     public void start(final int repeatDelay, final int repeatPeriod) throws MQClientException {

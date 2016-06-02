@@ -27,7 +27,7 @@ class ProducerSingle implements IProducer {
     }
 
     @Override
-    public ProducerSingle init(List<String> addresses, String producerGroup) {
+    public void init(List<String> addresses, String producerGroup) {
         if (addresses == null || addresses.isEmpty()) {
             System.out.println("case : Producer init error, reason : the arg addresses should have value");
             throw new IllegalArgumentException(" the arg addresses should have value ! ");
@@ -43,7 +43,6 @@ class ProducerSingle implements IProducer {
         producer.setInstanceName(Long.toString(System.currentTimeMillis()));
         producer.setNamesrvAddr(srvAddrs);
         producer.setCompressMsgBodyOverHowmuch(Integer.MAX_VALUE);
-        return this;
     }
 
     @Override

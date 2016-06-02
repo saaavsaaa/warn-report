@@ -15,7 +15,8 @@ public final class ProducerClient {
     private static ProducerPropeties properties = null;
 
     
-    private ProducerClient(){ 
+    private ProducerClient(){
+        logger.info("case : ProducerClient instance");
     	buildProducer();
     }  
     
@@ -34,7 +35,7 @@ public final class ProducerClient {
     private static IProducer buildProducer() {
         try {
             properties = new ProducerPropeties();
-            producer = producer.init(properties.getAddresses(), properties.getProducerGroup());
+            producer.init(properties.getAddresses(), properties.getProducerGroup());
             producer.start(properties.getRepeatDelay(), properties.getRepeatPeriod());
         } catch (MQClientException e) {
             logger.error("reason : ProducerClient instance error", e);

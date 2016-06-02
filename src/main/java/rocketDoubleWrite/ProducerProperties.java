@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 /**
  * Created by ldb on 2016/5/18.
  */
-public class ProducerPropeties {
+public class ProducerProperties {
     private String producerGroup;
     private String topic;
     private static String tag;
@@ -31,7 +31,7 @@ public class ProducerPropeties {
         System.out.print(addresses);
     }
 
-    public ProducerPropeties(){
+    public ProducerProperties(){
         addresses = new ArrayList<String>();
         ResourceBundle bundle = ResourceBundle.getBundle("resources.rocket");
         producerGroup = bundle.getString("producer.group");

@@ -2,24 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="61b86e4f-3c25-4b98-ab23-a37a820153bc" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/ConcurrentRun.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/test-classes/TestDoubleClient$2.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/IProducer.class" afterPath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/IProducer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerClient$Nested.class" afterPath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerClient$Nested.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerClient.class" afterPath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerClient.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerDouble$1.class" afterPath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerDouble$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerDouble.class" afterPath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerDouble.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerSingle$1.class" afterPath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerSingle$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerSingle.class" afterPath="$PROJECT_DIR$/target/classes/rocketDoubleWrite/ProducerSingle.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/TestDoubleClient$1.class" afterPath="$PROJECT_DIR$/target/test-classes/TestDoubleClient$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/TestDoubleClient.class" afterPath="$PROJECT_DIR$/target/test-classes/TestDoubleClient.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/IProducer.java" afterPath="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/IProducer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerClient.java" afterPath="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerClient.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerDouble.java" afterPath="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerDouble.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerSingle.java" afterPath="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerSingle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/resources/rocket.properties" afterPath="$PROJECT_DIR$/src/main/resources/resources/rocket.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/TestDoubleClient.java" afterPath="$PROJECT_DIR$/src/test/java/TestDoubleClient.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerPropeties.java" afterPath="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerProperties.java" />
     </list>
     <ignored path="warn-report.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,59 +27,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TestRocketCluter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/TestRocketCluter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="28" column="60" selection-start-line="28" selection-start-column="60" selection-end-line="28" selection-end-column="60" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ProducerSingle.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerSingle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="44" column="66" selection-start-line="44" selection-start-column="66" selection-end-line="44" selection-end-column="66" />
+            <state relative-caret-position="589">
+              <caret line="52" column="17" selection-start-line="52" selection-start-column="17" selection-end-line="52" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProducerDouble.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerDouble.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="684">
-              <caret line="36" column="9" selection-start-line="36" selection-start-column="9" selection-end-line="36" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IProducer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/IProducer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProducerClient.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerClient.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#677#678#0" expanded="true" />
-                <element signature="e#724#725#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -121,24 +59,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
+      <file leaf-file-name="ProducerClient.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="646">
-              <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="192">
+              <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ConcurrentRun.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/ConcurrentRun.java">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="524">
+              <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -196,10 +134,10 @@
         <option value="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/IProducer.java" />
         <option value="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerDouble.java" />
         <option value="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerSingle.java" />
-        <option value="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerClient.java" />
         <option value="$PROJECT_DIR$/src/test/java/ConcurrentRun.java" />
         <option value="$PROJECT_DIR$/src/test/java/TestDoubleClient.java" />
         <option value="$PROJECT_DIR$/src/main/resources/resources/rocket.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerClient.java" />
       </list>
     </option>
   </component>
@@ -1170,7 +1108,7 @@
       <workItem from="1464323933987" duration="3559000" />
       <workItem from="1464575470100" duration="2555000" />
       <workItem from="1464767737590" duration="7641000" />
-      <workItem from="1464835454553" duration="1778000" />
+      <workItem from="1464835454553" duration="2572000" />
     </task>
     <servers />
   </component>
@@ -1207,7 +1145,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="99843000" />
+    <option name="totallyTimeSpent" value="100637000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
@@ -1481,14 +1419,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/service/PushConsumerService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1546,14 +1476,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/TestRocketCluter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="28" column="60" selection-start-line="28" selection-start-column="60" selection-end-line="28" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/rocket/Producer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="127">
@@ -1576,15 +1498,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerPropeties.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerProperties.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="13" column="35" selection-start-line="13" selection-start-column="35" selection-end-line="13" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="false" />
-            <element signature="e#601#609#0" expanded="false" />
-            <element signature="e#2050#2051#0" expanded="false" />
-            <element signature="e#2076#2077#0" expanded="false" />
+            <element signature="e#602#610#0" expanded="false" />
+            <element signature="e#2052#2053#0" expanded="false" />
+            <element signature="e#2078#2079#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1596,13 +1518,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerSingle.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/resources/rocket.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="44" column="66" selection-start-line="44" selection-start-column="66" selection-end-line="44" selection-end-column="66" />
+        <state relative-caret-position="38">
+          <caret line="2" column="44" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/ConcurrentRun.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="63" selection-start-line="9" selection-start-column="63" selection-end-line="9" selection-end-column="63" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="524">
+          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/TestDoubleClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="26" column="27" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/IProducer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1616,46 +1570,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/IProducer.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/TestRocketCluter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+        <state relative-caret-position="19">
+          <caret line="28" column="60" selection-start-line="28" selection-start-column="60" selection-end-line="28" selection-end-column="60" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerSingle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="589">
+          <caret line="52" column="17" selection-start-line="52" selection-start-column="17" selection-end-line="52" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/rocketDoubleWrite/ProducerClient.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#677#678#0" expanded="true" />
-            <element signature="e#724#725#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/resources/rocket.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="44" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/TestDoubleClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="26" column="27" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/ConcurrentRun.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
+        <state relative-caret-position="192">
+          <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

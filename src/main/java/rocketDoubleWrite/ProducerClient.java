@@ -12,7 +12,7 @@ public final class ProducerClient {
     private static final Logger logger = LoggerFactory.getLogger(ProducerClient.class);
     
     private volatile static IProducer producer = new ProducerSingle();
-    private static ProducerPropeties properties = null;
+    private static ProducerProperties properties = null;
 
     
     private ProducerClient(){
@@ -34,7 +34,7 @@ public final class ProducerClient {
     
     private static IProducer buildProducer() {
         try {
-            properties = new ProducerPropeties();
+            properties = new ProducerProperties();
             producer.init(properties.getAddresses(), properties.getProducerGroup());
             producer.start(properties.getRepeatDelay(), properties.getRepeatPeriod());
         } catch (MQClientException e) {

@@ -6,7 +6,7 @@ import java.io.IOException;
  * Created by ldb on 2016/6/2.
  */
 public class TestSSH {
-    final String host = "192.168.1.44";
+    final String host = "192.168.1.47";
     final int port = 22;
     final String user = "root";
     final String password = "admin123!";
@@ -41,6 +41,15 @@ public class TestSSH {
         ssh.connect(host, port, user, password);
         //String exeContent = "/bin/sh -c netstat -anp";
         String exeContent = "netstat -anp";
+        ssh.execute(exeContent);
+    }
+
+    @Test
+    public void testDel() throws IOException {
+        LinuxExecUtil ssh = new LinuxExecUtil();
+        ssh.connect(host, port, user, password);
+        //String exeContent = "/bin/sh -c netstat -anp";
+        String exeContent = "cd /usr/local/tomcat/;rm -rf webapps/portal-bos*";
         ssh.execute(exeContent);
     }
 }

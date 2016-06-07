@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TestDoubleClient {
     @Test
     public void send(){
-        int a = 10000;
+        int a = 1;
         for (int i = 0; i < a; i++) {
             ProducerClient.send("a1", "{'a12':'121'}");
         }

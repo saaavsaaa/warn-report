@@ -105,7 +105,9 @@ public class ProducerDouble implements IProducer {
 
     private DefaultMQProducer buildProducer(final String address, final String producerGroup) {
         DefaultMQProducer producer = new DefaultMQProducer(producerGroup);
-        producer.setInstanceName(Long.toString(System.currentTimeMillis()));
+        String instance = Long.toString(System.currentTimeMillis()) + producerGroup ;
+        System.out.println(String.format("producer : %s, instance : %s", producerGroup, instance));
+        producer.setInstanceName(instance);
         producer.setNamesrvAddr(address);
         producer.setCompressMsgBodyOverHowmuch(Integer.MAX_VALUE);
         return producer;

@@ -6,13 +6,13 @@ import java.io.IOException;
  * Created by ldb on 2016/6/2.
  */
 public class TestRocketCommand {
-    final String ip = "192.168.1.44";
+    final String ip = "192.168.1.45";
     final int port = 22;
     final String user = "root";
     final String password = "admin123!";
 
-    final String rocketIp = "192.168.1.44";
-    final String topic = "testTopic";
+    final String rocketIp = "192.168.1.45";
+    final String topic = "registerTopic";
 
     final String cluster = "DefaultClusterB";
     final String broker = "broker-a";
@@ -21,7 +21,8 @@ public class TestRocketCommand {
     final String rocketNSrv = rocketIp + ":9876";
     final String rocketBroker = rocketIp + ":10911";
 
-    //sh mqadmin checkMsg -l /root/store -n 192.168.1.44:9876 -p
+    //todo : 起线程发redis队列,消费者起线程删除
+    //todo : sh mqadmin checkMsg -l /root/store -n 192.168.1.44:9876 -p
 
     @Test
     public void testConsumerProgress() throws IOException {
@@ -43,7 +44,7 @@ public class TestRocketCommand {
 
     @Test
     public void testQueryByKey() throws IOException {
-        String key = "a1";
+        String key = "13211111222";
         LinuxExecUtil executor = buildExecutor();
         String exeContent = String.format("sh %smqadmin queryMsgByKey -k %s -n %s -t %s", rocketPath, key, rocketNSrv, topic);
         executor.execute(exeContent);
@@ -53,7 +54,7 @@ public class TestRocketCommand {
     }
 
     @Test
-    public void testTopicStatus() throws IOException {
+    public void testBrokerStatus() throws IOException {
         LinuxExecUtil executor = buildExecutor();
         String exeContent = String.format("sh %smqadmin brokerStatus -b %s -n %s", rocketPath, rocketBroker, rocketNSrv);
         executor.execute(exeContent);
@@ -69,7 +70,7 @@ public class TestRocketCommand {
     }
 
     @Test
-    public void testBrokerStatus() throws IOException {
+    public void testTopicStatus() throws IOException {
         LinuxExecUtil executor = buildExecutor();
         String exeContent = String.format("sh %smqadmin topicStatus -n %s -t %s", rocketPath, rocketNSrv, topic);
         executor.execute(exeContent);

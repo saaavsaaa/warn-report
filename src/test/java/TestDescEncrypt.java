@@ -43,7 +43,28 @@ public class TestDescEncrypt {
 	public void  decrypt(){
 		String key = "CD1E7D3A7DEED8459952EB18207901EFA2609D1EFBE126EAC3B3CE6B2F92E84E388AB6DA10601630FD10574F028E7073485FC887BC90586FB212267C0B3601A3D5D8D18A217B0D698E7B22A595D275E2632CBCB38DE7E57BCFD9B37BDAB2691BEE1E5065D3287032722345CDF1D0CCD614F7F9CDFFAA692493AFC4C3F3C57DC3";
 		String strKey = "0001000200030004";
-		String value = DescEncrypt.decrypt(key,DescEncrypt.hex2byte(strKey));
+		String value = DescEncrypt.decrypt(key, DescEncrypt.hex2byte(strKey));
         System.out.println("解密===============>" + value);
+	}
+
+	@Test
+	public void  encrypt(){
+		/*
+		* jdbc.url=jdbc:mysql://192.168.1.46:3306/p2p
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.username=root
+jdbc.password=123456
+		* */
+		String key = "123456";
+		String strKey = "0001000200030004";
+		String value = DescEncrypt.encrypt(key, DescEncrypt.hex2byte(strKey));
+		System.out.println("加密===============>" + value);
+
+		/*
+		* 46:CD1E7D3A7DEED845FCD8AE9F63A294CC07654C1067D6CD8C4BD7715399773167C38695E8C2E4AA11
+		* 45:CD1E7D3A7DEED845FCD8AE9F63A294CC07654C1067D6CD8C4F427772B73AE589C38695E8C2E4AA11
+		* root:63AEB7FA5F01BC70
+		* 123456:A71F11AC5D1A24B6
+		* */
 	}
 }

@@ -26,7 +26,7 @@ public final class ProducerClient {
 
     //在第一次被引用时被加载  
     static class Nested  
-    {  
+    {
         private static ProducerClient instance = new ProducerClient();  
     }
     

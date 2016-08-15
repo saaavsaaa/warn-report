@@ -63,8 +63,9 @@ public class TestHttp {
 
     @Test
     public void testRegister() throws IOException {
-        String action = "portal-bos/fg/register/registerSubmitTuiGuangWithoutPwd.action";
-        String json = "{\"loginName\":\"13211111333\"," +
+        String action = "portal-bos/fg/register/registerSubmit.action";
+        String json = "{" +
+                "\"loginName\":\"13211111333\"," +
                 "\"messageCode\":\"123456\"," +
                 "\"channelCode\":\"jinritoutiao\"," +
                 "\"callback\":\"_huskd\"" +

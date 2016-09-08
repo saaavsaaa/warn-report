@@ -1,0 +1,20 @@
+This specification defines a hierarchical structure used for deployment and
+packaging purposes that can exist in an open file system, in an archive file, or in some other form. It is recommended, but not required, that servlet containers
+support this structure as a runtime representation.
+
+Web applications can be packaged and signed into a Web ARchive format (WAR)
+file using the standard Java archive tools. For example, an application for issue
+tracking might be distributed in an archive file called issuetrack.war.
+When packaged into such a form, a META-INF directory will be present which
+contains information useful to Java archive tools. This directory must not be
+directly served as content by the container in response to a Web client’s request, though its contents are visible to servlet code via the getResource and getResourceAsStream calls on the ServletContext. Also, any requests to access the
+resources in META-INF directory must be returned with a SC_NOT_FOUND(404)
+response.
+
+本规范定义了可在开放文件系统、档案文件或其他格式中用于打包和部署的分级结构。servlet容器建议不限制应该在运行时支持这种结构。
+Web应用可以被打包签名到Web归档格式（WAR）文件使用标准的Java归档工具。例如一个用于跟踪分布式问题的应用可以打包为issuetrack.war。打包的时候，创建一个提供信息给归档工具的META-INF目录。目录的信息不允许直接响应Web的客户端请求，但是
+通过ServletContext的getResource和getResourceAsStream方法可以得到它的内容。当然，任何访问META-INF的请求都会返回SC_NOT_FOUND(404)。
+
+
+
+

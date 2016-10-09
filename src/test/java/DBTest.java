@@ -26,7 +26,60 @@ public class DBTest {
     }
 
     @Test
-    public void testThreadUpdate() throws InterruptedException {
+    public void testLowLevelUpdateInThread() throws InterruptedException {
+        Runnable updateAndSelect = () -> {
+            Connection conn = null;
+            try {
+                conn = DBUtils.getConnection();
+                conn.setAutoCommit(false);
+                conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+                execSelect(conn);
+                Thread.sleep(100);
+                int a = execSelect(conn);
+                execUpdate(a, conn);
+                execSelect(conn);
+                throw new SQLException();
+                //conn.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+
+        Runnable update = () -> {
+            Connection conn = null;
+            try {
+                conn = DBUtils.getConnection();
+                conn.setAutoCommit(false);
+                conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+                execSelect(conn);
+                Thread.sleep(10);
+                execUpdate(conn);
+                execSelect(conn);
+                conn.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+        Thread threadus = createTask(updateAndSelect);
+        Thread threadu = createTask(update);
+        threadus.start();
+        threadu.start();
+        threadu.join();
+        threadus.join();
+        System.out.print("111");
+    }
+
+    @Test
+    public void testUpdateInThread() throws InterruptedException {
         Runnable updateAndSelect = () -> {
             Connection conn = null;
             try {
@@ -50,6 +103,7 @@ public class DBTest {
             try {
                 conn = DBUtils.getConnection();
                 conn.setAutoCommit(false);
+                //conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
                 execSelect(conn);
                 Thread.sleep(10);
                 execUpdate(conn);

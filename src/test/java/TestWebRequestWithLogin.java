@@ -1,12 +1,17 @@
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
@@ -39,7 +44,7 @@ public class TestWebRequestWithLogin {
 		// 创建一个本地上下文信息
 		HttpContext localContext = new BasicHttpContext();
 		// 在本地上下问中绑定一个本地存储
-		localContext.setAttribute(ClientContext.COOKIE_STORE, cs);
+		localContext.setAttribute(HttpClientContext.COOKIE_STORE, cs);
 		cs.addCookie(new BasicClientCookie(LOGIN_USERTOKEN_KEY, loginToken));
 		cs.addCookie(new BasicClientCookie(LOGIN_USERID_KEY, loginUserID));
 	}
@@ -50,7 +55,11 @@ public class TestWebRequestWithLogin {
 
 		String logPath = url;
 
-		DefaultHttpClient httpclient = new DefaultHttpClient();
+		//DefaultHttpClient httpclient = new DefaultHttpClient(); @deprecated
+		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+		cm.setMaxTotal(200);
+		cm.setDefaultMaxPerRoute(20);
+		CloseableHttpClient httpclient = HttpClients.custom().setConnectionManager(cm).build();
 
 		String cookieStr = "";
 		List<Cookie> list = cs.getCookies();
@@ -58,7 +67,7 @@ public class TestWebRequestWithLogin {
 			cookieStr += cookie.getName() + "=" + cookie.getValue() + ";";
 		}
 
-		HttpResponse response;
+		CloseableHttpResponse response;
 		if (isGet){
 			response = getResponse(logPath, cookieStr, httpclient);
 		} else {
@@ -78,19 +87,19 @@ public class TestWebRequestWithLogin {
 		return txt.toString();
 	}
 
-	private static HttpResponse getResponse(String logPath, String cookieStr, DefaultHttpClient httpclient) throws IOException {
+	private static CloseableHttpResponse getResponse(String logPath, String cookieStr, CloseableHttpClient httpclient) throws IOException {
 		// 目标地址
 		HttpGet httpget = new HttpGet(logPath);
 		httpget.setHeader("Cookie", cookieStr);
 		System.out.println("请求: " + httpget.getRequestLine());
 		// 设置类型
 		// 执行
-		HttpResponse response = httpclient.execute(httpget);
+		CloseableHttpResponse response = httpclient.execute(httpget);
 		return response;
 	}
 
-	private static HttpResponse postResponse(String logPath, String cookieStr, HttpEntity paras,
-											 DefaultHttpClient httpclient) throws IOException {
+	private static CloseableHttpResponse postResponse(String logPath, String cookieStr, HttpEntity paras,
+											 CloseableHttpClient httpclient) throws IOException {
 		HttpPost httpPost = new HttpPost(logPath);
 		httpPost.setHeader("Cookie", cookieStr);
 		if (paras != null) {
@@ -100,7 +109,7 @@ public class TestWebRequestWithLogin {
 		System.out.println("请求: " + httpPost.getRequestLine());
 		// 设置类型
 		// 执行
-		HttpResponse response = httpclient.execute(httpPost);
+		CloseableHttpResponse response = httpclient.execute(httpPost);
 		return response;
 	}
 }

@@ -1,7 +1,10 @@
 import org.junit.Test;
 
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Currency;
 import java.util.Optional;
 
@@ -10,6 +13,14 @@ import java.util.Optional;
  */
 @SuppressWarnings("Since15")
 public class TestObjectInstance {
+
+    @Test
+    public void testString() throws UnsupportedEncodingException {
+        byte[] bytes = new byte[] { 50, 0, -1, 11, -12 };
+        String sendString = new String(bytes , "ISO-8859-1" );
+        byte[] sendBytes = sendString.getBytes(  "ISO-8859-1" );
+        System.out.println(Arrays.toString(sendBytes));
+    }
 
     @Test
     public void testOptional(){

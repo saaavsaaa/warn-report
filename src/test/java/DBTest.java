@@ -6,6 +6,41 @@ import java.sql.*;
  */
 public class DBTest {
 
+    @Test
+    public void testConcurrentUpdate() throws InterruptedException {
+        Runnable update = () -> {
+            Connection conn = null;
+            try {
+                conn = DBUtils.getConnection();
+                conn.setAutoCommit(false);
+                conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+                int a = execSelect(conn);
+                int r = execUpdate(a, conn);
+                if (r == 0){
+                    repeatUpdate(0, conn);
+                }
+                execSelect(conn);
+                conn.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        };
+        ConcurrentRun.executeTasks(1100, update);
+    }
+
+    private boolean repeatUpdate(final int count, Connection conn) throws SQLException {
+        int currentCount = count + 1;
+        int a = execSelect(conn);
+        int r = execUpdate(a, conn);
+        if (r == 1){
+            return true;
+        }
+        if (r == 0 && currentCount < 3){
+            return repeatUpdate(currentCount, conn);
+        }
+        System.out.println("false");
+        return false;
+    }
 
     @Test
     public void testUpdate() throws SQLException {
@@ -145,18 +180,19 @@ public class DBTest {
         ResultSet rs = ps.executeQuery();
         rs.next();
         int a = rs.getInt(1);
-        System.out.println(Thread.currentThread().getId() + ", a : " + a);
+        System.out.println("TreadId : " + Thread.currentThread().getId() + ", version a : " + a);
         return a;
     }
 
-    private void execUpdate(int ver, Connection conn) throws SQLException {
+    private int execUpdate(final int ver, Connection conn) throws SQLException {
         String sql = "update aaatest set a=a+? where id=? AND a = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, 1);
         ps.setInt(2, 1);
         ps.setInt(3, ver);
         int r = ps.executeUpdate();
-        System.out.println(Thread.currentThread().getId() + " update : " + r);
+        System.out.println("TreadId : " + Thread.currentThread().getId() + " update : " + r);
+        return r;
     }
 
     private void execUpdate(Connection conn) throws SQLException {
@@ -165,7 +201,7 @@ public class DBTest {
         ps.setInt(1, 1);
         ps.setInt(2, 1);
         int r = ps.executeUpdate();
-        System.out.println(Thread.currentThread().getId() + " update : " + r);
+        System.out.println("TreadId : " + Thread.currentThread().getId() + " update : " + r);
     }
 
 

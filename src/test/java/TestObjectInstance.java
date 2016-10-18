@@ -21,6 +21,30 @@ public class TestObjectInstance {
         byte[] sendBytes = sendString.getBytes(  "ISO-8859-1" );
         System.out.println(Arrays.toString(sendBytes));
     }
+    
+    @Test
+    public void testDyPro(){
+        int n = 60;
+        int be = 0;
+        int a = 1;
+        while (0 < n--){
+            a = a + be;
+            be = a - be;
+        }
+        System.out.println(a);
+    }
+    
+    @Test
+    public void testRecursion(){
+        int n = 61;
+        int a = recursion(n);
+        System.out.println(a);
+    }
+    
+    private int recursion(int n){
+        System.out.println("ing : " + n);
+        return (2 > n) ? n : recursion(n - 1) + recursion(n - 2);
+    }
 
     @Test
     public void testOptional(){

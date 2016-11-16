@@ -20,7 +20,7 @@ class Test {
         w1.start();
         w2.start();
         while (true) {
-            if (exec(t.l)){//(t.l != -1l && t.l != 1l) {// when t.l != -1l l = 1 && when t.l != 1l l could change to -1
+            if (exec(t.l)){//(t.l != -1l && t.l != 1l) {// when t.l != -1l l = 1 && when t.l != 1l l probably change to -1
                 System.out.println(toBinary(t.l));
                 System.out.println("l的写不是原子操作");
                 break;

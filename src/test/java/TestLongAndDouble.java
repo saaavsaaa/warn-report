@@ -1,18 +1,14 @@
 /**
  * Created by root on 16-11-16.
  */
-public interface TestLongAndDouble {
-    
-}
-
-class Test {
+public class TestLongAndDouble {
     
     protected long l = -1l;
     
     public static void main(String[] args) {
         System.out.println(toBinary(-1l));
         System.out.println(toBinary(1l));
-        Test t = new Test();
+        TestLongAndDouble t = new TestLongAndDouble();
         Worker w1 = new Worker(t);
         Worker2 w2 = new Worker2(t);
         w1.setDaemon(true);
@@ -48,11 +44,11 @@ class Test {
 
 class Worker extends Thread {
     
-    public Worker(Test t) {
+    public Worker(TestLongAndDouble t) {
         this.t = t;
     }
     
-    private Test t;
+    private TestLongAndDouble t;
     
     public void run() {
         while (true) {
@@ -63,11 +59,11 @@ class Worker extends Thread {
 
 class Worker2 extends Thread {
     
-    public Worker2(Test t) {
+    public Worker2(TestLongAndDouble t) {
         this.t = t;
     }
     
-    private Test t;
+    private TestLongAndDouble t;
     
     public void run() {
         while (true) {

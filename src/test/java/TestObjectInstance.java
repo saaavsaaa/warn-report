@@ -73,6 +73,22 @@ public class TestObjectInstance {
             System.out.println("A," + a.getN());
         }
     }
+    
+    @Test
+    public void testSerializ(){
+        SService s = new SService();
+        A a = s.getA();
+        System.out.println(a.getN());
+    }
+}
+
+class SService{
+    public A getA(){
+        A a = new A(){{setN("dto");}};
+//        A a = new A();
+//        a.setN("dto");
+        return a;
+    }
 }
 
 class A{

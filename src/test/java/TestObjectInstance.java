@@ -45,6 +45,21 @@ public class TestObjectInstance {
         System.out.println("ing : " + n);
         return (2 > n) ? n : recursion(n - 1) + recursion(n - 2);
     }
+    
+    @Test
+    public void testTailRecursion(){
+        int n = 61;
+        int a = recursionTail(n, 0, 1);
+        System.out.println(a);
+    }
+    
+    private int recursionTail(int n, int acc1, int acc2){
+        System.out.println("ing : " + n);
+        if (n == 0){
+            return acc1;
+        }
+        return recursionTail(n - 1, acc2, acc1 + acc2);
+    }
 
     @Test
     public void testOptional(){

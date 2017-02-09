@@ -95,6 +95,13 @@ public class TestObjectInstance {
         A a = s.getA();
         System.out.println(a.getN());
     }
+    
+    @Test
+    public void testSingle(){
+        System.out.println(Single.INSTANCE.add());
+        System.out.println(Single.INSTANCE.add());
+        System.out.println(Single.INSTANCE.add());
+    }
 }
 
 class SService{
@@ -125,5 +132,13 @@ class A{
 class B extends A{
     public B(){
         n = "b";
+    }
+}
+
+enum Single{
+    INSTANCE;
+    int i = 0;
+    public int add(){
+        return ++i;
     }
 }

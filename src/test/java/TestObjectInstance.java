@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -101,6 +102,25 @@ public class TestObjectInstance {
         System.out.println(Single.INSTANCE.add());
         System.out.println(Single.INSTANCE.add());
         System.out.println(Single.INSTANCE.add());
+    }
+    
+    @Test
+    public void printAB(){
+        int a = 10;
+        int b = 20;
+        over();
+        System.out.println(a);
+        System.out.println(b);
+    }
+    
+    private void over(){
+        PrintStream print = new PrintStream(System.out){
+            @Override
+            public void println(int a){
+                super.println(a*10);
+            }
+        };
+        System.setOut(print);
     }
 }
 

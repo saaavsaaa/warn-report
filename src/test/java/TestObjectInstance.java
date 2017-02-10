@@ -3,6 +3,7 @@ import org.junit.Test;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -121,6 +122,32 @@ public class TestObjectInstance {
             }
         };
         System.setOut(print);
+    }
+    
+    public static void main(String[] args) {
+        overCache();
+        Integer a = 10;
+        Integer b = 20;
+        System.out.println(a);
+        System.out.println(b);
+    }
+    
+    private static void overCache(){
+        Class cache = Integer.class.getDeclaredClasses()[0];
+        Field c;
+        try {
+            c = cache.getDeclaredField("cache");
+            c.setAccessible(true);
+            Integer[] array = (Integer[])c.get(cache);
+            System.out.println(array[138]);
+            System.out.println(array[148]);
+            array[138] = 100;
+            array[148] = 200;
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
 

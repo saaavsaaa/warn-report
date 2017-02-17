@@ -158,6 +158,98 @@ public class DBTest {
         threadus.join();
         System.out.print("111");
     }
+    
+    /*
+    TreadId : 11, version a : 1, tag:11
+    TreadId : 12, version a : 1, tag:21
+    TreadId : 12 update : 1
+    TreadId : 12, version a : 2, tag:22
+    TreadId : 11, version a : 1, tag:12
+    TreadId : 12, version a : 2, tag:23
+    2C
+    TreadId : 11 update : 1
+    TreadId : 11, version a : 3, tag:13
+    TreadId : 12, version a : 2, tag:2
+    1C
+    O
+    */
+    @Test
+    public void testUpdateCrossInThread() throws InterruptedException {
+        Runnable updateAndSelect = () -> {
+            Connection conn = null;
+            try {
+                conn = DBUtils.getConnection();
+                conn.setAutoCommit(false);
+//                conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+                execSelect(conn, "11");
+                Thread.sleep(100);
+                execSelect(conn, "12");
+                execUpdate(conn);
+                Thread.sleep(10000);
+                execSelect(conn, "13");
+                conn.commit();
+                System.out.println("1C");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+        
+        Runnable update = () -> {
+            Connection conn = null;
+            try {
+                conn = DBUtils.getConnection();
+                conn.setAutoCommit(false);
+//                conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+                execSelect(conn, "21");
+                Thread.sleep(10);
+                execUpdate(conn);
+                execSelect(conn, "22");
+                Thread.sleep(5000);
+                execSelect(conn, "23");
+                conn.commit();
+                System.out.println("2C");
+                execSelect(conn, "2");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+    
+        Runnable update3 = () -> {
+            Connection conn = null;
+            try {
+                conn = DBUtils.getConnection();
+                conn.setAutoCommit(false);
+//                conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+                execSelect(conn, "31");
+                Thread.sleep(150);
+                execUpdate(conn);
+                execSelect(conn, "32");
+                Thread.sleep(5000);
+                execSelect(conn, "33");
+                conn.commit();
+                System.out.println("3C");
+                execSelect(conn, "3");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+        Thread threadus = createTask(updateAndSelect);
+        Thread threadu = createTask(update);
+        Thread thread3 = createTask(update3);
+        threadus.start();
+        threadu.start();
+        thread3.start();
+        threadu.join();
+        threadus.join();
+        thread3.join();
+        System.out.println("END");
+    }
 
     private Thread createTask(final Runnable task){
         Thread thread = new Thread(){
@@ -181,6 +273,17 @@ public class DBTest {
         rs.next();
         int a = rs.getInt(1);
         System.out.println("TreadId : " + Thread.currentThread().getId() + ", version a : " + a);
+        return a;
+    }
+    
+    private int execSelect(Connection conn, String tag) throws SQLException {
+        String sql = "select a,b from aaatest WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, 1);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        int a = rs.getInt(1);
+        System.out.println("TreadId : " + Thread.currentThread().getId() + ", version a : " + a + ", tag:" + tag);
         return a;
     }
 
@@ -273,6 +376,13 @@ class DBUtils {
     public static String DRIVER;
 
     //private static ResourceBundle rb = ResourceBundle.getBundle("jdbc");
+    private static final String createSql = "DROP TABLE IF EXISTS `aaatest`;" +
+            "CREATE TABLE `aaatest` (\n" +
+            "  `id` INT(11) DEFAULT NULL,\n" +
+            "  `a` INT(11) DEFAULT NULL,\n" +
+            "  `b` INT(11) DEFAULT NULL\n" +
+            ") ENGINE=INNODB DEFAULT CHARSET=utf8;" +
+            "INSERT  INTO `aaatest`(`id`,`a`,`b`) VALUES (1,0,1);";
 
     private DBUtils() {
     }

@@ -160,18 +160,23 @@ public class DBTest {
     }
     
     /*
-    TreadId : 11, version a : 1, tag:11
-    TreadId : 12, version a : 1, tag:21
+    TreadId : 12, version a : 0, tag:21
+    TreadId : 11, version a : 0, tag:11
     TreadId : 12 update : 1
-    TreadId : 12, version a : 2, tag:22
-    TreadId : 11, version a : 1, tag:12
-    TreadId : 12, version a : 2, tag:23
+    TreadId : 12, version a : 1, tag:22
+    TreadId : 11, version a : 0, tag:12
+    TreadId : 12, version a : 1, tag:23
     2C
     TreadId : 11 update : 1
-    TreadId : 11, version a : 3, tag:13
-    TreadId : 12, version a : 2, tag:2
+    TreadId : 12, version a : 1, tag:221
+    TreadId : 11, version a : 2, tag:13
     1C
-    O
+    TreadId : 11, version a : 2, tag:111
+    TreadId : 12, version a : 1, tag:222
+    TreadId : 12 update : 1
+    TreadId : 12, version a : 3, tag:223
+    2C1
+    END
     */
     @Test
     public void testUpdateCrossInThread() throws InterruptedException {
@@ -189,6 +194,8 @@ public class DBTest {
                 execSelect(conn, "13");
                 conn.commit();
                 System.out.println("1C");
+                Thread.sleep(10000);
+                execSelect(conn, "111");
             } catch (SQLException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -210,7 +217,13 @@ public class DBTest {
                 execSelect(conn, "23");
                 conn.commit();
                 System.out.println("2C");
-                execSelect(conn, "2");
+                execSelect(conn, "221");
+                Thread.sleep(21000);
+                execSelect(conn, "222");
+                execUpdate(conn);
+                execSelect(conn, "223");
+                conn.commit();
+                System.out.println("2C1");
             } catch (SQLException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {

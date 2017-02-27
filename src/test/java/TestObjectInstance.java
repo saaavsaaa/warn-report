@@ -17,6 +17,14 @@ import java.util.Optional;
 public class TestObjectInstance {
 
     @Test
+    public void testChar(){
+        char c = 99;
+        System.out.println("c" + 1 + c);
+        System.out.println(c + 1 + "c");
+        System.out.println(c + (1 + "c"));
+    }
+    
+    @Test
     public void testString() throws UnsupportedEncodingException {
         byte[] bytes = new byte[] { 50, 0, -1, 11, -12 };
         String sendString = new String(bytes , "ISO-8859-1" );

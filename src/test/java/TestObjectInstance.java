@@ -24,6 +24,8 @@ public class TestObjectInstance {
         System.out.println(c + (1 + "c"));
         System.out.println('c');
         System.out.println('c' + 1);
+        System.out.println((char) 1);
+        System.out.println('c' + (char) 1);
     }
     
     @Test

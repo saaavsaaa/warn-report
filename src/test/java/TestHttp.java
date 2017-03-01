@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 public class TestHttp {
+    
+//    curl -i -X POST -H "'Content-type':'application/json', 'charset':'utf-8' -d 'json_data={"loginName":"aaaa","registerType":"1","deviceId":"aaa","channelCode":"aaa","msgCode":"123456"},"hmac":"aaaaa"}'" http://192.168.1.68:8080/portal-bos/app/appv4/appLoginWit.action
     private static final String URL = "http://192.168.1.47:8080/";
     final String loginToken = "115d522ca69ea091c63f09f5d7e5bc9c";
     final String loginUserID = "1";

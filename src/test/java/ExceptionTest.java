@@ -10,7 +10,7 @@ public class ExceptionTest<T extends RuntimeException> {
     public void run(){
         try {
             this.castT(new SQLException());
-        }catch (final Exception e){
+        }catch (final RuntimeException/*or Exception*/ e){
 //        }catch (final SQLException e){
             e.printStackTrace();
         }

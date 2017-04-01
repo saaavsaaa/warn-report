@@ -29,6 +29,30 @@ public class TestObjectInstance {
     }
     
     @Test
+    public void testStringLength(){
+        String str = "123456";
+        change(str);
+        System.out.println(str);
+        str = change(str);
+        System.out.println(str);
+    }
+    
+    private String change(String str){
+        Class clazz = String.class;
+        try {
+            Field valueField = clazz.getDeclaredField("value");
+            valueField.setAccessible(true);
+            valueField.set(str, new char[]{'1','2','3','4','5','6','7'});
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        str = "1234";
+        return str;
+    }
+    
+    @Test
     public void testString() throws UnsupportedEncodingException {
         byte[] bytes = new byte[] { 50, 0, -1, 11, -12 };
         String sendString = new String(bytes , "ISO-8859-1" );

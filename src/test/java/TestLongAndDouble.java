@@ -2,6 +2,7 @@ import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.atomic.LongAdder;
 
 /**
@@ -18,22 +19,23 @@ public class TestLongAndDouble {
         Runnable build = () -> {
             for (int i = 0; i < 100000000; i++){
                 long id = getId();
-                all.add(id);
+                all.add(id); //不加这个时间1左右
 //                System.out.println(id);
             }
         };
         ConcurrentRun.executeTasks(1, build);
+//        Thread.sleep(1000);
         System.out.println(all.size());
+        all.forEach(System.out::println);
     }
 
     private long getId(){
         longAdder.increment();
         long value = longAdder.longValue();
-        if (value <= top){
-            return value;
-        }
-        long lPrint = value % top;
-        return lPrint;
+//        if (value <= top){
+//            return value;
+//        }
+        return value % top;
     }
     
     protected long l = -1l;

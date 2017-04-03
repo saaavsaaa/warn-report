@@ -1,7 +1,40 @@
+import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.LongAdder;
+
 /**
  * Created by root on 16-11-16.
  */
 public class TestLongAndDouble {
+
+    private final Set<Long> all = new HashSet<>();
+    private final LongAdder longAdder = new LongAdder();
+    private final int top = 100 * 10000;
+
+    @Test
+    public void run() throws InterruptedException {
+        Runnable build = () -> {
+            for (int i = 0; i < 100000000; i++){
+                long id = getId();
+                all.add(id);
+//                System.out.println(id);
+            }
+        };
+        ConcurrentRun.executeTasks(1, build);
+        System.out.println(all.size());
+    }
+
+    private long getId(){
+        longAdder.increment();
+        long value = longAdder.longValue();
+        if (value <= top){
+            return value;
+        }
+        long lPrint = value % top;
+        return lPrint;
+    }
     
     protected long l = -1l;
     

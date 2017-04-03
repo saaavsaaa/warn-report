@@ -36,6 +36,9 @@ public class ConcurrentRun {
         //等待n个完成
         endGate.await();
         long end = System.nanoTime();
-        System.out.println(end - start);
+        long result = end - start;
+        long p = result / (1000 * 1000);
+        System.out.println(p + "毫秒");
+//        System.out.println(end - start);
     }
 }

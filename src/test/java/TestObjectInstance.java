@@ -17,6 +17,33 @@ import java.util.Optional;
 public class TestObjectInstance {
 
     @Test
+    public void testBytesCatch(){
+        int count = 0;
+        byte [] data = {1, 2, 3, 4, 'a', 'b', 'c', 'd', 'e'};
+        boolean result = contrastBytes(data);
+        if (result){
+            count++;
+        }
+        System.out.println(count);
+    }
+    
+    private boolean contrastBytes(byte [] data){
+        //        byte [] data = {1, 2, 3, 4, 97, 98, 99, 100};
+        byte [] newData;
+        newData = Arrays.copyOfRange(data, 0, 8);
+         
+//        for(byte i : newData) {
+//            System.out.print(i + " ");
+//        }
+        if (1 == newData[0] && 2 == newData[1] && 3 == newData[2] && 4 == newData[3]
+                && 97 == newData[4] && 98 == newData[5] && 99 == newData[6] && 100 == newData[7]){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    @Test
     public void testChar(){
         char c = 99;
         System.out.println("c" + 1 + c);

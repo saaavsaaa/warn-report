@@ -31,8 +31,8 @@ public class TestObjectInstance {
         //        byte [] data = {1, 2, 3, 4, 97, 98, 99, 100};
         byte [] newData;
         newData = Arrays.copyOfRange(data, 0, 8);
-         
-//        for(byte i : newData) {
+
+//        for(byte i:newData) {
 //            System.out.print(i + " ");
 //        }
         if (1 == newData[0] && 2 == newData[1] && 3 == newData[2] && 4 == newData[3]

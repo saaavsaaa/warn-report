@@ -6,6 +6,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.Optional;
@@ -16,6 +17,13 @@ import java.util.Optional;
 @SuppressWarnings("Since15")
 public class TestObjectInstance {
 
+    @Test
+    public void contrastClassTest(){
+        Class c1 = new ArrayList<String>().getClass();
+        Class c2 = new ArrayList<Integer>().getClass();
+        System.out.println(c1 == c2);
+    }
+    
     @Test
     public void testBytesCatch(){
         int count = 0;

@@ -19,7 +19,8 @@ public class TestConcurrent {
     public void testCreate(){
         long start = System.nanoTime();
         for (int i = 0; i < 1000000; i++) {
-            IdGenerator.INSTANCE.createNewId();
+//            IdGenerator.INSTANCE.createNewId();
+            System.out.println(IdGenerator.INSTANCE.createNewId());
 //            UUID.randomUUID();
         }
         long end = System.nanoTime();

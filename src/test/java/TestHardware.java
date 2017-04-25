@@ -1,6 +1,7 @@
 import org.junit.Test;
 
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Enumeration;
 
 /**
@@ -15,6 +16,20 @@ public class TestHardware {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    @Test
+    public void printCardTest() throws SocketException {
+        Enumeration<NetworkInterface> ni = NetworkInterface.getNetworkInterfaces();
+    
+        NetworkInterface netI = ni.nextElement();
+        byte[] bytes = netI.getHardwareAddress();
+        StringBuffer sb = new StringBuffer()
+                .append(bytes[0]).append(bytes[1])
+                .append(bytes[2]).append(bytes[3])
+                .append(bytes[4]).append(bytes[5]);
+        
+        System.out.println(sb.toString().toUpperCase());
     }
     
     /**

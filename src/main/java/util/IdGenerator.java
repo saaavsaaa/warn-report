@@ -51,6 +51,10 @@ public enum  IdGenerator {
             if(netCard != null && bytes != null && bytes.length == 6){
                 StringBuffer sb = new StringBuffer().append(bytes[0]).append(bytes[1]).append(bytes[2]).append(bytes[3])
                         .append(bytes[4]).append(bytes[5]);
+    
+                /*StringBuffer sb = new StringBuffer().append(toHex(bytes[0])).append(toHex(bytes[1])).append(toHex(bytes[2]))
+                        .append(toHex(bytes[3])).append(toHex(bytes[4])).append(toHex(bytes[5]));*/
+                
                 return sb.toString().toUpperCase();
             }
         } catch (SocketException e) {
@@ -59,7 +63,7 @@ public enum  IdGenerator {
         return "12700001";
     }
     
-    private static String toChar(byte b){
+    private static String toHex(byte b){
         //与11110000作按位与运算以便读取当前字节高4位
         String high = Integer.toHexString((b&240)>>4);
         //与00001111作按位与运算以便读取当前字节低4位

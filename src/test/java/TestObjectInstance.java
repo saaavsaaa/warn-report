@@ -1,9 +1,12 @@
 import org.junit.Test;
+import sun.management.MethodInfo;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -86,6 +89,35 @@ public class TestObjectInstance {
         str = "1234";
         return str;
     }
+    
+    /*private void change(Method method){
+        try {
+            Class<?> clazz = method.getDeclaringClass();
+            ClassPool pool = ClassPool.getDefault();
+            CtClass clz = pool.get(clazz.getName());
+            CtClass[] params = new CtClass[method.getParameterTypes().length];
+            for (int i = 0; i < method.getParameterTypes().length; i++) {
+                params[i] = pool.getCtClass(method.getParameterTypes()[i].getName());
+            }
+            CtMethod ctMethod = clz.getDeclaredMethod(method.getName(), params);
+            MethodInfo methodInfo = ctMethod.getMethodInfo();
+            ConstPool constPool = methodInfo.getConstPool();
+            AnnotationsAttribute annotationsAttribute = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
+//            AnnotationsAttribute  annotationsAttribute = (AnnotationsAttribute) methodInfo.getAttribute(AnnotationsAttribute.visibleTag);
+            Annotation annotation = annotationsAttribute.getAnnotation(Transactional.class.getName());
+            if (annotation == null){
+                Annotation methodAnnot = new Annotation(Transactional.class.getTypeName(), constPool);
+                annotationsAttribute.setAnnotation(methodAnnot);
+//                methodInfo.addAttribute(annotationsAttribute);
+                ctMethod.getMethodInfo().addAttribute(annotationsAttribute);
+            }
+            clz.addMethod(ctMethod);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (CannotCompileException e) {
+            e.printStackTrace();
+        }
+    }*/
     
     @Test
     public void testString() throws UnsupportedEncodingException {

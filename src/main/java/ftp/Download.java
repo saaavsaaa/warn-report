@@ -29,9 +29,7 @@ public class Download {
         3、交易对账
         4、账户余额对账
     */
-    private static final String USER = "M20000030333";
-    private static final String pass = "p4ri89m0333";
-    private static String ip = "111.203.205.28";
+
     private static int port = 21;
     public static final String LOCAL_DOWNLOAD_PATH = "/home/aaa/test/";
     

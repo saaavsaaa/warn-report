@@ -22,4 +22,13 @@ public class ExceptionTest<T extends Exception> {
     private void castT(final Exception e) throws T {
         throw (T)e;
     }
+    
+    @Test
+    public void testThrow(){
+        try{
+            throw new RuntimeException("123");
+        } catch (Exception e){
+            System.out.println(e.getCause().getLocalizedMessage());
+        }
+    }
 }

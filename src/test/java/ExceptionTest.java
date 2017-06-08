@@ -26,7 +26,7 @@ public class ExceptionTest<T extends Exception> {
     @Test
     public void testThrow(){
         try{
-            throw new RuntimeException("123");
+            throw new RuntimeException("123");//, new Throwable("cause:aaa")
         } catch (Exception e){
             System.out.println(e.getCause().getLocalizedMessage());
         }

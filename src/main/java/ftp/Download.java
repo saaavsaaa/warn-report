@@ -1,5 +1,7 @@
 package ftp;
 
+import rocket.Producer;
+import rocketDoubleWrite.ProducerClient;
 import run.Watcher;
 import sun.net.TelnetInputStream;
 import sun.net.TelnetOutputStream;
@@ -29,13 +31,18 @@ public class Download {
         3、交易对账
         4、账户余额对账
     */
-
+    private static final String USER = "";
+    private static final String pass = "";
+    private static String ip = "";
     private static int port = 21;
     public static final String LOCAL_DOWNLOAD_PATH = "/home/aaa/test/";
     
     private static final String WITHDRAW = "WITHDRAW";
     private static final String TRANSACTION = "TRANSACTION";
     private static final String RECHARGE = "RECHARGE";
+    private static final String BALANCECHANGE = "BALANCECHANGE";
+    
+    private static final int T1_DATE = -12;
     
     /**
      * 函数入口
@@ -44,7 +51,7 @@ public class Download {
      */
     public static void main(String agrs[]) throws IOException, FtpProtocolException {
         
-        LocalDate yesterday = LocalDate.now().plusDays(-1);
+        LocalDate yesterday = LocalDate.now().plusDays(T1_DATE);
         int year = yesterday.getYear();
         String sub = yesterday.getMonthValue() > 9 ? String.valueOf(yesterday.getMonthValue()) : "0" + yesterday.getMonthValue();
         
@@ -68,6 +75,7 @@ public class Download {
         downloadWithdraw(path, prx, ftp);
         downloadTransaction(path, prx, ftp);
         downloadRecharge(path, prx, ftp);
+        downloadBalanceChange(path, prx, ftp);
         // 下载
         /*for (int i = 0; i < keys.length; i++) {
             try {
@@ -81,6 +89,7 @@ public class Download {
             }
         }*/
         ftp.closeConnect();
+        System.exit(1);
     }
     
     private static void downloadWithdraw(String basePath, String prx, FtpUtil ftp) throws FtpProtocolException {
@@ -95,6 +104,11 @@ public class Download {
     
     private static void downloadRecharge(String basePath, String prx, FtpUtil ftp) throws FtpProtocolException {
         DownloadExec exec = new DownloadExec(RECHARGE);
+        exec.start(basePath, prx, ftp);
+    }
+    
+    private static void downloadBalanceChange(String basePath, String prx, FtpUtil ftp) throws FtpProtocolException {
+        DownloadExec exec = new DownloadExec(BALANCECHANGE);
         exec.start(basePath, prx, ftp);
     }
     /*private static String[] getKeys(LocalDate yesterday){
@@ -132,7 +146,7 @@ class DownloadExec {
         try {
             String localPath = Download.LOCAL_DOWNLOAD_PATH + key;
             if (ftp.exist(ftpPath + ".ok")) {
-                ftp.download(ftpPath + ".txt", localPath + ".txt");
+                ftp.download(key, type,ftpPath + ".txt", localPath + ".txt");
                 return true;
             } else {
                 return false;
@@ -229,7 +243,7 @@ class FtpUtil {
      * @param localFile  本地文件路径(客户端)
      * @throws FtpProtocolException
      */
-    public void download(String remoteFile, String localFile) throws FtpProtocolException {
+    public void download(String key, String type,String remoteFile, String localFile) throws FtpProtocolException {
         InputStream inputStream = null;
 //        FileOutputStream outputStream = null;
         try {
@@ -244,7 +258,7 @@ class FtpUtil {
             /*while ((c = inputStream.read(bytes)) != -1) {
                 outputStream.write(bytes, 0, c);
             }*/
-            System.out.println(getContent(inputStream, "UTF-8"));
+            getContent(key, type,inputStream, "UTF-8");
             System.out.println("download success");
         } catch (IOException ex) {
             System.out.println("download error");
@@ -256,13 +270,25 @@ class FtpUtil {
         }
     }
     
-    public static String getContent(InputStream inputStream, String encode) throws IOException {
+    public static String getContent(String key, String type,InputStream inputStream, String encode) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, encode);
         String content = "";
         int tChar = 0;
+        boolean isTotal = true;
         while ((tChar = inputStreamReader.read()) != -1) {
-            //if not end,the total content add the value of the stream read this time
-            content += (char) tChar;
+            if (tChar == 10) {
+                if (isTotal){
+                    //the top row is total
+                    ProducerClient.send("Total_" + key , content, "contrastTopic", type);
+                    isTotal = false;
+                } else {
+                    ProducerClient.send(key, content, "contrastTopic", type);
+                }
+                System.out.println(content);
+                content = "";
+            } else {
+                content += (char) tChar;
+            }
         }
         inputStreamReader.close();
         return content;

@@ -38,6 +38,7 @@ class ProducerSingle implements IProducer {
                 srvAddrs += new StringBuilder(";").append(addresses.get(i)).toString();
             }
         }
+        srvAddrs = "192.168.1.45:9876";
         System.out.println("srvAddrs : " + srvAddrs);
         producer = new DefaultMQProducer(producerGroup);
         producer.setInstanceName(Long.toString(System.currentTimeMillis()));

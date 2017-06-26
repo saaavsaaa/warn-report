@@ -3,7 +3,7 @@ package util;
 /**
  * Created by root on 17-2-22.
  */
-public enum State {
+ public enum State {
     AAA(1, true ),
     BBB(2, true),
     CCC(3, true);

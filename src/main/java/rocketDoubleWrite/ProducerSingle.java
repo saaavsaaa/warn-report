@@ -48,6 +48,7 @@ class ProducerSingle implements IProducer {
 
     @Override
     public void start(int repeatDelay, int repeatPeriod) throws MQClientException {
+        
         producer.start();
         this.repeatDelay = repeatDelay;
         this.repeatPeriod = repeatPeriod;

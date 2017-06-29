@@ -1,19 +1,34 @@
 import org.junit.Test;
 
+import java.math.BigInteger;
+
 /**
  * Created by aaa on 17-6-29.
  */
 public class FibonacciTest {
     @Test
     public void testDyPro(){
-        int n = 60;
-        int be = 0;
-        int a = 1;
+        int count = 0;
+        int n = 99;
+        long be = 0;
+        BigInteger o = BigInteger.ZERO;
+        BigInteger t = BigInteger.ONE;
+        long a = 1;
         while (0 < n--){
             a = a + be;
             be = a - be;
+            System.out.println("long : " + be);
+            
+            o = o.add(t);
+            t = o.subtract(t);
+            System.out.println("big integer : " + t.toString());
+            
+            if (be % 2 != 0){
+                count++;
+            }
         }
         System.out.println(a);
+        System.out.println(count);
     }
     
     @Test

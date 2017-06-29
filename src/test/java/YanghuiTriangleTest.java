@@ -57,12 +57,14 @@ public class YanghuiTriangleTest {
         Stack<String> rows = new Stack<>();
         int layerRowsExceptTop = 30;
         int lastLength = 0;
-        for (int l = layerRowsExceptTop; l > 0; l--) {
+        for (int l = layerRowsExceptTop; l > -1; l--) {
             StringBuilder thisLine = new StringBuilder();
-            for (int i = 0; i < l; i++) {
+            
+            for (int i = 0; i < l + 1; i++) {
                 BigInteger position = calculateCombination(l, i);
                 thisLine.append(position).append("  ");
             }
+            
             int thisLength = thisLine.length();
             if (lastLength > 0) {
                 int prxSpace = (lastLength - thisLength) / 2;
@@ -83,7 +85,7 @@ public class YanghuiTriangleTest {
     * c(a,b)=a!/((a-b)!*b!)
     * */
     private BigInteger calculateCombination(int a, int b) {
-        if (b == 0) {
+        if (b == 0 || a == b) {
             return BigInteger.ONE;
         }
         BigInteger aFactorial = calculateFactorial(a);

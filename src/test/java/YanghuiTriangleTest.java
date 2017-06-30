@@ -115,8 +115,19 @@ public class YanghuiTriangleTest {
         return result;
     }
     
+    /*
+    * c(a,b) = c(a-1,b-1) + c(a-1,b)
+    * */
     @Test
     public void test(){
+        int a = 11;
+        int b = 5;
+
+        BigInteger c = calculateCombination(a, b);
+        BigInteger c1 = calculateCombination(a - 1, b - 1);
+        BigInteger c2 = calculateCombination(a - 1, b);
+        System.out.println(c + " : " + c1.add(c2));
+        
         System.out.println(StringUtil.padPrx("aaa", 12 , ' '));
     }
     

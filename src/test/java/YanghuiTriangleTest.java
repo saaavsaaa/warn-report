@@ -52,7 +52,7 @@ public class YanghuiTriangleTest {
     * 按多项式各项系数
     * */
     @Test
-    public void calculatePolynomial() {
+    public void buildByPolynomial() {
 //        System.out.println(calculateCombination(30, 1).toString());
         Stack<String> rows = new Stack<>();
         int layerRowsExceptTop = 30;
@@ -85,6 +85,9 @@ public class YanghuiTriangleTest {
     * c(a,b)=a!/((a-b)!*b!)
     * */
     private BigInteger calculateCombination(int a, int b) {
+        if (b < 0 || a < 0){
+            return BigInteger.ZERO;
+        }
         if (b == 0 || a == b) {
             return BigInteger.ONE;
         }
@@ -97,6 +100,56 @@ public class YanghuiTriangleTest {
         BigInteger c = aFactorial.divide(bFactorial.multiply(abSubtract));
 //        System.out.println(c);
         return c;
+    }
+    /*
+    * c(a,b) = c(a-1,b-1) + c(a-1,b)
+    * */
+    private BigInteger calculateCombinationByAdd(int a, int b) {
+        if (b == 0 || a == b) {
+            return BigInteger.ONE;
+        }
+        //一次循环生成两行
+        BigInteger c1 = calculateCombination(a - 1, b - 1);
+        BigInteger c2 = calculateCombination(a - 1, b);
+        return c1.add(c2);
+    }
+    
+    @Test
+    public void buildTwoRow(){
+        int layerRowsExceptTop = 31;
+        Stack<String[]> rows = new Stack<>();
+        for (int r = layerRowsExceptTop - 1; r > 1; r--) {
+            String[] row = new String[r + 3];
+            String[] row1 = new String[r + 2];
+            for(int col = 0; col < r; col++){
+                BigInteger c1 = calculateCombination(r - 1, col - 1);
+                BigInteger c2 = calculateCombination(r - 1, col);
+                row[col] = c2.add(c1).toString();
+                row1[col] = c1.toString();
+                row1[col + 1] = c2.toString();
+            }
+            rows.push(row);
+            rows.push(row1);
+            r--;
+        }
+    
+        while (!rows.empty()){
+            String[] row = rows.pop();
+            for (int i = 0; i < row.length; i++) {
+                System.out.print(row[i] + Interval);
+            }
+            System.out.println();
+        }
+    }
+    
+    private BigInteger recursion(int r, int col){
+        if (r < 0){
+            return BigInteger.ZERO;
+        }
+        BigInteger c1 = calculateCombination(r - 1, col + 1);
+        BigInteger c2 = recursion(r - 1, col);
+        System.out.println(c2.add(c1));
+        return c2.add(c1);
     }
     
     /*
@@ -115,20 +168,19 @@ public class YanghuiTriangleTest {
         return result;
     }
     
-    /*
-    * c(a,b) = c(a-1,b-1) + c(a-1,b)
-    * */
+
     @Test
     public void test(){
-        int a = 11;
+        recursion(30, 0);
+        /*int a = 11;
         int b = 5;
 
+        //一次循环生成两行
         BigInteger c = calculateCombination(a, b);
-        BigInteger c1 = calculateCombination(a - 1, b - 1);
-        BigInteger c2 = calculateCombination(a - 1, b);
-        System.out.println(c + " : " + c1.add(c2));
+        BigInteger c1 = calculateCombinationByAdd(a, b);
+        System.out.println(c + " : " + c1);
         
-        System.out.println(StringUtil.padPrx("aaa", 12 , ' '));
+        System.out.println(StringUtil.padPrx("aaa", 12 , ' '));*/
     }
     
 

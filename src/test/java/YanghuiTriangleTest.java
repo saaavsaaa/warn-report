@@ -110,7 +110,7 @@ public class YanghuiTriangleTest {
         }
         BigInteger c1 = Calculate.calculateCombination(r - 1, col + 1);
         BigInteger c2 = recursion(r - 1, col);
-        ss1.push(c1.toString());
+        ss1.push("1");
         si.push(String.valueOf(r));
         ss.push(c2.add(c1).toString());
         return c2.add(c1);
@@ -124,9 +124,24 @@ public class YanghuiTriangleTest {
         System.out.println();
     }
     
+    private void printTiltStack(){
+        int count = 0;
+        while (!ss1.empty()){
+            String one = ss1.pop();
+            String iOne = si.pop();
+            String vOne = ss.pop();
+            System.out.print(StringUtil.padPrx(one, (++count * 2), Interval));
+            System.out.print(StringUtil.padPrx(iOne, (++count * 2), Interval));
+            System.out.print(StringUtil.padPrx(vOne, (++count * 2), Interval));
+            System.out.println();
+        }
+        System.out.println();
+    }
+    
     @Test
     public void buildTilt(){
         recursion(30, 0);
+        printTiltStack();
     }
 
     @Test

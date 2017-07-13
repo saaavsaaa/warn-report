@@ -39,6 +39,15 @@ public class TestWebRequestWithLogin {
 		setCookie(loginToken, loginUserID);
 		return opera(url, paras, false);
 	}
+	
+	public static String testPostWithCookie(String url, String cookieKey, String cookieValue,
+									  HttpEntity paras) throws Exception {
+		HttpContext localContext = new BasicHttpContext();
+		// 在本地上下问中绑定一个本地存储
+		localContext.setAttribute(HttpClientContext.COOKIE_STORE, cs);
+		cs.addCookie(new BasicClientCookie(cookieKey, cookieValue));
+		return opera(url, paras, false);
+	}
 
 	private static void setCookie(String loginToken, String loginUserID){
 		// 创建一个本地上下文信息

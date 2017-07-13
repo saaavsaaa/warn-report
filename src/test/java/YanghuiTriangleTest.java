@@ -108,6 +108,10 @@ public class YanghuiTriangleTest {
         if (r < 0){
             return BigInteger.ZERO;
         }
+        int termCount = r + 1;
+        int maxTerm = (int)Math.ceil(Double.valueOf((double)(r/2)));
+        //按平均每两项长度加1
+        
         BigInteger c1 = Calculate.calculateCombination(r - 1, col + 1);
         BigInteger c2 = recursion(r - 1, col);
         ss1.push("1");
@@ -130,9 +134,9 @@ public class YanghuiTriangleTest {
             String one = ss1.pop();
             String iOne = si.pop();
             String vOne = ss.pop();
-            System.out.print(StringUtil.padPrx(one, (++count * 2), Interval));
-            System.out.print(StringUtil.padPrx(iOne, (++count * 2), Interval));
-            System.out.print(StringUtil.padPrx(vOne, (++count * 2), Interval));
+            System.out.print(StringUtil.padPrx(one, (++count), Interval));
+            System.out.print(StringUtil.padPrx(iOne, (++count), Interval));
+            System.out.print(StringUtil.padPrx(vOne, (++count), Interval));
             System.out.println();
         }
         System.out.println();

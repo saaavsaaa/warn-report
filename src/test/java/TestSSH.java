@@ -12,6 +12,21 @@ public class TestSSH {
     final String password = "admin123!";
     final String rocketNSrv = "192.168.1.44:9876";
     final String topic = "testTopic";
+    
+    @Test
+    public void grep() throws IOException {
+        LinuxExecUtil ssh = new LinuxExecUtil();
+        ssh.connect("192.168.1.213", port, user, password);
+        
+        StringBuilder builder = new StringBuilder();
+        builder.append("cd /cjq/logs/caijinquan-release/p2p-app;");
+//        builder.append(String.format("grep %s -ri * --color | head -n %d;", "queryFirstShow", 3));
+//        builder.append(String.format("grep %s -r * --color | grep -i '%s' | head -n %d;", "15111111111", "queryMyMessNoNotRead", 3));
+//        builder.append(String.format("grep %s -r * | grep -i '%s' | grep '%s';", "15111111111", "CipherFilter", "queryMyMessNoNotRead"));
+        builder.append(String.format("grep %s -ri * -A5 | grep '%s' | grep -v %s | head -n 50;", "CipherFilter", "queryFirstShow", "responseJson"));
+        String exeContent = new String(builder);
+        ssh.execute(exeContent);
+    }
 
     @Test
     public void testTopicStatus() throws IOException {

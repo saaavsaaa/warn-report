@@ -7,6 +7,8 @@ import structure.Pair;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class TestHttp {
@@ -23,36 +25,55 @@ public class TestHttp {
         urls = new ConcurrentHashMapExtend<>();
         urls.putKeysList(11,
                 new Pair("app/firstShow/not/queryFirstShow.action", "{\"hmac\":\"NyKPvrVqqjmdR0gkoQEFlvw/GuEucDHUKUgf7KHLlYldlE2LjwttbF2qREij1KaxEtrYuNlBd2tWemFPfncaTjfaXjTkddRvKiUezjHeaYQmfY/qFZT1MNRB/kZt/BmM54dEOCnEcBnsnJcRfmvd2WmWxF0c0ptYwo21q5hNFQc=\",\"params\":{}}"),
-                new Pair("app/firstShow/not/queryNoticeList.action", "{\"curPage\":1,\"params\":{\"msgtype\":\"1\",\"phone\":\"15111111111\"},\"hmac\":\"XDgU1q6p3kro6rX1nlxCiKgScqVOXGHlB1IqpfZxoBG+wncE00Ut6upnYmKWyEJGSoWqzJywG2ZShkFbkSPVzznuY+nXxhuoIkak7tMH9mBx37TNgXT8tekwkkem/Scx1CpOwN93nbsZxvXQZg6jma6465h3knQjduofaOmnq1o=\"}"),
-                new Pair("/notice/queryMyMessNoNotRead.action", ""),
-                new Pair("/advertisement/not/queryHomePageAdvertList.action", ""),
-                new Pair("/newTask/taskProgress.action", ""));
+                new Pair("app/notice/not/queryNoticeList.action", "{\"hmac\":\"UI7QbO+oCcGsmCLgr/bLlmkV2moq7ngZkemuIp0BqbxlLn7oWOz75aQ+5ODCwW5tDH+UTQgkvyj88D8PnH4t1TEwTZXBrWfmBMwWskKS4wE5HQMxyOu+4MpfPg5u2scrAmSy42TxF9PlVdwCDZL6LOM5Wq22DSFU+QRbKz3M4Bw=\",\"curPage\":\"1\",\"params\":{\"isindex\":\"0\",\"msgtype\":\"3\",\"phone\":\"18500342698\"}}"),
+                new Pair("app/notice/queryMyMessNoNotRead.action", "{\"curPage\":1,\"params\":{\"msgtype\":\"1\",\"phone\":\"15111111111\"},\"hmac\":\"XDgU1q6p3kro6rX1nlxCiKgScqVOXGHlB1IqpfZxoBG+wncE00Ut6upnYmKWyEJGSoWqzJywG2ZShkFbkSPVzznuY+nXxhuoIkak7tMH9mBx37TNgXT8tekwkkem/Scx1CpOwN93nbsZxvXQZg6jma6465h3knQjduofaOmnq1o=\"}"),
+                new Pair("/app/advertisement/not/queryHomePageAdvertList.action", "{\"hmac\":\"a29Lz0eEz5OGGvigpoOKQGnYfc1yXVJ9q8B5y1Pk5R87CGCOW33yuanihExPcJ1PnI8ezzXM6ObZ3IpjHze4NJmRrPuOF0p/ZaY7wXSVcBZt/8useaQsZU6lryWoGo/eI6k/UiO9M+sjYCWKh9qalkd2kOA6wcAOBgcgsgszceU=\",\"params\":{}}"),
+                new Pair("app/newTask/taskProgress.action", "{\"hmac\":\"Ib/jJuoQ5r8LQLa3eHm3GNm4EwuElbyECTkJ3rI+v7mx+kL6olfqGnqjugx6LDjeKhDUlcRGO85q3qqtkzHD6MYD2BcJiSCmv7hlGLYYgy/gXEQ5CdUirghb7jsME2HnJgQQvibbx2SAaDpm6MGTvs0Vf3ohhC3dLvv8Yx+1BmY=\"}"));
         urls.putKeysList(7,
-                new Pair("/advertisement/not/queryAppPopAdvertisementPic.action", ""),
-                new Pair("/discovery/not/queryDiscovery.action", ""),
-                new Pair("/menu/not/list.action", ""),
-                new Pair("/activityArea/queryActivityAreaList.action", ""),
-                new Pair("/activityArea/not/queryFinanceActivity.action", ""));
+                new Pair("app/advertisement/not/queryAppPopAdvertisementPic.action", "{\"hmac\":\"dveo5qx2oXJRKoucGwQdF8g8EtzAINW/vyJZXjR0RqiyrK5ST4EFuOpRtosuadztVJbYUsP7+v5Xuy5n7/8qoTHxETZkYAGNv3pi2IXnMkvXjaYD+BMON02j1ggveWnzU9iPVotCnKIOoxYn1MbXwI4sF4xFopeadGSczxvn5lM=\",\"params\":{}}"),
+                new Pair("app/discovery/not/queryDiscovery.action", "{\"hmac\":\"ThBtfTMPCAWdR/3Y8UUGHBg5uAmJPFQ6Q+Lc+KUHiaELySmIQmWxrPPcMm70aVtI1rFAHvdKmX4URZKSAQpGzC2U0CarXW59ycuLFPUd9/Sm/sBgunFQAhxOLHF2t/DxNolf2OLNmVqjTsMZ2QQ+AhFdbJHzJrUWtAwdfzVp1M0=\"}"),
+                new Pair("app/menu/not/list.action", "{\"hmac\":\"j8zPP4qbxgM/88jIwEmISIZJLTWtWnK0KleTs0w8fLw2xN9CmFqAOtnNamaN6U2Dz3w11tiSzoFTdeJZ1iJhGapeCkcF9PUgYa692k0Qx2slX1vSrYY+zADn5XQz8c7U+KEVRkNOTVpgS+wTK88vgQpn56qMI5yOIzXd+WsRjvU=\",\"params\":{}}"),
+                new Pair("app/activityArea/queryActivityAreaList.action", "{\"hmac\":\"iC9VinR1FUojMJJXALKeBlde1An5lX2Z9tRh1ObpYjWOKR9Bt3kRS0jA87N+xQBjViUleuWGayF4MvvNBBUYWLVk92h+mYv7tsQyFagIEqVEQ6V9k6QanjzZdBWjUBkSjjvBRTfF4LJYOkNHaw0B71cB3BKZSyUFEFOgYLA+qPo=\",\"curPage\":\"1\",\"params\":{\"activityType\":\"0\"}}"),
+                new Pair("app/activityArea/not/queryFinanceActivity.action", "{\"hmac\":\"Qde4rWdDULlfgUFL2IfwicDyWIf5GBdRisEPiTPQOWidpKJp1n5f7pb8wdcALbPZMEctm6zvfCwnVhC7pnqpXCRbswm7Vfk3K9feKToYIxstbf9laJVLHfOm2bKAiLJbWMCtBY/7RyEvLg/VWvrMIyoL0t1v36zmjR1JkhlXnHo=\",\"params\":{\"type\":\"1\"}}"));
         urls.putKeysList(5,
-                new Pair("/share/getMicroMsgInfoCrossDomain.action", ""),
-                new Pair("/newTask/taskBanner.action", ""),
-                new Pair("/bos/myaccount/myAccountComprehensive.action", ""),
-                new Pair("/bos/finance/not/queryRegularList.action", ""),
-                new Pair("/bos/finance/not/queryNewCustBidList.action", ""),
-                new Pair("/gesture/checkGesture.action", ""));
+//                new Pair("/share/getMicroMsgInfoCrossDomain.action", ""),
+//                new Pair("/newTask/taskBanner.action", ""),
+                new Pair("app/bos/myaccount/myAccountComprehensive.action", "{\"hmac\":\"T46zg8mZ/TxjqobKRdEujI+bBIJRdcb4hVVKcJ0HiFwCosGODv2HRWEppAlFpl2sfKUo3sgqOEnqm8+USs4oHGCPS95dTCAxvMGrpjMZOmmqIl4vCLyuVm4U8QdSWLhWoZud+qEM7EwN5Q0HagwLAOmijzFQj9dqzMVxqeeRgWM=\",\"params\":{}}"),
+                new Pair("app/bos/finance/not/queryRegularList.action", "{\"hmac\":\"VH3Qj+2nIpEsBNXIed9wPn3aCGcoIrCOApZdlrIGE2h25FZE10/c5RcjdE2MuFuvD+5sBPKRycPQhQMnLeCe2eU+lrKtcw3fbjw2LzRs6WW3mU4EWMpVS3An44mxFYmdf1+CTOjNt07adAgZfyKR7lYWri1WB9vMBE3MUWB/fe0=\"}"),
+                new Pair("app/bos/finance/not/queryNewCustBidList.action", "{\"hmac\":\"NT1nRSCVtYfbvkMVKlSCJrnjbi/aRpo444qyrip9T6yhyPB69a0WgcrcNI2LT3/UyBN0YPBX/Tusyko+nhDxola7pOqhQwBcQu+ozhwTyQQPusWjGA1Dc1I7Z6j79iRA3VHeae2h5UpptvPEJz6696BYT+bgUsXI/IQdD8E6UiI=\"}"),
+                new Pair("app/gesture/checkGesture.action", "{\"hmac\":\"b6SUfZcLRJPeP+w2IqvI+Yqzh72vce02jQZ2LFyJgFgjfU5ZGK2WnAzWQH+aBb3Q1MGxhCl5BgTBAJpeJc3uaaF/Kqu13oSq5jTGGLhRxyYhZS82P/r3p/7EObBYOmaGJoKlTCYD4nzaECiRmoPXfTod3/5AST2RDo50AllpWTU=\",\"params\":{\"errorTimes\":\"5\",\"gesturePsd\":\"76d1dabed06c7a234de1caab62e84969e34d770e\",\"loginName\":\"15210080001\"}}"));
         urls.putKeysList(3,
-                new Pair("/bos/finance/not/queryExpFinanceDetail.action", ""),
-                new Pair("/signIn/newSignIn.action", ""),
-                new Pair("/version/not/updateAll.action", ""),
-                new Pair("/advertisement/not/queryLoadingPic.action", ""));
+                new Pair("app/bos/finance/not/queryExpFinanceDetail.action", "{\"hmac\":\"RotvNuoD6uGmgoq0L90IVmzZZy1UefeOVY8E6p4Jq2+yHcvca1qklzcI8sL6Reqx/+3jKUlhsHeXWJwWgGOJlX5NKq1k983KjSm2Fvs1sU/Wyt1HHOH8jMp1V7dkw8abkhJCyXLvYUDZhSRg9MvqJ6NybcSIKmt9yh4qG95kzT0=\"}"),
+//                new Pair("/signIn/newSignIn.action", ""),
+                new Pair("app/version/not/updateAll.action", "{\"hmac\":\"G7z0tsihl1VLWtWQjg7AsqV47eNQmQhNoMMnIOTdNX9kRuK7WbAg8dCn1pSCpv1tKwrHIXQsOGmJ09IYjEze2YQ/02QjMTskIt57yXawsdV9C0qEfW/RjrWK94tsZlt9QWfCsxJnRJfTqcDuFlGZMlTSSH0MSxxAftNwroUxNXs=\",\"params\":{\"appType\":\"2\",\"appVersion\":\"20\"}}"),
+                new Pair("app/advertisement/not/queryLoadingPic.action", "{\"hmac\":\"ONeNxw1vue7vhJM6Ib9TG/29oL9ORgbdCgeT6evsYNozhXwGexNbd+81+0FVHX+hn43RHwCZbqG7rHL7s2iery6fysN5E97eXjk8xiDBl3rx2h13qyROPpEDQ+pmy2NYrZCNi3F77h8uhP0xGn4Zvh34/nhRT5RPzvSKe+qv/t4=\",\"params\":{}}"));
         return urls;
     }
     
     @Test
-    public void postPress() throws IOException {
-        //（/app/firstShow/not/queryFirstShow.action）:{"hmac":"NyKPvrVqqjmdR0gkoQEFlvw/GuEucDHUKUgf7KHLlYldlE2LjwttbF2qREij1KaxEtrYuNlBd2tWemFPfncaTjfaXjTkddRvKiUezjHeaYQmfY/qFZT1MNRB/kZt/BmM54dEOCnEcBnsnJcRfmvd2WmWxF0c0ptYwo21q5hNFQc=","params":{}}
-        String action = "app/firstShow/not/queryFirstShow.action";
-        String json = "{\"hmac\":\"NyKPvrVqqjmdR0gkoQEFlvw/GuEucDHUKUgf7KHLlYldlE2LjwttbF2qREij1KaxEtrYuNlBd2tWemFPfncaTjfaXjTkddRvKiUezjHeaYQmfY/qFZT1MNRB/kZt/BmM54dEOCnEcBnsnJcRfmvd2WmWxF0c0ptYwo21q5hNFQc=\",\"params\":{}}";
+    public void postPress() throws IOException, InterruptedException {
+        List<Runnable> runnableList = new ArrayList<>();
+        urls = buildUrls();
+        urls.forEachEntry(119, (e) -> {
+            String action = e.getKey();
+            Pair pair = e.getValue();
+            String json = (String) pair.getK();
+            int radio = (int) pair.getV();
+            Runnable runnable = () -> {
+                try {
+                    execSingleRequest(action, json);
+                } catch (IOException ee) {
+                    System.out.println(ee.getMessage());
+                }
+            };
+            for (int i = 0; i < radio; i++) {
+                runnableList.add(runnable);
+            }
+        });
+        ConcurrentRun.executeTasks(runnableList);
+    }
+    
+    private void execSingleRequest(String action, String json) throws IOException {
         StringEntity paras = new StringEntity(json);;
         paras.setContentEncoding("UTF-8");
         paras.setContentType("application/json");

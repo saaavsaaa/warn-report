@@ -52,13 +52,14 @@ public class TestHttp {
     
     @Test
     public void postPress() throws IOException, InterruptedException {
+        int enlarge = 10;
         List<Runnable> runnableList = new ArrayList<>();
         urls = buildUrls();
         urls.forEachEntry(119, (e) -> {
             String action = e.getKey();
             Pair pair = e.getValue();
             String json = (String) pair.getK();
-            int radio = (int) pair.getV();
+            int radio = (int) pair.getV() * enlarge;
             Runnable runnable = () -> {
                 try {
                     execSingleRequest(action, json);

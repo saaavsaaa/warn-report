@@ -20,10 +20,11 @@ public class TestSSH {
         
         StringBuilder builder = new StringBuilder();
         builder.append("cd /cjq/logs/caijinquan-release/p2p-app;");
+//        builder.append("grep -i -A5 '17:24:33.569' info/info.2017-07-18.log");
 //        builder.append(String.format("grep %s -ri * --color | head -n %d;", "queryFirstShow", 3));
 //        builder.append(String.format("grep %s -r * --color | grep -i '%s' | head -n %d;", "15111111111", "queryMyMessNoNotRead", 3));
 //        builder.append(String.format("grep %s -r * | grep -i '%s' | grep '%s';", "15111111111", "CipherFilter", "queryMyMessNoNotRead"));
-        builder.append(String.format("grep %s -ri * -A5 | grep '%s' | grep -v %s | head -n 50;", "CipherFilter", "queryFirstShow", "responseJson"));
+        builder.append(String.format("grep %s -ri * -A5 | grep '%s' | grep -v %s | head -n 50;", "CipherFilter", "queryLoadingPic", "responseJson"));
         String exeContent = new String(builder);
         ssh.execute(exeContent);
     }

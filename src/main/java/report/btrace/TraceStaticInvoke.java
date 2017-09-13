@@ -26,22 +26,15 @@ public class TraceStaticInvoke {
     }
     
     @OnMethod(clazz = "com.sun.beans.finder.MethodFinder", method = "findStaticMethod", location = @Location(Kind.RETURN))
-    public static void traceHttpServletRequestCopierExecute(@ProbeClassName String name,@ProbeMethodName String method, Class<?> var0, String var1, Class... var2){
+    public static void traceHttpServletRequestCopierExecute(@ProbeClassName String name,@ProbeMethodName String method, Class<?> var0, String var1){
         println(strcat("trace class name ============", name));
         println(strcat("trace class method ============", method));
-        println(strcat("trace class var0 ============", var0.getName()));
+        println(strcat("trace class var0 ============", Strings.str(var0)));
         println(strcat("trace class var1 ============", var1));
-        println(strcat("trace class var2 ============", var2.toString()));
     }
     
     @OnMethod(clazz = "com.sun.beans.finder.MethodFinder", method = "findStaticMethod", location = @Location(Kind.ERROR))
     public static void traceERRORExecute(@ProbeClassName String name,@ProbeMethodName String method){
-        println(strcat("ERROR class name ============", name));
-        println(strcat("ERROR class method ============", method));
-    }
-    
-    @OnError
-    public static void eRRORExecute(@ProbeClassName String name,@ProbeMethodName String method){
         println(strcat("ERROR class name ============", name));
         println(strcat("ERROR class method ============", method));
     }

@@ -36,10 +36,4 @@ public class ApacheBase64Trace {
         println(strcat("ERROR class name ============", name));
         println(strcat("ERROR class method ============", method));
     }
-    
-    @OnError
-    public static void eRRORExecute(@ProbeClassName String name,@ProbeMethodName String method){
-        println(strcat("ERROR class name ============", name));
-        println(strcat("ERROR class method ============", method));
-    }
 }

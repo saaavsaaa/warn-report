@@ -10,28 +10,31 @@ import static com.sun.btrace.BTraceUtils.strcat;
  * Created by aaa on 17-9-13.
  */
 @BTrace
-public class ApacheBase64Trace {
+public class TraceStaticInvoke {
     @TLS
     private static long startTime = 0;
     
-    @OnMethod(clazz = "org.apache.commons.codec.binary.Base64", method = "decodeBase64")
+    @OnMethod(clazz = "com.sun.beans.finder.MethodFinder", method = "findStaticMethod")
     public static void startMethod(){
         startTime = timeMillis();
     }
     
-    @OnMethod(clazz = "org.apache.commons.codec.binary.Base64", method = "decodeBase64", location = @Location(Kind.RETURN))
+    @OnMethod(clazz = "com.sun.beans.finder.MethodFinder", method = "findStaticMethod", location = @Location(Kind.RETURN))
     public static void endHttpServletRequestCopierMethod(){
-        println(strcat("org.apache.commons.codec.binary.Base64.decodeBase64 execute time============", str(timeMillis()-startTime)));
+        println(strcat("com.caijinquan.p2p.common.bos.reapel.client.utils.decodeBase64 execute time============", str(timeMillis()-startTime)));
         println("-------------------------------------------");
     }
     
-    @OnMethod(clazz = "org.apache.commons.codec.binary.Base64", method = "decodeBase64", location = @Location(Kind.RETURN))
-    public static void traceHttpServletRequestCopierExecute(@ProbeClassName String name,@ProbeMethodName String method, String base64String){
+    @OnMethod(clazz = "com.sun.beans.finder.MethodFinder", method = "findStaticMethod", location = @Location(Kind.RETURN))
+    public static void traceHttpServletRequestCopierExecute(@ProbeClassName String name,@ProbeMethodName String method, Class<?> var0, String var1, Class... var2){
         println(strcat("trace class name ============", name));
         println(strcat("trace class method ============", method));
+        println(strcat("trace class var0 ============", var0.getName()));
+        println(strcat("trace class var1 ============", var1));
+        println(strcat("trace class var2 ============", var2.toString()));
     }
     
-    @OnMethod(clazz = "org.apache.commons.codec.binary.Base64", method = "decodeBase64", location = @Location(Kind.ERROR))
+    @OnMethod(clazz = "com.sun.beans.finder.MethodFinder", method = "findStaticMethod", location = @Location(Kind.ERROR))
     public static void traceERRORExecute(@ProbeClassName String name,@ProbeMethodName String method){
         println(strcat("ERROR class name ============", name));
         println(strcat("ERROR class method ============", method));

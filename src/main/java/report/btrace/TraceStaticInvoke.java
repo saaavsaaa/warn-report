@@ -21,7 +21,7 @@ public class TraceStaticInvoke {
     
     @OnMethod(clazz = "com.sun.beans.finder.MethodFinder", method = "findStaticMethod", location = @Location(Kind.RETURN))
     public static void endHttpServletRequestCopierMethod(){
-        println(strcat("com.caijinquan.p2p.common.bos.reapel.client.utils.decodeBase64 execute time============", str(timeMillis()-startTime)));
+        println(strcat(" execute time============", str(timeMillis()-startTime)));
         println("-------------------------------------------");
     }
     

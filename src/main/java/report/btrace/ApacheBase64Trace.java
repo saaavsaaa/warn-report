@@ -29,6 +29,7 @@ public class ApacheBase64Trace {
     public static void traceHttpServletRequestCopierExecute(@ProbeClassName String name,@ProbeMethodName String method, String base64String){
         println(strcat("trace class name ============", name));
         println(strcat("trace class method ============", method));
+        println(strcat("trace class base64Data ============", base64String));
     }
     
     @OnMethod(clazz = "org.apache.commons.codec.binary.Base64", method = "decodeBase64", location = @Location(Kind.ERROR))

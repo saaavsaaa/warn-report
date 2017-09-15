@@ -15,12 +15,13 @@ public class BTraceInitBase64 {
     private static long startTime = 0;
     
     @OnMethod(clazz = "/.*.Base64/", method = "<init>")
-    public static void startMethodHandl(){
+    public static void startMethodHandle(){
+        println("sssssssssssssssssssssssss");
         startTime = timeMillis();
     }
     
     @OnMethod(clazz = "/.*.Base64/", method = "<init>", location = @Location(Kind.RETURN))
-    public static void endMethodHandl(){
+    public static void endMethodHandle(){
         println(strcat("trace execute time============", str(timeMillis()-startTime)));
         println("-------------------------------------------");
     }
@@ -38,8 +39,15 @@ public class BTraceInitBase64 {
     }
     
     @OnMethod(clazz = "/.*.Base64/", method = "decodeBase64")
-    public static void startBase64MethodHandl(){
+    public static void startBase64MethodHandle(){
         startTime = timeMillis();
+    }
+    
+    @OnMethod(clazz = "/.*.Base64/", method = "decodeBase64")
+    public static void preMethodHandle(@ProbeClassName String name,@ProbeMethodName String method){
+        println(strcat("trace class name ============", name));
+        println(strcat("trace class method ============", method));
+        println("pppppppppppppppppppppppppppppppppppppppppppppp");
     }
     
     @OnMethod(clazz = "/.*.Base64/", method = "decodeBase64", location = @Location(Kind.RETURN))

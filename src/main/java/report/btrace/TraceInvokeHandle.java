@@ -16,6 +16,30 @@ public class TraceInvokeHandle {
     private static long startTime = 0;
     
     @OnMethod(clazz = "java.lang.invoke.MethodHandleImpl", method = "initStatics")
+    public static void startMethodHandl(){
+        startTime = timeMillis();
+    }
+    
+    @OnMethod(clazz = "java.lang.invoke.MethodHandleImpl", method = "initStatics", location = @Location(Kind.RETURN))
+    public static void endMethodHandl(){
+        println(strcat("java.lang.invoke.MethodHandleImpl.initStatics execute time============", str(timeMillis()-startTime)));
+        println("-------------------------------------------");
+    }
+    
+    @OnMethod(clazz = "java.lang.invoke.MethodHandleImpl", method = "initStatics", location = @Location(Kind.RETURN))
+    public static void traceMethodHandlExecute(@ProbeClassName String name,@ProbeMethodName String method, byte[] base64Data){
+        println(strcat("trace class name ============", name));
+        println(strcat("trace class method ============", method));
+        println(strcat("trace class base64Data ============", Strings.str(base64Data)));
+    }
+    
+    @OnMethod(clazz = "java.lang.invoke.MethodHandleImpl", method = "initStatics", location = @Location(Kind.ERROR))
+    public static void traceERRORMethodHandl(@ProbeClassName String name,@ProbeMethodName String method){
+        println(strcat("ERROR class name ============", name));
+        println(strcat("ERROR class method ============", method));
+    }
+    
+    @OnMethod(clazz = "java.lang.invoke.MethodHandleImpl", method = "initStatics")
     public static void startMethod(){
         startTime = timeMillis();
     }

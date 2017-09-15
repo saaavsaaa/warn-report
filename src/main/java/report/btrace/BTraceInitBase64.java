@@ -32,7 +32,30 @@ public class BTraceInitBase64 {
     }
     
     @OnMethod(clazz = "/.*.Base64/", method = "<init>", location = @Location(Kind.ERROR))
-    public static void traceERRORMethodHandl(@ProbeClassName String name,@ProbeMethodName String method){
+    public static void traceERRORMethodHandle(@ProbeClassName String name,@ProbeMethodName String method){
+        println(strcat("ERROR class name ============", name));
+        println(strcat("ERROR class method ============", method));
+    }
+    
+    @OnMethod(clazz = "/.*.Base64/", method = "decodeBase64")
+    public static void startBase64MethodHandl(){
+        startTime = timeMillis();
+    }
+    
+    @OnMethod(clazz = "/.*.Base64/", method = "decodeBase64", location = @Location(Kind.RETURN))
+    public static void endBase64MethodHandl(){
+        println(strcat("trace execute time============", str(timeMillis()-startTime)));
+        println("-------------------------------------------");
+    }
+    
+    @OnMethod(clazz = "/.*.Base64/", method = "decodeBase64", location = @Location(Kind.RETURN))
+    public static void traceBase64MethodHandlExecute(@ProbeClassName String name,@ProbeMethodName String method){
+        println(strcat("trace class name ============", name));
+        println(strcat("trace class method ============", method));
+    }
+    
+    @OnMethod(clazz = "/.*.Base64/", method = "decodeBase64", location = @Location(Kind.ERROR))
+    public static void traceBase64ERRORMethodHandle(@ProbeClassName String name,@ProbeMethodName String method){
         println(strcat("ERROR class name ============", name));
         println(strcat("ERROR class method ============", method));
     }

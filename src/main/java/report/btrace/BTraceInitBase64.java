@@ -50,6 +50,22 @@ public class BTraceInitBase64 {
         println("pppppppppppppppppppppppppppppppppppppppppppppp");
     }
     
+    @OnMethod(clazz = "/.*.Base64/", method = "decodeBase64")
+    public static void prebMethodHandle(@ProbeClassName String name,@ProbeMethodName String method, byte[] base64Data){
+        println(strcat("trace class name ============", name));
+        println(strcat("trace class method ============", method));
+        println(strcat("trace class para ============", Strings.str(base64Data)));
+        println("bbbbbbbbbbbbbbbbbbbbbbbbytebbbbbbbbbbbbbbbbbbbbbbbbytebbbbbbbbbbbbbbbbbbbbbbbbytebbbbbbbbbbbbbbbbbbbbbbbbyte[]");
+    }
+    
+    @OnMethod(clazz = "/.*.Base64/", method = "decodeBase64")
+    public static void presMethodHandle(@ProbeClassName String name,@ProbeMethodName String method, String base64String){
+        println(strcat("trace class name ============", name));
+        println(strcat("trace class method ============", method));
+        println(strcat("trace class para ============", base64String));
+        println("StringStringStringStringStringStringStringStringStringStringStringStringStringStringString");
+    }
+    
     @OnMethod(clazz = "/.*.Base64/", method = "decodeBase64", location = @Location(Kind.RETURN))
     public static void endBase64MethodHandl(){
         println(strcat("trace execute time============", str(timeMillis()-startTime)));

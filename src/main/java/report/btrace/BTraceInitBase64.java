@@ -14,25 +14,26 @@ public class BTraceInitBase64 {
     @TLS
     private static long startTime = 0;
     
-    @OnMethod(clazz = "/.*.Base64/", method = "<init>")
+    //clinit没有构造时执行生成的无参构造，init没有构造不执行
+    @OnMethod(clazz = "/.*.Base64/", method = "<clinit>")
     public static void startMethodHandle(){
         println("sssssssssssssssssssssssss");
         startTime = timeMillis();
     }
     
-    @OnMethod(clazz = "/.*.Base64/", method = "<init>", location = @Location(Kind.RETURN))
+    @OnMethod(clazz = "/.*.Base64/", method = "<clinit>", location = @Location(Kind.RETURN))
     public static void endMethodHandle(){
         println(strcat("trace execute time============", str(timeMillis()-startTime)));
         println("-------------------------------------------");
     }
     
-    @OnMethod(clazz = "/.*.Base64/", method = "<init>", location = @Location(Kind.RETURN))
+    @OnMethod(clazz = "/.*.Base64/", method = "<clinit>", location = @Location(Kind.RETURN))
     public static void traceMethodHandlExecute(@ProbeClassName String name,@ProbeMethodName String method){
         println(strcat("trace class name ============", name));
         println(strcat("trace class method ============", method));
     }
     
-    @OnMethod(clazz = "/.*.Base64/", method = "<init>", location = @Location(Kind.ERROR))
+    @OnMethod(clazz = "/.*.Base64/", method = "<clinit>", location = @Location(Kind.ERROR))
     public static void traceERRORMethodHandle(@ProbeClassName String name,@ProbeMethodName String method){
         println(strcat("ERROR class name ============", name));
         println(strcat("ERROR class method ============", method));

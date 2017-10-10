@@ -1,7 +1,6 @@
 import org.junit.Test;
+import util.ConcurrentRun;
 import util.IdGenerator;
-
-import java.util.UUID;
 
 /**
  * Created by root on 17-4-25.

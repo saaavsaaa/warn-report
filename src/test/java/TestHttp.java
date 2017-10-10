@@ -3,19 +3,19 @@ import org.apache.http.entity.StringEntity;
 import org.junit.Test;
 import structure.ConcurrentHashMapExtend;
 import structure.Pair;
+import util.ConcurrentRun;
+import util.WebRequestClient;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class TestHttp {
     
 //    curl -i -X POST -H "'Content-type':'application/json', 'charset':'utf-8' -d 'json_data={"loginName":"aaaa","registerType":"1","deviceId":"aaa","channelCode":"aaa","msgCode":"123456"},"hmac":"aaaaa"}'" http://192.168.1.68:8080/portal-bos/app/appv4/appLoginWit.action
 //    private static final String URL = "http://192.168.1.47:8080/";
-    private static final String URL = "http://192.168.1.213:8088/";
+    private static final String URL = "http://192.168.1.215:8080/";
     final String loginToken = "115d522ca69ea091c63f09f5d7e5bc9c";
     final String loginUserID = "1";
 
@@ -52,9 +52,10 @@ public class TestHttp {
     
     @Test
     public void postPress() throws IOException, InterruptedException {
-        int enlarge = 10;
+        int enlarge = 50;
         List<Runnable> runnableList = new ArrayList<>();
-        urls = buildUrls();
+//        urls = buildUrls();
+        urls = buildOldUrls();
         urls.forEachEntry(119, (e) -> {
             String action = e.getKey();
             Pair pair = e.getValue();
@@ -79,6 +80,63 @@ public class TestHttp {
         paras.setContentEncoding("UTF-8");
         paras.setContentType("application/json");
         post(action, "JSESSIONID", "15111111111", paras);
+    }
+    
+    @Test
+    public void postSinglePress() throws IOException {
+//        String cookieValue = "15111111111";
+//        String action = "app/firstShow/not/queryFirstShow.action";
+//        String json = "{\"hmac\":\"NyKPvrVqqjmdR0gkoQEFlvw/GuEucDHUKUgf7KHLlYldlE2LjwttbF2qREij1KaxEtrYuNlBd2tWemFPfncaTjfaXjTkddRvKiUezjHeaYQmfY/qFZT1MNRB/kZt/BmM54dEOCnEcBnsnJcRfmvd2WmWxF0c0ptYwo21q5hNFQc=\",\"params\":{}}";
+        String cookieValue = "8c593810de1447f987bde834f24900b6";
+        String action = "promotion-service/advertisement/not/queryShopAdvertList.action";
+        String json = "{\"hmac\": \"4931fc0765a17293c8635b1759724e146b078193\", \"params\": {\"bannerType\": \"1\"}}";
+        StringEntity paras = new StringEntity(json);;
+        paras.setContentEncoding("UTF-8");
+        paras.setContentType("application/json");
+        String result = post(action, "JSESSIONID", cookieValue, paras);
+        System.out.println("result:" + result);
+    }
+    
+    private ConcurrentHashMapExtend<String, String, Integer> buildOldUrls(){
+        urls = new ConcurrentHashMapExtend<>();
+        urls.putKeysList(11,
+                new Pair("portal-bos/app/appv4/notice/queryNoticeList.action", "{\"curPage\":1,\"params\":{\"msgtype\":\"3\",\"isindex\":\"1\"},\"hmac\":\"a5a052efb20641d0fd09230e8a20f53c6a4007e4\"}"),
+                new Pair("portal-bos/app/activityArea/queryLatestActivity.action", "{\"type\":\"4\",\"hmac\":\"d35c75787e07a679d3a42a9168c5c515a0254c48\"}"),
+                new Pair("portal-bos/app/appv5/regularFinance/queryRegularDetailExperience.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
+                new Pair("portal-bos/app/appv4/firstShowV2/queryFirstShowV3.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
+                new Pair("portal-bos/app/appv3/financeMenuList.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"));
+        urls.putKeysList(7,
+                new Pair("portal-bos/app/activityArea/queryActivityAreaList.action", "{\"curPage\":\"1\",\"hmac\":\"57a1e2787405c6fd397f13e9431a4511236d708b\"}"),
+                new Pair("portal-bos/app/discovery.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
+                new Pair("portal-bos/app/appv3/advert/queryAdvertListv4.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
+                new Pair("portal-bos/app/newTask/taskProgressV2.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
+                new Pair("portal-bos/app/appv3/notice/queryMyMessNoNotReadV2.action", "{\"curPage\": 1,\"params\": {\"phone\": \"\"  },\"hmac\": \"278abbc069efc1220b47d47f6d75779112cde72a\"}"));
+        urls.putKeysList(5,
+//                new Pair("/share/getMicroMsgInfoCrossDomain.action", ""),
+//                new Pair("/newTask/taskBanner.action", ""),
+//                new Pair("app/bos/myaccount/myAccountComprehensive.action", "{\"hmac\":\"T46zg8mZ/TxjqobKRdEujI+bBIJRdcb4hVVKcJ0HiFwCosGODv2HRWEppAlFpl2sfKUo3sgqOEnqm8+USs4oHGCPS95dTCAxvMGrpjMZOmmqIl4vCLyuVm4U8QdSWLhWoZud+qEM7EwN5Q0HagwLAOmijzFQj9dqzMVxqeeRgWM=\",\"params\":{}}"),
+                new Pair("portal-bos/app/appv5/regularFinance/queryRegularListV5.action", "{\"curPage\":1,\"hmac\":\"b3742274abc71329407aa107f9faffa60e326cd8\"}"),
+                new Pair("portal-bos/app/appv5/newCustBid/queryNewCustBidList.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
+//                new Pair("portal-bos/app/appv5/regularFinance/queryRegularDetailExperience.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
+                new Pair("portal-bos/app/appv4/checkOpenGesture.actionn", "{\"params\":{\"loginName\":\"15111111111\"},\"hmac\":\"ea0735be1cdd21bc7bdb2dde215a739271936041\"}"));
+        urls.putKeysList(3,
+                new Pair("portal-bos/app/appv4/updateAll.action", "{\"params\":{\"appType\":\"1\",\"appVersion\":39},\"hmac\":\"cc3e60efae506f58b6e85311fe8317ea004d16c2\"}"),
+                new Pair("portal-bos/app/appv4/advertisement/queryAppPopAdvertisementPic.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
+//                new Pair("/signIn/newSignIn.action", ""),
+                new Pair("portal-bos/app/appv4/advertisement/queryLoadingPic.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"));
+        return urls;
+    }
+    
+    @Test
+    public void postOld() throws IOException {
+        String cookieValue = "dfa1f765c71b43a89cb3ab8bb8f2c903";
+        String action = "portal-bos/app/appv5/regularFinance/queryRegularListV5.action";
+        String json = "{\"curPage\":1,\"hmac\":\"b3742274abc71329407aa107f9faffa60e326cd8\"}";
+        StringEntity paras = new StringEntity(json);;
+        paras.setContentEncoding("UTF-8");
+        paras.setContentType("application/json");
+        String result = post(action, "JSESSIONID", cookieValue, paras);
+        System.out.println("result:" + result);
     }
     /*
     * /firstShow/not/queryFirstShow.action 查询首页展示项目
@@ -139,7 +197,7 @@ public class TestHttp {
     private String getResult(String action, String paras) throws IOException {
         String result = null;
         try {
-            result = TestWebRequestWithLogin.testLinkGet(URL + action + paras, loginToken, loginUserID);
+            result = WebRequestClient.testLinkGet(URL + action + paras, loginToken, loginUserID);
         } catch (Exception e) {
             // TODO 自动生成的 catch 块
             e.printStackTrace();
@@ -151,7 +209,7 @@ public class TestHttp {
     private String post(String action, String cookieKey, String cookieValue,HttpEntity paras) throws IOException {
         String result = null;
         try {
-            result = TestWebRequestWithLogin.testPostWithCookie(URL + action, cookieKey, cookieValue, paras);
+            result = WebRequestClient.testPostWithCookie(URL + action, cookieKey, cookieValue, paras);
         } catch (Exception e) {
             // TODO 自动生成的 catch 块
             e.printStackTrace();
@@ -163,7 +221,7 @@ public class TestHttp {
     private String post(String action, HttpEntity paras) throws IOException {
         String result = null;
         try {
-            result = TestWebRequestWithLogin.testLinkPost(URL + action, loginToken, loginUserID, paras);
+            result = WebRequestClient.testLinkPost(URL + action, loginToken, loginUserID, paras);
         } catch (Exception e) {
             // TODO 自动生成的 catch 块
             e.printStackTrace();

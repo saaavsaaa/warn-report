@@ -1,11 +1,7 @@
 
 import org.junit.Test;
 import rocketDoubleWrite.ProducerClient;
-
-import java.util.Iterator;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
+import util.ConcurrentRun;
 
 public class TestDoubleClient {
     @Test

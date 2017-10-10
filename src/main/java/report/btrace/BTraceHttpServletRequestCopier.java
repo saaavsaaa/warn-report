@@ -18,6 +18,7 @@ public class BTraceHttpServletRequestCopier {
     private static long initStartTime = 0;
     
     @OnMethod(clazz = "org.apache.commons.io.IOUtils", method = "copyLarge")
+//    @OnMethod(clazz = "com.caijinquan.p2p.common.controller.httpobject.HttpServletRequestCopier", method = "getCopy")
     public static void startMethod(){
         startTime = timeMillis();
     }
@@ -31,7 +32,7 @@ public class BTraceHttpServletRequestCopier {
         }
     }
     
-    @OnLowMemory(pool = "nio", threshold = 75)
+    @OnLowMemory(pool = "pool", threshold = 75)
     public static void low(){
         println(strcat("OnLowMemory time==", str(Time.timestamp())));
     }
@@ -70,12 +71,12 @@ public class BTraceHttpServletRequestCopier {
         }
     }
     
-    @OnMethod(clazz = "cn.xxx.xxx.app.filter.HttpServletRequestCopier", method = "<init>")
+    @OnMethod(clazz = "cn.caijingquan.p2p.app.filter.HttpServletRequestCopier", method = "<init>")
     public static void startMethodinit(){
         initStartTime = timeMillis();
     }
     
-    @OnMethod(clazz = "cn.xxx.xxx.app.filter.HttpServletRequestCopier", method = "<init>", location = @Location(Kind.RETURN))
+    @OnMethod(clazz = "cn.caijingquan.p2p.app.filter.HttpServletRequestCopier", method = "<init>", location = @Location(Kind.RETURN))
     public static void endHttpServletRequestCopierMethodinit(){
         if (timeMillis()-initStartTime > 1000) {
             println(strcat("HttpServletRequestCopier.init execute time==", str(timeMillis() - initStartTime)));
@@ -83,7 +84,7 @@ public class BTraceHttpServletRequestCopier {
         }
     }
     
-    @OnMethod(clazz = "cn.xxx.xxx.app.filter.HttpServletRequestCopier", method = "<init>", location = @Location(Kind.RETURN))
+    @OnMethod(clazz = "cn.caijingquan.p2p.app.filter.HttpServletRequestCopier", method = "<init>", location = @Location(Kind.RETURN))
     public static void traceHttpServletRequestCopierExecuteinit(@ProbeClassName String name,@ProbeMethodName String method){
         if (timeMillis()-initStartTime > 1000) {
             println(strcat("the class name=>", name));
@@ -91,7 +92,7 @@ public class BTraceHttpServletRequestCopier {
         }
     }
     
-    @OnMethod(clazz = "cn.xxx.xxx.app.filter.HttpServletRequestCopier", method = "<init>", location = @Location(Kind.ERROR))
+    @OnMethod(clazz = "cn.caijingquan.p2p.app.filter.HttpServletRequestCopier", method = "<init>", location = @Location(Kind.ERROR))
     public static void traceERRORExecuteinit(@ProbeClassName String name,@ProbeMethodName String method){
         if (timeMillis()-initStartTime > 1000) {
             println(strcat("ERROR class name=>", name));

@@ -42,7 +42,6 @@ public class StressTest {
         while (true) {
             try {
                 ConcurrentRun.executeTasks(runnableList);
-                break;
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
             }

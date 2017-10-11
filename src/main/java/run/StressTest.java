@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class StressTest {
     private static final String requestURL = "http://192.168.1.215:8080/";
-    private static final String sessionId = "002d796d0a8c45c99aa323ba17ab9bcb";
+    private static final String sessionId = "23afed7a118b4793b5f57eec6ea7842d";
     
     public static void main(String[] args){
         int enlarge = 10;
@@ -64,6 +64,9 @@ public class StressTest {
             e.printStackTrace();
         }
         System.out.println(result);
+        if (result.contains("MF0009")){
+            System.out.println(action);
+        }
         return result;
     }
     
@@ -84,7 +87,7 @@ public class StressTest {
         urls.putKeysList(5,
                 new Pair("portal-bos/app/appv5/regularFinance/queryRegularListV5.action", "{\"curPage\":1,\"hmac\":\"b3742274abc71329407aa107f9faffa60e326cd8\"}"),
                 new Pair("portal-bos/app/appv5/newCustBid/queryNewCustBidList.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
-                new Pair("portal-bos/app/appv4/checkOpenGesture.actionn", "{\"params\":{\"loginName\":\"15111111111\"},\"hmac\":\"ea0735be1cdd21bc7bdb2dde215a739271936041\"}"));
+                new Pair("portal-bos/app/appv4/checkOpenGesture.actionn", "{\"params\":{\"errorTimes\":4,\"gesturePsd\":\"76d1dabed06c7a234de1caab62e84969e34d770e\",\"loginName\":\"15111111111\"},\"hmac\":\"396f34f1be9c72d029054e19c32bde5ce26b4a96\"}"));
         urls.putKeysList(3,
                 new Pair("portal-bos/app/appv4/updateAll.action", "{\"params\":{\"appType\":\"1\",\"appVersion\":39},\"hmac\":\"cc3e60efae506f58b6e85311fe8317ea004d16c2\"}"),
                 new Pair("portal-bos/app/appv4/advertisement/queryAppPopAdvertisementPic.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),

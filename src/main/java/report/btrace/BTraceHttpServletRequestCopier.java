@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.sun.btrace.BTraceUtils.*;
+import static com.sun.btrace.BTraceUtils.strcat;
 
 /**
  * Created by aaa on 17-9-8.
@@ -16,6 +17,9 @@ public class BTraceHttpServletRequestCopier {
     @TLS
     private static long startTime = 0;
     private static long initStartTime = 0;
+    private static long contrast = 100;
+    private static long count = 0;
+    private static long current = 0;
     
     @OnMethod(clazz = "org.apache.commons.io.IOUtils", method = "copyLarge")
 //    @OnMethod(clazz = "com.caijinquan.p2p.common.controller.httpobject.HttpServletRequestCopier", method = "getCopy")
@@ -25,10 +29,15 @@ public class BTraceHttpServletRequestCopier {
     
     @OnMethod(clazz = "org.apache.commons.io.IOUtils", method = "copyLarge", location = @Location(Kind.RETURN))
     public static void endHttpServletRequestCopierMethod(){
-        if (timeMillis()-startTime > 1000) {
+        if (timeMillis()-startTime > contrast) {
             println(strcat("copyLarge execute time==", str(timeMillis() - startTime)));
             println(strcat("copyLarge time==", str(Time.timestamp())));
             println("-------------------------------------------");
+        }
+        count++;
+        if (count == current + 100) {
+            current = count;
+            println(strcat("conunt:::", str(count)));
         }
     }
     
@@ -44,7 +53,7 @@ public class BTraceHttpServletRequestCopier {
     
     @OnMethod(clazz = "org.apache.commons.io.IOUtils", method = "copyLarge", location = @Location(Kind.RETURN))
     public static void traceHttpServletRequestCopierExecute(@ProbeClassName String name,@ProbeMethodName String method, @Return long result){
-        if (timeMillis()-startTime > 1000) {
+        if (timeMillis()-startTime > contrast) {
             println(strcat("traceHttpServletRequestCopierExecute the class name=>", name));
             println(strcat("traceHttpServletRequestCopierExecute the class method=>", method));
             println(strcat("traceHttpServletRequestCopierExecute result class method=>", str(result)));
@@ -54,7 +63,7 @@ public class BTraceHttpServletRequestCopier {
     @OnMethod(clazz = "org.apache.commons.io.IOUtils", method = "copyLarge", location = @Location(Kind.RETURN))
     public static void traceHttpServletRequestCopierExecuteInput(@ProbeClassName String name, @ProbeMethodName String method,
                                                                  InputStream input, OutputStream output, byte[] buffer){
-        if (timeMillis()-startTime > 1000) {
+        if (timeMillis()-startTime > contrast) {
             println(strcat("traceHttpServletRequestCopierExecuteInput the class name=>", name));
             println(strcat("traceHttpServletRequestCopierExecuteInput the class method=>", method));
             println(strcat("traceHttpServletRequestCopierExecuteInput class input=>", str(input)));
@@ -65,7 +74,7 @@ public class BTraceHttpServletRequestCopier {
     
     @OnMethod(clazz = "org.apache.commons.io.IOUtils", method = "copyLarge", location = @Location(Kind.ERROR))
     public static void traceERRORExecute(@ProbeClassName String name,@ProbeMethodName String method){
-        if (timeMillis()-startTime > 1000) {
+        if (timeMillis()-startTime > contrast) {
             println(strcat("ERROR class name=>", name));
             println(strcat("ERROR class method=>", method));
         }
@@ -78,7 +87,7 @@ public class BTraceHttpServletRequestCopier {
     
     @OnMethod(clazz = "cn.caijingquan.p2p.app.filter.HttpServletRequestCopier", method = "<init>", location = @Location(Kind.RETURN))
     public static void endHttpServletRequestCopierMethodinit(){
-        if (timeMillis()-initStartTime > 1000) {
+        if (timeMillis()-initStartTime > contrast) {
             println(strcat("HttpServletRequestCopier.init execute time==", str(timeMillis() - initStartTime)));
             println("-------------------------------------------");
         }
@@ -86,7 +95,7 @@ public class BTraceHttpServletRequestCopier {
     
     @OnMethod(clazz = "cn.caijingquan.p2p.app.filter.HttpServletRequestCopier", method = "<init>", location = @Location(Kind.RETURN))
     public static void traceHttpServletRequestCopierExecuteinit(@ProbeClassName String name,@ProbeMethodName String method){
-        if (timeMillis()-initStartTime > 1000) {
+        if (timeMillis()-initStartTime > contrast) {
             println(strcat("the class name=>", name));
             println(strcat("the class method=>", method));
         }
@@ -94,7 +103,7 @@ public class BTraceHttpServletRequestCopier {
     
     @OnMethod(clazz = "cn.caijingquan.p2p.app.filter.HttpServletRequestCopier", method = "<init>", location = @Location(Kind.ERROR))
     public static void traceERRORExecuteinit(@ProbeClassName String name,@ProbeMethodName String method){
-        if (timeMillis()-initStartTime > 1000) {
+        if (timeMillis()-initStartTime > contrast) {
             println(strcat("ERROR class name=>", name));
             println(strcat("ERROR class method=>", method));
         }

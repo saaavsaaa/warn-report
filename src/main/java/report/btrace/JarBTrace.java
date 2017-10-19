@@ -18,7 +18,7 @@ import static com.sun.btrace.BTraceUtils.strcat;
 @BTrace
 public class JarBTrace {
     @OnMethod(clazz = "java.util.jar.JarFile", method = "<init>", location = @Location(Kind.RETURN))
-    public static void traceHttpServletRequestCopierExecuteInput(@ProbeClassName String name, @ProbeMethodName String method,
+    public static void traceJar(@ProbeClassName String name, @ProbeMethodName String method,
                                                                  File file, boolean verify, int mode){
         String input = str(file);
         println(input);
@@ -39,6 +39,11 @@ public class JarBTrace {
             println(strcat("jar class mode=>", str(mode)));
             println(strcat("http time==", str(Time.timestamp())));
         }
+    }
+    
+    @OnMethod(clazz = "java.lang.ClassLoader", method = "loadClass", location = @Location(Kind.RETURN))
+    public static void traceClassLoader(@ProbeClassName String name, @ProbeMethodName String method, String jname, boolean resolve){
+        println(strcat("traceClassLoader=>", jname));
     }
     
     
@@ -89,8 +94,8 @@ public class JarBTrace {
         printVmArguments();
         println("OS Enviroment:");
         printEnv();
-        exit(0);
     }
+    
     //打印程序执行关系
     //LobbyAction中所有方法执行的执行顺序
     @OnMethod(clazz="sun.misc.URLClassPath", method="/.*/",

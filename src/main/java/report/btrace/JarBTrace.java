@@ -17,6 +17,17 @@ import static com.sun.btrace.BTraceUtils.strcat;
  */
 @BTrace
 public class JarBTrace {
+    
+    //打印系统参数
+    static {
+        println("System Properties:");
+        printProperties();
+        println("VM Flags:");
+        printVmArguments();
+        println("OS Enviroment:");
+        printEnv();
+    }
+    
     @OnMethod(clazz = "java.util.jar.JarFile", method = "<init>", location = @Location(Kind.RETURN))
     public static void traceJar(@ProbeClassName String name, @ProbeMethodName String method,
                                                                  File file, boolean verify, int mode){
@@ -84,16 +95,6 @@ public class JarBTrace {
         printFields(self);
         Object montmp =get(field(getSuperclass(classOf(self)), "urls"), self);
         printFields(montmp);
-    }
-
-    //打印系统参数
-    static {
-        println("System Properties:");
-        printProperties();
-        println("VM Flags:");
-        printVmArguments();
-        println("OS Enviroment:");
-        printEnv();
     }
     
     //打印程序执行关系

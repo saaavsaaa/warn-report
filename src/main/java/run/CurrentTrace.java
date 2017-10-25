@@ -1,5 +1,7 @@
 package run;
 
+import util.ConcurrentRun;
+import util.IdGenerator;
 import util.size.ClassIntrospection;
 import util.size.ObjectInfo;
 
@@ -16,10 +18,31 @@ public enum CurrentTrace {
     INSTANCE;
     
     public static void main(String[] args) throws Exception {
-        CurrentTrace.INSTANCE.started("aaaaaaa");
-        System.out.println(CurrentTrace.INSTANCE.getTraceIdHolder().size());
-        Thread.sleep(3000);
-        CurrentTrace.INSTANCE.success("aaaaaaa");
+        Runnable watch = () -> {
+            String traceId = IdGenerator.INSTANCE.createNewId();
+            CurrentTrace.INSTANCE.started(traceId);
+            
+            if (System.currentTimeMillis() % 2 == 0){
+                CurrentTrace.INSTANCE.success(traceId);
+            } else {
+                CurrentTrace.INSTANCE.fail(traceId);
+            }
+            
+        };
+        ConcurrentRun.executeTasks(10, watch);
+    }
+    
+    private void printSize()  {
+        final ClassIntrospection ci = new ClassIntrospection();
+        
+        ObjectInfo res;
+        
+        try {
+            res = ci.introspect(traceIdHolder);
+            System.out.println("size:" + res.getDeepSize());
+        } catch (IllegalAccessException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     CurrentTrace(){
@@ -40,7 +63,7 @@ public enum CurrentTrace {
     public synchronized boolean started(String traceId) {
         if (!traceIdHolder.containsKey(traceId)) {
             traceIdHolder.put(traceId, start);
-            System.out.println("start:" + traceIdHolder.size());
+            System.out.println(System.currentTimeMillis() + " start:" + traceId);
             return false;
         }
         return traceIdHolder.get(traceId) == fail;
@@ -55,8 +78,6 @@ public enum CurrentTrace {
     }
     
     private synchronized void stop(){
-        System.out.println(System.currentTimeMillis() + " stop count:" + traceIdHolder.size());
-        this.printSize();
         if (traceIdHolder.isEmpty()){
             return;
         }
@@ -71,6 +92,7 @@ public enum CurrentTrace {
                     }
                 }
         );
+        this.printSize();
     }
     
     private void startWatchTrace() {
@@ -78,18 +100,5 @@ public enum CurrentTrace {
                 Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Current-Trace-Stop"));
         
         scheduledExecutorService.scheduleAtFixedRate(() -> stop(), 1000, 6000, TimeUnit.MILLISECONDS);
-    }
-    
-    private void printSize()  {
-        final ClassIntrospection ci = new ClassIntrospection();
-        
-        ObjectInfo res;
-        
-        try {
-            res = ci.introspect(traceIdHolder);
-            System.out.println("size:" + res.getDeepSize());
-        } catch (IllegalAccessException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

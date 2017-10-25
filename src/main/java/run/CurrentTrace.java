@@ -1,5 +1,8 @@
 package run;
 
+import util.size.ClassIntrospection;
+import util.size.ObjectInfo;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -53,6 +56,7 @@ public enum CurrentTrace {
     
     private synchronized void stop(){
         System.out.println(System.currentTimeMillis() + " stop count:" + traceIdHolder.size());
+        this.printSize();
         if (traceIdHolder.isEmpty()){
             return;
         }
@@ -74,5 +78,18 @@ public enum CurrentTrace {
                 Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Current-Trace-Stop"));
         
         scheduledExecutorService.scheduleAtFixedRate(() -> stop(), 1000, 6000, TimeUnit.MILLISECONDS);
+    }
+    
+    private void printSize()  {
+        final ClassIntrospection ci = new ClassIntrospection();
+        
+        ObjectInfo res;
+        
+        try {
+            res = ci.introspect(traceIdHolder);
+            System.out.println("size:" + res.getDeepSize());
+        } catch (IllegalAccessException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

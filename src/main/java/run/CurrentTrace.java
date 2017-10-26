@@ -19,57 +19,6 @@ import java.util.concurrent.TimeUnit;
 public enum CurrentTrace {
     INSTANCE;
     
-    public static void main(String[] args) throws Exception {
-        List<String> traceIds = new ArrayList<>();
-        Runnable watch = () -> {
-            String traceId = IdGenerator.INSTANCE.createNewId();
-            CurrentTrace.INSTANCE.started(traceId);
-            
-            traceIds.add(traceId);
-            if (System.currentTimeMillis() % 2 == 0) {
-                CurrentTrace.INSTANCE.success(traceId);
-            } else {
-                CurrentTrace.INSTANCE.fail(traceId);
-            }
-            
-        };
-        ConcurrentRun.executeTasks(10, watch);
-        
-        Runnable retry = () -> {
-            while (!traceIds.isEmpty()) {
-                traceIds.forEach(traceId -> {
-                            if (CurrentTrace.INSTANCE.started(traceId)) {
-                                System.out.println("Already started : " + traceId);
-                                return;
-                            }
-                            
-                            if (System.currentTimeMillis() % 2 == 0) {
-                                CurrentTrace.INSTANCE.success(traceId);
-                            } else {
-                                CurrentTrace.INSTANCE.fail(traceId);
-                            }
-                            
-                            ConcurrentRun.sleepCurrentThread(6);
-                        }
-                );
-            }
-        };
-        ConcurrentRun.executeTasks(10, retry);
-    }
-    
-    private void printSize() {
-        final ClassIntrospection ci = new ClassIntrospection();
-        
-        ObjectInfo res;
-        
-        try {
-            res = ci.introspect(traceIdHolder);
-            System.out.println("size:" + res.getDeepSize());
-        } catch (IllegalAccessException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-    
     CurrentTrace() {
         startWatchTrace();
     }
@@ -113,7 +62,6 @@ public enum CurrentTrace {
                     }
                 }
         );
-        this.printSize();
     }
     
     private void startWatchTrace() {

@@ -1,4 +1,4 @@
-package util;
+package util.type;
 
 import java.lang.reflect.Field;
 

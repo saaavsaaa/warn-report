@@ -1,4 +1,4 @@
-package util;
+package util.type;
 
 /**
  * Created by root on 17-2-22.

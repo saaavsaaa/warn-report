@@ -1,6 +1,4 @@
-package util;
-
-import java.util.Arrays;
+package util.type;
 
 /**
  * Created by aaa on 17-6-29.

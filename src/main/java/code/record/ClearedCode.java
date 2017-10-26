@@ -1,7 +1,7 @@
 package code.record;
 
 import org.apache.commons.lang3.StringUtils;
-import util.BeanUtil;
+import util.type.BeanUtil;
 
 import java.util.HashMap;
 import java.util.Map;

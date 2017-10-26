@@ -1,8 +1,8 @@
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import structure.ArrayListExtend;
-import util.Calculate;
-import util.StringUtil;
+import util.type.Calculate;
+import util.type.StringUtil;
 
 import java.math.BigInteger;
 import java.util.*;

@@ -5,6 +5,8 @@ import util.IdGenerator;
 import util.size.ClassIntrospection;
 import util.size.ObjectInfo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -18,11 +20,13 @@ public enum CurrentTrace {
     INSTANCE;
     
     public static void main(String[] args) throws Exception {
+        List<String> traceIds = new ArrayList<>();
         Runnable watch = () -> {
             String traceId = IdGenerator.INSTANCE.createNewId();
             CurrentTrace.INSTANCE.started(traceId);
             
-            if (System.currentTimeMillis() % 2 == 0){
+            traceIds.add(traceId);
+            if (System.currentTimeMillis() % 2 == 0) {
                 CurrentTrace.INSTANCE.success(traceId);
             } else {
                 CurrentTrace.INSTANCE.fail(traceId);
@@ -30,9 +34,30 @@ public enum CurrentTrace {
             
         };
         ConcurrentRun.executeTasks(10, watch);
+        
+        Runnable retry = () -> {
+            while (!traceIds.isEmpty()) {
+                traceIds.forEach(traceId -> {
+                            if (CurrentTrace.INSTANCE.started(traceId)) {
+                                System.out.println("Already started : " + traceId);
+                                return;
+                            }
+                            
+                            if (System.currentTimeMillis() % 2 == 0) {
+                                CurrentTrace.INSTANCE.success(traceId);
+                            } else {
+                                CurrentTrace.INSTANCE.fail(traceId);
+                            }
+                            
+                            ConcurrentRun.sleepCurrentThread(6);
+                        }
+                );
+            }
+        };
+        ConcurrentRun.executeTasks(10, retry);
     }
     
-    private void printSize()  {
+    private void printSize() {
         final ClassIntrospection ci = new ClassIntrospection();
         
         ObjectInfo res;
@@ -45,7 +70,7 @@ public enum CurrentTrace {
         }
     }
     
-    CurrentTrace(){
+    CurrentTrace() {
         startWatchTrace();
     }
     
@@ -55,10 +80,6 @@ public enum CurrentTrace {
     private final Integer stop = 3;
     
     private final Map<String, Integer> traceIdHolder = new ConcurrentHashMap<>();
-    
-    public Map<String, Integer> getTraceIdHolder(){
-        return traceIdHolder;
-    }
     
     public synchronized boolean started(String traceId) {
         if (!traceIdHolder.containsKey(traceId)) {
@@ -77,16 +98,16 @@ public enum CurrentTrace {
         traceIdHolder.replace(traceId, success);
     }
     
-    private synchronized void stop(){
-        if (traceIdHolder.isEmpty()){
+    private synchronized void stop() {
+        if (traceIdHolder.isEmpty()) {
             return;
         }
         traceIdHolder.forEach(
-                (k, v)->{
-                    if (v == success){
+                (k, v) -> {
+                    if (v == success) {
                         traceIdHolder.replace(k, stop);
                         System.out.println(System.currentTimeMillis() + " stop:" + k);
-                    } else if (v == stop){
+                    } else if (v == stop) {
                         traceIdHolder.remove(k);
                         System.out.println(System.currentTimeMillis() + " del:" + k);
                     }

@@ -15,7 +15,7 @@ public class TestHttp {
     
 //    curl -i -X POST -H "'Content-type':'application/json', 'charset':'utf-8' -d 'json_data={"loginName":"aaaa","registerType":"1","deviceId":"aaa","channelCode":"aaa","msgCode":"123456"},"hmac":"aaaaa"}'" http://192.168.1.68:8080/portal-bos/app/appv4/appLoginWit.action
 //    private static final String URL = "http://192.168.1.47:8080/";
-    private static final String URL = "http://192.168.1.215:8080/";
+    private static final String URL = "http://192.168.1.214:8080/";
     final String loginToken = "002d796d0a8c45c99aa323ba17ab9bcb";
     final String loginUserID = "1";
 
@@ -84,12 +84,12 @@ public class TestHttp {
     
     @Test
     public void postSinglePress() throws IOException {
-//        String cookieValue = "15111111111";
-//        String action = "app/firstShow/not/queryFirstShow.action";
-//        String json = "{\"hmac\":\"NyKPvrVqqjmdR0gkoQEFlvw/GuEucDHUKUgf7KHLlYldlE2LjwttbF2qREij1KaxEtrYuNlBd2tWemFPfncaTjfaXjTkddRvKiUezjHeaYQmfY/qFZT1MNRB/kZt/BmM54dEOCnEcBnsnJcRfmvd2WmWxF0c0ptYwo21q5hNFQc=\",\"params\":{}}";
-        String cookieValue = "8c593810de1447f987bde834f24900b6";
-        String action = "promotion-service/advertisement/not/queryShopAdvertList.action";
-        String json = "{\"hmac\": \"4931fc0765a17293c8635b1759724e146b078193\", \"params\": {\"bannerType\": \"1\"}}";
+        String cookieValue = "2f43ce27d1c94239968b65014bb3a8a5";
+        String action = "app/gesture/checkGesture.action";
+        String json = "{\"params\":{\"errorTimes\":4,\"gesturePsd\":\"76d1dabed06c7a234de1caab62e84969e34d770e\",\"loginName\":\"15111111111\"},\"hmac\":\"U273MJkm9HiMz98im+WKm5zu8xdapiTRAdoN32bagUNIUV8xfslkSwAfBQfmuH226mlTf1fKRhGqqh6RtLQ3rengyLqpFpv+DRRcCac1OImv3rzvlR5s0+5vzhGJvQxHX51JMsgj6M68ZanJn1pVcG9QmPmVIuvJQjgixOKATqM=\"}";
+//        String cookieValue = "8c593810de1447f987bde834f24900b6";
+//        String action = "promotion-service/advertisement/not/queryShopAdvertList.action";
+//        String json = "{\"hmac\": \"4931fc0765a17293c8635b1759724e146b078193\", \"params\": {\"bannerType\": \"1\"}}";
         StringEntity paras = new StringEntity(json);;
         paras.setContentEncoding("UTF-8");
         paras.setContentType("application/json");

@@ -92,4 +92,12 @@ public class ConcurrentRun {
         thread.start();
         return thread;
     }
+    
+    public static void sleepCurrentThread(long s){
+        try {
+            Thread.sleep(s * 1000);
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

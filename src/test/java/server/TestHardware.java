@@ -1,3 +1,5 @@
+package server;
+
 import org.junit.Test;
 
 import java.net.NetworkInterface;

@@ -1,3 +1,5 @@
+package structure;
+
 import org.junit.Test;
 
 import java.math.BigInteger;

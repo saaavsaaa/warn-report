@@ -1,3 +1,5 @@
+package object;
+
 import org.junit.Test;
 import util.ConcurrentRun;
 

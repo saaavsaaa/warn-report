@@ -1,3 +1,5 @@
+package structure;
+
 import structure.Search;
 
 import java.util.LinkedList;

@@ -40,15 +40,18 @@ public enum CurrentTrace {
     }
     
     public synchronized void fail(String traceId) {
+        System.out.println("fail : " + traceId);
         traceIdHolder.replace(traceId, fail);
     }
     
     public synchronized void success(String traceId) {
+        System.out.println("success : " + traceId);
         traceIdHolder.replace(traceId, success);
     }
     
     private synchronized void stop() {
         if (traceIdHolder.isEmpty()) {
+            System.out.println("current holder break");
             return;
         }
         traceIdHolder.forEach(
@@ -58,7 +61,7 @@ public enum CurrentTrace {
                         System.out.println(System.currentTimeMillis() + " stop:" + k);
                     } else if (v == stop) {
                         traceIdHolder.remove(k);
-                        System.out.println(System.currentTimeMillis() + " del:" + k);
+                        System.out.println(System.currentTimeMillis() + " delete:" + k);
                     }
                 }
         );

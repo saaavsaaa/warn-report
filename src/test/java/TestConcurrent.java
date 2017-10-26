@@ -48,43 +48,19 @@ public class TestConcurrent {
         }
     }
     
-    private static void circleRetry(List<String> traceIds){
-        while (!traceIds.isEmpty()) {
-            printSize(CurrentTrace.INSTANCE);
-            
-            Iterator<String> iterator = traceIds.listIterator();
-            while (iterator.hasNext()){
-                String traceId = iterator.next();
-                if (CurrentTrace.INSTANCE.started(traceId)) {
-                    System.out.println("Already started : " + traceId);
-                    return;
-                }
-    
-                if (System.currentTimeMillis() % 2 == 0) {
-                    CurrentTrace.INSTANCE.success(traceId);
-                    iterator.remove();
-                } else {
-                    CurrentTrace.INSTANCE.fail(traceId);
-                }
-            }
-    
-            ConcurrentRun.sleepCurrentThread(6);
-        }
-    }
-    
     public static void main(String[] args) throws Exception {
         List<String> traceIds = new ArrayList<>();
         Runnable watch = () -> {
             String traceId = IdGenerator.INSTANCE.createNewId();
             CurrentTrace.INSTANCE.started(traceId);
             
-            traceIds.add(traceId);
-            if (System.currentTimeMillis() % 2 == 0) {
+            long i = Thread.currentThread().getId() % 2;
+            if (i == 0) {
                 CurrentTrace.INSTANCE.success(traceId);
             } else {
                 CurrentTrace.INSTANCE.fail(traceId);
+                traceIds.add(traceId);
             }
-            
         };
         ConcurrentRun.executeTasks(10, watch);
     
@@ -93,5 +69,29 @@ public class TestConcurrent {
             circleRetry(traceIds);
         };
         ConcurrentRun.executeTasks(10, retry);*/
+    }
+    
+    private static void circleRetry(List<String> traceIds){
+        while (!traceIds.isEmpty()) {
+            printSize(CurrentTrace.INSTANCE);
+            
+            Iterator<String> iterator = traceIds.listIterator();
+            while (iterator.hasNext()){
+                String traceId = iterator.next();
+                if (!CurrentTrace.INSTANCE.started(traceId)) {
+                    System.out.println("Already started : " + traceId);
+                    continue;
+                }
+                
+                if (System.currentTimeMillis() % 2 == 0) {
+                    CurrentTrace.INSTANCE.success(traceId);
+                    iterator.remove();
+                } else {
+                    CurrentTrace.INSTANCE.fail(traceId);
+                }
+            }
+            
+            ConcurrentRun.sleepCurrentThread(6);
+        }
     }
 }

@@ -8,8 +8,12 @@ import util.ConcurrentRun;
 import util.WebRequestClient;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Created by aaa on 17-10-10.
@@ -18,32 +22,12 @@ public class StressTest {
     private static final String requestURL = "http://192.168.1.215:8080/";
     private static final String sessionId = "23afed7a118b4793b5f57eec6ea7842d";
     
-    public static void circleRequests(int size, int enlarge, ConcurrentHashMapExtend<String, String, Integer> urls,
-                                       List<Runnable> runnableList){
-        urls.forEachEntry(size, (e) -> {
-            String action = e.getKey();
-            Pair pair = e.getValue();
-            String json = (String) pair.getK();
-            int radio = (int) pair.getV() * enlarge;
-            Runnable runnable = () -> {
-                try {
-                    execSingleRequest(action, json);
-                } catch (IOException ee) {
-                    System.out.println(ee.getMessage());
-                }
-            };
-            for (int i = 0; i < radio; i++) {
-                runnableList.add(runnable);
-            }
-        });
-    }
-    
     public static void main(String[] args){
         int enlarge = 10;
         List<Runnable> runnableList = new ArrayList<>();
         
         int size = 11*5+7*5+5*3+3*3;
-        circleRequests(size, enlarge, buildOldUrls(), runnableList);
+        circleRequests(size, enlarge, buildOldUrls(), runnableList, (url, json) -> execSingleRequest(url, json));
         
         while (true) {
             try {
@@ -54,14 +38,34 @@ public class StressTest {
         }
     }
     
-    private static void execSingleRequest(String action, String json) throws IOException {
-        StringEntity paras = new StringEntity(json);;
+    public static void circleRequests(int size, int enlarge, ConcurrentHashMapExtend<String, String, Integer> urls,
+                                      List<Runnable> runnableList, BiConsumer<? super String, ? super String> action){
+        urls.forEachEntry(size, (e) -> {
+            String url = e.getKey();
+            Pair pair = e.getValue();
+            String json = (String) pair.getK();
+            int radio = (int) pair.getV() * enlarge;
+            
+            for (int i = 0; i < radio; i++) {
+                runnableList.add(() -> action.accept(url, json));
+            }
+        });
+    }
+    
+    private static void execSingleRequest(String action, String json) {
+        StringEntity paras = null;
+        try {
+            paras = new StringEntity(json);
+        } catch (UnsupportedEncodingException e) {
+            System.out.println(e.getMessage());
+        }
+        ;
         paras.setContentEncoding("UTF-8");
         paras.setContentType("application/json");
         post(action, "JSESSIONID", sessionId, paras);
     }
     
-    private static String post(String action, String cookieKey, String cookieValue,HttpEntity paras) throws IOException {
+    private static String post(String action, String cookieKey, String cookieValue,HttpEntity paras) {
         String result = null;
         try {
             result = WebRequestClient.testPostWithCookie(requestURL + action, cookieKey, cookieValue, paras);

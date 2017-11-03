@@ -59,7 +59,13 @@ public class TestHttp {
         List<Runnable> runnableList = new ArrayList<>();
         urls = buildUrls();
 //        urls = buildOldUrls();
-        StressTest.circleRequests(119, enlarge, urls, runnableList);
+        StressTest.circleRequests(119, enlarge, urls, runnableList, (url, json) -> {
+            try {
+                execSingleRequest(url, json);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        });
 
         ConcurrentRun.executeTasks(runnableList);
     }

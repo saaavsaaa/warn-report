@@ -78,7 +78,7 @@ public class ConcurrentRun {
                     startGate.await();
                     try{
                         task.run();
-                        System.out.println(count.incrementAndGet());
+//                        System.out.println(count.incrementAndGet());
                     }
                     finally{
                         //***注意子线程的countDown一定要保证能执行到,因为异常在主线程catch不到***

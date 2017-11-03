@@ -61,8 +61,8 @@ public class WebRequestClient {
 	}
 
 	private static String opera(String url, HttpEntity paras, boolean isGet) throws Exception {
-		System.out.println("----------------------------------------");
-		System.out.println("----------------------------------------");
+//		System.out.println("----------------------------------------");
+//		System.out.println("----------------------------------------");
 
 		String logPath = url;
 

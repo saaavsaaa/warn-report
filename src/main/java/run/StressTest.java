@@ -18,11 +18,9 @@ public class StressTest {
     private static final String requestURL = "http://192.168.1.215:8080/";
     private static final String sessionId = "23afed7a118b4793b5f57eec6ea7842d";
     
-    public static void main(String[] args){
-        int enlarge = 10;
-        List<Runnable> runnableList = new ArrayList<>();
-        ConcurrentHashMapExtend<String, String, Integer> urls = buildOldUrls();
-        urls.forEachEntry(119, (e) -> {
+    public static void circleRequests(int size, int enlarge, ConcurrentHashMapExtend<String, String, Integer> urls,
+                                       List<Runnable> runnableList){
+        urls.forEachEntry(size, (e) -> {
             String action = e.getKey();
             Pair pair = e.getValue();
             String json = (String) pair.getK();
@@ -38,6 +36,14 @@ public class StressTest {
                 runnableList.add(runnable);
             }
         });
+    }
+    
+    public static void main(String[] args){
+        int enlarge = 10;
+        List<Runnable> runnableList = new ArrayList<>();
+        
+        int size = 11*5+7*5+5*3+3*3;
+        circleRequests(size, enlarge, buildOldUrls(), runnableList);
         
         while (true) {
             try {

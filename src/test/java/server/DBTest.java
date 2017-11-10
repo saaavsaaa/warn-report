@@ -8,6 +8,87 @@ import java.sql.*;
  * Created by aaa on 2016/10/9.
  */
 public class DBTest {
+    
+    @Test
+    public void updateRCConcurrent(){
+        Runnable update1 = () -> {
+            Connection conn = null;
+            try {
+                conn = DBUtils.getConnection();
+                conn.setAutoCommit(false);
+                conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+                execSelect(conn);
+                execUpdate(conn);
+                Thread.sleep(1000);
+                execSelect(conn);
+                conn.commit();
+                System.out.println("TreadId : " + Thread.currentThread().getId() + " commit");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    
+        Runnable update2 = () -> {
+            Connection conn = null;
+            try {
+                conn = DBUtils.getConnection();
+                conn.setAutoCommit(false);
+                int a = execSelect(conn);
+                int r = execUpdate(a, conn);
+                if (r == 0){
+                    retryUpdate(0, conn);
+                }
+                execSelect(conn);
+                conn.commit();
+                System.out.println("TreadId : " + Thread.currentThread().getId() + " commit");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }finally {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        
+        
+        Thread threadu1 = createTask(update1);
+        Thread threadu2 = createTask(update2);
+        threadu1.start();
+        threadu2.start();
+        try {
+            threadu1.join();
+            threadu2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private boolean retryUpdate(final int count, Connection conn) throws SQLException {
+        int currentCount = count + 1;
+        conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+        int a = execSelect(conn);
+        conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+        int r = execUpdate(a, conn);
+        if (r == 1){
+            System.out.println("TreadId : " + Thread.currentThread().getId() + ", true version a : " + a);
+            return true;
+        }
+        if (r == 0 && currentCount < 3){
+            return retryUpdate(currentCount, conn);
+        }
+        System.out.println("false");
+        return false;
+    }
 
     @Test
     public void testConcurrentUpdate() throws InterruptedException {
@@ -36,6 +117,7 @@ public class DBTest {
         int a = execSelect(conn);
         int r = execUpdate(a, conn);
         if (r == 1){
+            System.out.println("TreadId : " + Thread.currentThread().getId() + ", true version a : " + a);
             return true;
         }
         if (r == 0 && currentCount < 3){
@@ -409,7 +491,7 @@ class DBUtils {
 //        USERNAME = rb.getString("jdbc.username");
 //        PASSWORD = rb.getString("jdbc.password");
 //        DRIVER = rb.getString("jdbc.driver");
-        URL = "jdbc:mysql://192.168.1.46:3306/p2p";
+        URL = "jdbc:mysql://192.168.2.46:3306/p2p";
         USERNAME = "root";
         PASSWORD = "123456";
         DRIVER = "com.mysql.jdbc.Driver";

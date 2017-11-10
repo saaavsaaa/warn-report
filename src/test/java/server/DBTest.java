@@ -41,17 +41,17 @@ public class DBTest {
             try {
                 conn = DBUtils.getConnection();
                 conn.setAutoCommit(false);
-                int a = execSelect(conn);
-                int r = execUpdate(a, conn);
-                if (r == 0){
-                    retryUpdate(0, conn);
-                }
+//                conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+                Thread.sleep(1000);
+                retryUpdate(0, conn);
                 execSelect(conn);
                 conn.commit();
                 System.out.println("TreadId : " + Thread.currentThread().getId() + " commit");
             } catch (SQLException e) {
                 e.printStackTrace();
-            }finally {
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
                 try {
                     conn.close();
                 } catch (SQLException e) {
@@ -84,6 +84,7 @@ public class DBTest {
             return true;
         }
         if (r == 0 && currentCount < 3){
+            System.out.println("TreadId : " + Thread.currentThread().getId() + ", retry version a : " + a);
             return retryUpdate(currentCount, conn);
         }
         System.out.println("false");

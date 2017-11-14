@@ -36,15 +36,15 @@ public class TestHttp {
                 new Pair("app/advertisement/not/queryAppPopAdvertisementPic.action", "{\"hmac\":\"dveo5qx2oXJRKoucGwQdF8g8EtzAINW/vyJZXjR0RqiyrK5ST4EFuOpRtosuadztVJbYUsP7+v5Xuy5n7/8qoTHxETZkYAGNv3pi2IXnMkvXjaYD+BMON02j1ggveWnzU9iPVotCnKIOoxYn1MbXwI4sF4xFopeadGSczxvn5lM=\",\"params\":{}}"),
                 new Pair("app/discovery/not/queryDiscovery.action", "{\"hmac\":\"ThBtfTMPCAWdR/3Y8UUGHBg5uAmJPFQ6Q+Lc+KUHiaELySmIQmWxrPPcMm70aVtI1rFAHvdKmX4URZKSAQpGzC2U0CarXW59ycuLFPUd9/Sm/sBgunFQAhxOLHF2t/DxNolf2OLNmVqjTsMZ2QQ+AhFdbJHzJrUWtAwdfzVp1M0=\"}"),
                 new Pair("app/menu/not/list.action", "{\"hmac\":\"j8zPP4qbxgM/88jIwEmISIZJLTWtWnK0KleTs0w8fLw2xN9CmFqAOtnNamaN6U2Dz3w11tiSzoFTdeJZ1iJhGapeCkcF9PUgYa692k0Qx2slX1vSrYY+zADn5XQz8c7U+KEVRkNOTVpgS+wTK88vgQpn56qMI5yOIzXd+WsRjvU=\",\"params\":{}}"),
-                new Pair("app/activityArea/queryActivityAreaList.action", "{\"hmac\":\"iC9VinR1FUojMJJXALKeBlde1An5lX2Z9tRh1ObpYjWOKR9Bt3kRS0jA87N+xQBjViUleuWGayF4MvvNBBUYWLVk92h+mYv7tsQyFagIEqVEQ6V9k6QanjzZdBWjUBkSjjvBRTfF4LJYOkNHaw0B71cB3BKZSyUFEFOgYLA+qPo=\",\"curPage\":\"1\",\"params\":{\"activityType\":\"0\"}}"),
-                new Pair("app/activityArea/not/queryFinanceActivity.action", "{\"hmac\":\"Qde4rWdDULlfgUFL2IfwicDyWIf5GBdRisEPiTPQOWidpKJp1n5f7pb8wdcALbPZMEctm6zvfCwnVhC7pnqpXCRbswm7Vfk3K9feKToYIxstbf9laJVLHfOm2bKAiLJbWMCtBY/7RyEvLg/VWvrMIyoL0t1v36zmjR1JkhlXnHo=\",\"params\":{\"type\":\"1\"}}"));
+                new Pair("app/activityArea/not/queryActivityAreaList.action", "{\"hmac\":\"iC9VinR1FUojMJJXALKeBlde1An5lX2Z9tRh1ObpYjWOKR9Bt3kRS0jA87N+xQBjViUleuWGayF4MvvNBBUYWLVk92h+mYv7tsQyFagIEqVEQ6V9k6QanjzZdBWjUBkSjjvBRTfF4LJYOkNHaw0B71cB3BKZSyUFEFOgYLA+qPo=\",\"curPage\":\"1\",\"params\":{\"activityType\":\"0\"}}"),
+                new Pair("app/activityArea/not/queryLatestActivity.action", "{\"hmac\":\"Qde4rWdDULlfgUFL2IfwicDyWIf5GBdRisEPiTPQOWidpKJp1n5f7pb8wdcALbPZMEctm6zvfCwnVhC7pnqpXCRbswm7Vfk3K9feKToYIxstbf9laJVLHfOm2bKAiLJbWMCtBY/7RyEvLg/VWvrMIyoL0t1v36zmjR1JkhlXnHo=\",\"params\":{\"type\":\"1\"}}"));
         urls.putKeysList(5,
 //                new Pair("/share/getMicroMsgInfoCrossDomain.action", ""),
 //                new Pair("/newTask/taskBanner.action", ""),
                 new Pair("app/bos/myaccount/myAccountComprehensive.action", "{\"hmac\":\"T46zg8mZ/TxjqobKRdEujI+bBIJRdcb4hVVKcJ0HiFwCosGODv2HRWEppAlFpl2sfKUo3sgqOEnqm8+USs4oHGCPS95dTCAxvMGrpjMZOmmqIl4vCLyuVm4U8QdSWLhWoZud+qEM7EwN5Q0HagwLAOmijzFQj9dqzMVxqeeRgWM=\",\"params\":{}}"),
                 new Pair("app/bos/finance/not/queryRegularList.action", "{\"hmac\":\"VH3Qj+2nIpEsBNXIed9wPn3aCGcoIrCOApZdlrIGE2h25FZE10/c5RcjdE2MuFuvD+5sBPKRycPQhQMnLeCe2eU+lrKtcw3fbjw2LzRs6WW3mU4EWMpVS3An44mxFYmdf1+CTOjNt07adAgZfyKR7lYWri1WB9vMBE3MUWB/fe0=\"}"),
                 new Pair("app/bos/finance/not/queryNewCustBidList.action", "{\"hmac\":\"NT1nRSCVtYfbvkMVKlSCJrnjbi/aRpo444qyrip9T6yhyPB69a0WgcrcNI2LT3/UyBN0YPBX/Tusyko+nhDxola7pOqhQwBcQu+ozhwTyQQPusWjGA1Dc1I7Z6j79iRA3VHeae2h5UpptvPEJz6696BYT+bgUsXI/IQdD8E6UiI=\"}"),
-                new Pair("app/gesture/checkGesture.action", "{\"hmac\":\"b6SUfZcLRJPeP+w2IqvI+Yqzh72vce02jQZ2LFyJgFgjfU5ZGK2WnAzWQH+aBb3Q1MGxhCl5BgTBAJpeJc3uaaF/Kqu13oSq5jTGGLhRxyYhZS82P/r3p/7EObBYOmaGJoKlTCYD4nzaECiRmoPXfTod3/5AST2RDo50AllpWTU=\",\"params\":{\"errorTimes\":\"5\",\"gesturePsd\":\"76d1dabed06c7a234de1caab62e84969e34d770e\",\"loginName\":\"15210080001\"}}"));
+                new Pair("app/gesture/checkGesture.action", "{\"hmac\":\"FyFYe+WKsQfri6Qxo7GE0QWtDwi8dN1IKGzBMWw9+815iDfdvgoSYEqm9p1gE8Q/ioFN1gd4sAOapGUg7hlT5hJUTyIh//inAv0NYtJCrhv7fjLUCjb7CNQjiMr0Dv/+6xpOLKPGJors+ttv/LIh9XmWVtE7bcof7b5olC++JaU=\",\"params\":{\"loginName\":\"15111111111\",\"errorTimes\":4,\"gesturePsd\":\"76d1dabed06c7a234de1caab62e84969e34d770e\"}}"));
         urls.putKeysList(3,
                 new Pair("app/bos/finance/not/queryExpFinanceDetail.action", "{\"hmac\":\"RotvNuoD6uGmgoq0L90IVmzZZy1UefeOVY8E6p4Jq2+yHcvca1qklzcI8sL6Reqx/+3jKUlhsHeXWJwWgGOJlX5NKq1k983KjSm2Fvs1sU/Wyt1HHOH8jMp1V7dkw8abkhJCyXLvYUDZhSRg9MvqJ6NybcSIKmt9yh4qG95kzT0=\"}"),
 //                new Pair("/signIn/newSignIn.action", ""),
@@ -74,17 +74,23 @@ public class TestHttp {
         StringEntity paras = new StringEntity(json);;
         paras.setContentEncoding("UTF-8");
         paras.setContentType("application/json");
-        post(action, "JSESSIONID", "15111111111", paras);
+        String result = post(action, "JSESSIONID", loginToken, paras);
+        if (result.contains("RS0000")){
+            return;
+        }
+        System.out.println(action + ":" + result);
     }
     
     @Test
     public void postSinglePress() throws IOException {
         String cookieValue = "e2d0576cb7fb4193b2e480e9e96f2339";
-        String action = "app/bos/finance/financeInvest.action";
-        String json = "{\"params\":{\"checkPwd\":\"7c4a8d09ca3762af61e59520943dc26494f8941b\",\"fid\":\"11886\",\"financeMoney\":\"200\"},\"hmac\":\"CBSDWEY34nIi+e04jlxxFrp2Er10NzxW0wevsbhERY9YxypGTq3gQSbkhjyeKkCxIQcHEqx4t9CHkPRB/7nF3dLD4FA0pPS2AmuIqRo2gkSxgMyTJz8occocao1ha4Gfr0jmTE0ep3BlZb/lIh35Wx8AFa+CiXrUvzFyOHeT1tk=\"}\n";
+//        String action = "app/bos/finance/financeInvest.action";
+//        String json = "{\"params\":{\"checkPwd\":\"7c4a8d09ca3762af61e59520943dc26494f8941b\",\"fid\":\"11886\",\"financeMoney\":\"200\"},\"hmac\":\"CBSDWEY34nIi+e04jlxxFrp2Er10NzxW0wevsbhERY9YxypGTq3gQSbkhjyeKkCxIQcHEqx4t9CHkPRB/7nF3dLD4FA0pPS2AmuIqRo2gkSxgMyTJz8occocao1ha4Gfr0jmTE0ep3BlZb/lIh35Wx8AFa+CiXrUvzFyOHeT1tk=\"}\n";
 //        String cookieValue = "8c593810de1447f987bde834f24900b6";
 //        String action = "promotion-service/advertisement/not/queryShopAdvertList.action";
 //        String json = "{\"hmac\": \"4931fc0765a17293c8635b1759724e146b078193\", \"params\": {\"bannerType\": \"1\"}}";
+        String action = "app/bos/reapal/checkRecharge.action";
+        String json = "{\"hmac\":\"PR5ezxjL7fqaTODvFMxghykqciPW7iQHwcdT/2ghm/rdW+xPvAkaQnLxHIJxEGRhTixOXF/XXrAbY+5X0XSUU1TcSCf9YoPYDRo9fncIQaNlxLrXSSQ2HFc9Z2DNHZS+U9FSucng7J5b5w1zHAgh0/tASB76Atb9+WctZRYB7Fs=\",\"params\":{\"deviceType\":\"2\",\"rechargeMoney\":\"200\",\"terminalInfo\":\"null-B45DC298-3A4A-4DA6-AE27-92CB1099D4B1\"}}";
         StringEntity paras = new StringEntity(json);;
         paras.setContentEncoding("UTF-8");
         paras.setContentType("application/json");
@@ -97,28 +103,28 @@ public class TestHttp {
         urls.putKeysList(11,
                 new Pair("portal-bos/app/appv4/notice/queryNoticeList.action", "{\"curPage\":1,\"params\":{\"msgtype\":\"3\",\"isindex\":\"1\"},\"hmac\":\"a5a052efb20641d0fd09230e8a20f53c6a4007e4\"}"),
                 new Pair("portal-bos/app/activityArea/queryLatestActivity.action", "{\"type\":\"4\",\"hmac\":\"d35c75787e07a679d3a42a9168c5c515a0254c48\"}"),
-                new Pair("portal-bos/app/appv5/regularFinance/queryRegularDetailExperience.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
-                new Pair("portal-bos/app/appv4/firstShowV2/queryFirstShowV3.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
-                new Pair("portal-bos/app/appv3/financeMenuList.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"));
+                new Pair("portal-bos/app/appv5/regularFinance/queryRegularDetailExperience.action", "{\"hmac\":\"e2d0576cb7fb4193b2e480e9e96f2339\"}"),
+                new Pair("portal-bos/app/appv4/firstShowV2/queryFirstShowV3.action", "{\"hmac\":\"e2d0576cb7fb4193b2e480e9e96f2339\"}"),
+                new Pair("portal-bos/app/appv3/financeMenuList.action", "{\"hmac\":\"e2d0576cb7fb4193b2e480e9e96f2339\"}"));
         urls.putKeysList(7,
                 new Pair("portal-bos/app/activityArea/queryActivityAreaList.action", "{\"curPage\":\"1\",\"hmac\":\"57a1e2787405c6fd397f13e9431a4511236d708b\"}"),
-                new Pair("portal-bos/app/discovery.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
-                new Pair("portal-bos/app/appv3/advert/queryAdvertListv4.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
-                new Pair("portal-bos/app/newTask/taskProgressV2.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
-                new Pair("portal-bos/app/appv3/notice/queryMyMessNoNotReadV2.action", "{\"curPage\": 1,\"params\": {\"phone\": \"\"  },\"hmac\": \"278abbc069efc1220b47d47f6d75779112cde72a\"}"));
+                new Pair("portal-bos/app/discovery.action", "{\"hmac\":\"e2d0576cb7fb4193b2e480e9e96f2339\"}"),
+                new Pair("portal-bos/app/appv3/advert/queryAdvertListv4.action", "{\"hmac\":\"e2d0576cb7fb4193b2e480e9e96f2339\"}"),
+                new Pair("portal-bos/app/newTask/taskProgressV2.action", "{\"hmac\":\"e2d0576cb7fb4193b2e480e9e96f2339\"}"),
+                new Pair("portal-bos/app/appv3/notice/queryMyMessNoNotReadV2.action", "{\"curPage\": 1,\"params\": {\"phone\": \"15111111111\"  },\"hmac\": \"278abbc069efc1220b47d47f6d75779112cde72a\"}"));
         urls.putKeysList(5,
 //                new Pair("/share/getMicroMsgInfoCrossDomain.action", ""),
 //                new Pair("/newTask/taskBanner.action", ""),
 //                new Pair("app/bos/myaccount/myAccountComprehensive.action", "{\"hmac\":\"T46zg8mZ/TxjqobKRdEujI+bBIJRdcb4hVVKcJ0HiFwCosGODv2HRWEppAlFpl2sfKUo3sgqOEnqm8+USs4oHGCPS95dTCAxvMGrpjMZOmmqIl4vCLyuVm4U8QdSWLhWoZud+qEM7EwN5Q0HagwLAOmijzFQj9dqzMVxqeeRgWM=\",\"params\":{}}"),
                 new Pair("portal-bos/app/appv5/regularFinance/queryRegularListV5.action", "{\"curPage\":1,\"hmac\":\"b3742274abc71329407aa107f9faffa60e326cd8\"}"),
-                new Pair("portal-bos/app/appv5/newCustBid/queryNewCustBidList.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
-//                new Pair("portal-bos/app/appv5/regularFinance/queryRegularDetailExperience.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
+                new Pair("portal-bos/app/appv5/newCustBid/queryNewCustBidList.action", "{\"hmac\":\"e2d0576cb7fb4193b2e480e9e96f2339\"}"),
+//                new Pair("portal-bos/app/appv5/regularFinance/queryRegularDetailExperience.action", "{\"hmac\":\"e2d0576cb7fb4193b2e480e9e96f2339\"}"),
                 new Pair("portal-bos/app/appv4/checkOpenGesture.actionn", "{\"params\":{\"loginName\":\"15111111111\"},\"hmac\":\"ea0735be1cdd21bc7bdb2dde215a739271936041\"}"));
         urls.putKeysList(3,
                 new Pair("portal-bos/app/appv4/updateAll.action", "{\"params\":{\"appType\":\"1\",\"appVersion\":39},\"hmac\":\"cc3e60efae506f58b6e85311fe8317ea004d16c2\"}"),
-                new Pair("portal-bos/app/appv4/advertisement/queryAppPopAdvertisementPic.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"),
+                new Pair("portal-bos/app/appv4/advertisement/queryAppPopAdvertisementPic.action", "{\"hmac\":\"e2d0576cb7fb4193b2e480e9e96f2339\"}"),
 //                new Pair("/signIn/newSignIn.action", ""),
-                new Pair("portal-bos/app/appv4/advertisement/queryLoadingPic.action", "{\"hmac\":\"033e2c69657a002549e70c114f887ea695096c23\"}"));
+                new Pair("portal-bos/app/appv4/advertisement/queryLoadingPic.action", "{\"hmac\":\"e2d0576cb7fb4193b2e480e9e96f2339\"}"));
         return urls;
     }
     
@@ -209,7 +215,7 @@ public class TestHttp {
             // TODO 自动生成的 catch 块
             e.printStackTrace();
         }
-        System.out.println(result);
+//        System.out.println(result);
         return result;
     }
     

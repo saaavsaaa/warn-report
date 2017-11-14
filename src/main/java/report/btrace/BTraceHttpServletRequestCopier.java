@@ -21,7 +21,7 @@ public class BTraceHttpServletRequestCopier {
     private static long current = 0;
     
     @OnMethod(clazz = "org.apache.commons.io.IOUtils", method = "copyLarge")
-//    @OnMethod(clazz = "com.caijinquan.p2p.common.controller.httpobject.HttpServletRequestCopier", method = "getCopy")
+//    @OnMethod(clazz = "com.***.common.controller.httpobject.HttpServletRequestCopier", method = "getCopy")
     public static void startMethod(){
         startTime = timeMillis();
     }

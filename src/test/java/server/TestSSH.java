@@ -21,7 +21,7 @@ public class TestSSH {
         ssh.connect("192.168.1.213", port, user, password);
         
         StringBuilder builder = new StringBuilder();
-        builder.append("cd /cjq/logs/caijinquan-release/p2p-app;");
+        builder.append("cd /logs/release/p2p-app;");
 //        builder.append("grep -i -A5 '17:24:33.569' info/info.2017-07-18.log");
 //        builder.append(String.format("grep %s -ri * --color | head -n %d;", "queryFirstShow", 3));
 //        builder.append(String.format("grep %s -r * --color | grep -i '%s' | head -n %d;", "15111111111", "queryMyMessNoNotRead", 3));

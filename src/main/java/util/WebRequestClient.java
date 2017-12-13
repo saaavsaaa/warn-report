@@ -33,7 +33,10 @@ public class WebRequestClient {
 	private static final String LOGIN_USERTOKEN_KEY = "session_user_token";
 	private static CookieStore cs = new BasicCookieStore();
 	private static ThreadLocal<Header[]> headerHolder = new ThreadLocal<>();
-
+	
+	public static String testLinkGet(String url) throws Exception {
+		return opera(url, null, true);
+	}
 
 	public static String testLinkGet(String url, String loginToken, String loginUserID) throws Exception {
 		setCookie(loginToken, loginUserID);

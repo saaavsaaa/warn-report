@@ -13,7 +13,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * Created by aaa on 17-11-23.
@@ -95,6 +97,26 @@ public class DocReader {
             Node node1 =list.item(i);
             list(node1);
         }
+    }
+    
+    Stack<String> tag = new Stack<>();
+    String currentTag = "";
+    boolean checking = false;
+    
+    public static String getDocNode(String txt, String expression){
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < txt.length(); i++) {
+            char c = txt.charAt(i);
+            if (validate(c)){
+                result.append(c);
+            }
+        }
+        return result.toString();
+    }
+    
+    private static boolean validate(char c){
+        
+        return true;
     }
     
     public static String getContent(InputStream inputStream) throws IOException {

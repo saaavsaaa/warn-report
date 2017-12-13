@@ -8,19 +8,75 @@ import structure.ConcurrentHashMapExtend;
 import structure.Pair;
 import util.ConcurrentRun;
 import util.WebRequestClient;
+import util.type.DateUtil;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class TestHttp {
     
 //    curl -i -X POST -H "'Content-type':'application/json', 'charset':'utf-8' -d 'json_data={"loginName":"aaaa","registerType":"1","deviceId":"aaa","channelCode":"aaa","msgCode":"123456"},"hmac":"aaaaa"}'" http://192.168.1.68:8080/portal-bos/app/appv4/appLoginWit.action
 //    private static final String URL = "http://192.168.1.47:8080/";
-    private static final String URL = "http://192.168.1.2:8080/";
+    private static final String URL = "http://192.168.3.2:8080/";
     final String loginToken = "e2d0576cb7fb4193b2e480e9e96f2339";
     final String loginUserID = "1";
+    
+    public String getμs(){
+        long currentTimeMillis = System.currentTimeMillis();
+        String μs = String.valueOf(currentTimeMillis * 1000);
+        System.out.println(currentTimeMillis);
+        System.out.println(μs);
+        return μs;
+    }
+    
+    @Test
+    public void toDate() throws ParseException {
+        System.out.println(DateUtil.timeStamp2Date("1543571883"));
+    }
+    
+    @Test
+    public void getTest(){
+        String result = null;
+        
+//        String url = "http://www.bjbus.com/home/ajax_rtbus_data.php?act=busTime&selBLine=140&selBDir=4817620473575672470&selBStop=9";
+        String url = "http://www.bjbus.com/home/ajax_rtbus_data.php?act=busTime&selBLine=9&selBDir=4795159742108558556&selBStop=15";
+        try {
+            String current = String.valueOf(System.currentTimeMillis());
+            
+            Map<String, String> cookieKVs = new HashMap<>();
+            cookieKVs.put("acw_tc", "AQAAAEMTLn1hFgMAWt2bJxJzTJktSa4l");
+            cookieKVs.put("PHPSESSID", "a920fc4b90cfab64d51ee05cdcd9a9fc");
+            cookieKVs.put("aliyungf_tc", "AQAAAJYOjQqFXQIAWt2bJxd94vYqSkW2+");
+            cookieKVs.put("SERVERID", "564a72c0a566803360ad8bcb09158728|" + current + "|1512617375");
+            
+            Map<String, String> headerKVs = new HashMap<>();
+            headerKVs.put("Accept", "application/json, text/javascript, */*; q=0.01");
+            headerKVs.put("Accept-Encoding", "gzip, deflate");
+            headerKVs.put("Accept-Language", "zh-CN,zh;q=0.9");
+            headerKVs.put("Connection", "keep-alive");
+            headerKVs.put("Host", "www.bjbus.com");
+            headerKVs.put("Referer", "http://www.bjbus.com/home/fun_rtbus.php?uSec=00000160&uSub=00000162");
+            headerKVs.put("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+            headerKVs.put("X-Requested-With", "XMLHttpRequest */");
+            
+            headerKVs.put("Cookie", "acw_tc=AQAAAMovklcCFw4AE9KEOhzs+LMdL8cV; PHPSESSID=b98e7a3615b7c03ac5e644a84c057da1; aliyungf_tc=AQAAAGd1bh+0lAwAWt2bJ0Etbnurgd9Z; SMAPUVID=1510735151009066; SGMINFO=; m_t_b=usertip_%251%7Cruler_%251%7Cclear_%251%7Csavemap_%251%7Ccity_%251%7Cpan_%251%7Cfzin_%251%7Cfzout_%251%7Cprint_%251%7Cfullscreen_%251%7Ccollection_%251%7Csetting_%251; activecity=%u5317%u4EAC%2C12956000%2C4824875%2C10; __utma=126505438.1937832166.1510735151.1510735151.1510735151.1; __utmc=126505438; __utmz=126505438.1510735151.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_2c630339360dacc1fc1fd8110f283748=1510734016,1510735170,1510737608; Hm_lpvt_2c630339360dacc1fc1fd8110f283748=1510737915; SERVERID=564a72c0a566803360ad8bcb09158728|1510740540|1510734014");
+            
+            result = WebRequestClient.testLinkGet(url, cookieKVs, headerKVs);
+        } catch (Exception e) {
+            // TODO 自动生成的 catch 块
+            e.printStackTrace();
+        }
+        System.out.println(result);
+    }
+    
+    @Test
+    public void testOutputResponse() throws Exception {
+        String url = URL + "a/admin/bdfq/oa/oaNotify/self/count?updateSession=0&t=1513126438987";
+        System.out.println(WebRequestClient.testLinkGet(url));
+    }
 
     
     private ConcurrentHashMapExtend<String, String, Integer> urls;
@@ -83,14 +139,14 @@ public class TestHttp {
     
     @Test
     public void postSinglePress() throws IOException {
-        String cookieValue = "e2d0576cb7fb4193b2e480e9e96f2339";
+        String cookieValue = "a809b35f66fa45f393fa7d7ba737505f";
 //        String action = "app/bos/finance/financeInvest.action";
 //        String json = "{\"params\":{\"checkPwd\":\"7c4a8d09ca3762af61e59520943dc26494f8941b\",\"fid\":\"11886\",\"financeMoney\":\"200\"},\"hmac\":\"CBSDWEY34nIi+e04jlxxFrp2Er10NzxW0wevsbhERY9YxypGTq3gQSbkhjyeKkCxIQcHEqx4t9CHkPRB/7nF3dLD4FA0pPS2AmuIqRo2gkSxgMyTJz8occocao1ha4Gfr0jmTE0ep3BlZb/lIh35Wx8AFa+CiXrUvzFyOHeT1tk=\"}\n";
 //        String cookieValue = "8c593810de1447f987bde834f24900b6";
 //        String action = "promotion-service/advertisement/not/queryShopAdvertList.action";
 //        String json = "{\"hmac\": \"4931fc0765a17293c8635b1759724e146b078193\", \"params\": {\"bannerType\": \"1\"}}";
-        String action = "app/bos/reapal/checkRecharge.action";
-        String json = "{\"hmac\":\"PR5ezxjL7fqaTODvFMxghykqciPW7iQHwcdT/2ghm/rdW+xPvAkaQnLxHIJxEGRhTixOXF/XXrAbY+5X0XSUU1TcSCf9YoPYDRo9fncIQaNlxLrXSSQ2HFc9Z2DNHZS+U9FSucng7J5b5w1zHAgh0/tASB76Atb9+WctZRYB7Fs=\",\"params\":{\"deviceType\":\"2\",\"rechargeMoney\":\"200\",\"terminalInfo\":\"null-B45DC298-3A4A-4DA6-AE27-92CB1099D4B1\"}}";
+        String action = "app/bos/traderecord/traderecordlist.action";
+        String json = " {\"curPage\":1,\"params\":{\"monthLine\":\"\"},\"hmac\":\"I+cQxcZ4TUtaj6+iSJbiNHXqFuJADk2hYrTh+gSXCF8baZpMpUoXGsfM0PUVSjXGNnByG9iNri+GRn0LSwG2dk0KPH0TtkdRQOjr7ocXdBdTei3yueIUcn7L/V3aQJwZP0c8U272Upq1DagxyjxuYOiA2VMia+QRQAGfWJQ0+vU=\"}";
         StringEntity paras = new StringEntity(json);;
         paras.setContentEncoding("UTF-8");
         paras.setContentType("application/json");
@@ -193,6 +249,18 @@ public class TestHttp {
         paras.setContentEncoding("UTF-8");
         paras.setContentType("application/json");
         post(action, paras);
+    }
+    
+    private String getResult(String action, String paras, Map headers) throws IOException {
+        String result = null;
+        try {
+            result = WebRequestClient.testLinkGet(URL + action + paras, loginToken, loginUserID);
+        } catch (Exception e) {
+            // TODO 自动生成的 catch 块
+            e.printStackTrace();
+        }
+        System.out.println(result);
+        return result;
     }
 
     private String getResult(String action, String paras) throws IOException {

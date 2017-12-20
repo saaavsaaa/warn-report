@@ -22,15 +22,28 @@ public class TestAgentVMAttacher {
         String agentPath = "/home/aaa/Code/agent/agentest.so";
         VirtualMachine virtualMachine = com.sun.tools.attach.VirtualMachine.attach(pid);
         virtualMachine.loadAgentPath(agentPath, null);
+//        virtualmachine.loadAgent("/home/aaa/Code/agent-1.0-SNAPSHOT.jar");
         virtualMachine.detach();
     }
     
+    
+    //consult: http://ayufox.iteye.com/blog/653214
+    /*
+    * HotSpotDiagnosticMXBean
+    * ClassLoadingMXBean
+    * CompilationMXBean
+    * GarbageCollectorMXBean
+    * MemoryManagerMXBean
+    * MemoryPoolMXBean
+    * OperatingSystemMXBean
+    * RuntimeMXBean
+    * ThreadMXBeanisolatering
+    * */
     @Test
     public void test() throws IOException, AttachNotSupportedException, AgentLoadException, AgentInitializationException {
         // args[0]传入的是某个jvm进程的pid
         String targetPid = "9527";
         VirtualMachine virtualmachine = VirtualMachine.attach(targetPid);
-//        virtualmachine.loadAgent("/home/aaa/Code/agent-1.0-SNAPSHOT.jar");
     
     
         // 让JVM加载jmx Agent
@@ -49,6 +62,6 @@ public class TestAgentVMAttacher {
         RuntimeMXBean rmxb = ManagementFactory.newPlatformMXBeanProxy(connector.getMBeanServerConnection(), "java.lang:type=Runtime",
                 RuntimeMXBean.class);
         // 得到目标虚拟机占用cpu时间
-        System.out.println(rmxb.getUptime());
+        System.out.println(rmxb.getInputArguments());
     }
 }

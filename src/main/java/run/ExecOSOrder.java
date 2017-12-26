@@ -47,7 +47,11 @@ public class ExecOSOrder {
         String line;
         BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
         while ((line = in.readLine()) != null) {
-            return abstractOrderResult(key, pattern, line);
+            String tid = abstractOrderResult(key, pattern, line);
+            if (tid.isEmpty()){
+                continue;
+            }
+            return tid;
         }
         return "";
     }

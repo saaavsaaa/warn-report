@@ -33,4 +33,22 @@ public class ExceptionTest<T extends Exception> {
             System.out.println(e.getCause().getLocalizedMessage());
         }
     }
+    
+    @Test
+    public void testTwice(){
+        try
+        {
+            try
+            {
+                throw new IllegalArgumentException("111111");
+            } catch(Exception ex){
+                throw new IllegalArgumentException("2222222");
+            } finally{
+                System.out.println("aaaaaaaaaaaaaaaaaaaaa");
+            }
+        }
+        catch(Exception ex){
+            System.out.println("bbbbbbbbbbbbbb");
+        }
+    }
 }

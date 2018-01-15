@@ -42,7 +42,7 @@ public class ClassWriterTest {
         cw.visitField(ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "EQUAL", "I", null, new Integer(0)).visitEnd();
         cw.visitField(ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "GREATER", "I", null, new Integer(1)).visitEnd();
         /*
-        visitMethod 调用用于定义 compareTo 方法,
+        visitMethod 调用用于定义 compareTo 方法,bao
         同样,第一个参数是一组对应于 Java 修饰符的标志。
         第二个参数是方法名,与其在源代码中的显示一样。
         第三个参数是方法的描述符。

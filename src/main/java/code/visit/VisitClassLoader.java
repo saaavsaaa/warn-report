@@ -20,6 +20,7 @@ public class VisitClassLoader extends ClassLoader {
     
     /*
     * public
+    * 字节数组可以存储在一个 .class 文件中,供以后使用。或者,也可以用 ClassLoader 动态加载它
     * */
     public Class<?> defineClass(String name, byte[] b){
         return super.defineClass(name, b, 0, b.length);

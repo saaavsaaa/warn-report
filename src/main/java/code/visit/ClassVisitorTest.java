@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import static jdk.internal.org.objectweb.asm.Opcodes.ASM4;
 import static jdk.internal.org.objectweb.asm.Opcodes.V1_5;
+import static jdk.internal.org.objectweb.asm.Opcodes.V1_7;
 
 /**
  * Created by aaa on 18-1-5.
@@ -26,7 +27,7 @@ public class ClassVisitorTest {
         byte[] b2 = cw.toByteArray();
     
         VisitClassLoader visitClassLoader = new VisitClassLoader();
-        Class c = visitClassLoader.defineClass("code.record.WaitClearCode", b2);
+        Class<?> c = visitClassLoader.defineClass("code.record.WaitClearCode", b2);
         System.out.println(c.getTypeName());
         
         System.out.println(b2);
@@ -41,6 +42,6 @@ class ChangeVersionAdapter extends ClassVisitor {
     @Override
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {
-        cv.visit(V1_5, access, name, signature, superName, interfaces);
+        cv.visit(V1_7, access, name, signature, superName, interfaces);
     }
 }

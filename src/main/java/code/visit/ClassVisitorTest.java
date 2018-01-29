@@ -5,6 +5,8 @@ import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.ClassWriter;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static jdk.internal.org.objectweb.asm.Opcodes.ASM4;
@@ -24,13 +26,24 @@ public class ClassVisitorTest {
         ClassWriter cw = new ClassWriter(cr, 0);
         ChangeVersionAdapter ca = new ChangeVersionAdapter(cw);
         cr.accept(ca, 0);
-        byte[] b2 = cw.toByteArray();
+        byte[] b = cw.toByteArray();
     
         VisitClassLoader visitClassLoader = new VisitClassLoader();
-        Class<?> c = visitClassLoader.defineClass("code.record.WaitClearCode", b2);
+        Class<?> c = visitClassLoader.defineClass("code.record.WaitClearCode", b);
         System.out.println(c.getTypeName());
         
-        System.out.println(b2);
+//        write(b);
+    }
+    
+    private static void write(byte[] data) {
+        try {
+            File file = new File("ClassCode.class");
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(data);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

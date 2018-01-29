@@ -16,16 +16,20 @@ import static jdk.internal.org.objectweb.asm.Opcodes.V1_5;
 public class ClassVisitorTest {
     public static void main(String[] args) throws ClassNotFoundException, IOException {
 //        byte[] b1 = new byte[]{};
-        WaitClearCode code = new WaitClearCode();
-        String c = "code.record.WaitClearCode";
+        String path = "code.record.WaitClearCode";
         VisitClassLoader classLoader = new VisitClassLoader(Thread.currentThread().getContextClassLoader());
-        
-        ClassReader cr = new ClassReader(c);
+
+        ClassReader cr = new ClassReader(path);
         ClassWriter cw = new ClassWriter(cr, 0);
         ChangeVersionAdapter ca = new ChangeVersionAdapter(cw);
         cr.accept(ca, 0);
         byte[] b2 = cw.toByteArray();
-        System.out.println(code.toString());
+    
+        VisitClassLoader visitClassLoader = new VisitClassLoader();
+        Class c = visitClassLoader.defineClass("code.record.WaitClearCode", b2);
+        System.out.println(c.getTypeName());
+        
+        System.out.println(b2);
     }
 }
 

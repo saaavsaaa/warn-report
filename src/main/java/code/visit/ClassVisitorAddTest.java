@@ -28,13 +28,24 @@ public class ClassVisitorAddTest {
         System.out.println(javaClass.toString());*/
         
         byte[] data = ResourceUtil.loadFile("ClassCode.class");
-        
-        addField(data);
-    }
-    
-    private static void addField(byte[] data){
         ClassReader cr = new ClassReader(data);
         ClassWriter cw = new ClassWriter(0);
+        
+//        deleteField(cr, cw);
+        addField(cr, cw);
+    }
+    
+    private static void deleteField(ClassReader cr, ClassWriter cw){
+        DeleteMethodAdapter cv = new DeleteMethodAdapter(cw, "ttt", "Ljava/lang/String;"); //Type.getObjectType("java/lang/String").getDescriptor()
+        cv.visitField(ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "ttt", "Ljava/lang/String;", "Ljava/lang/String;" , "AAA");
+        cv.visitEnd();
+        cr.accept(cv, 0);
+        byte[] b = cw.toByteArray();
+        
+        ResourceUtil.write("ClassCode.class", b);
+    }
+    
+    private static void addField(ClassReader cr, ClassWriter cw){
         AddFieldAdapter cv = new AddFieldAdapter(cw, ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "ttt", "Ljava/lang/String;"); //Type.getObjectType("java/lang/String").getDescriptor()
         cv.visitField("Ljava/lang/String;", "AAA");
         cv.visitEnd();
@@ -42,6 +53,25 @@ public class ClassVisitorAddTest {
         byte[] b = cw.toByteArray();
     
         ResourceUtil.write("ClassCode.class", b);
+    }
+}
+
+class DeleteMethodAdapter extends ClassVisitor {
+    private String initName;
+    private String initDesc;
+    public DeleteMethodAdapter(ClassVisitor cv, String initName, String initDesc) {
+        super(ASM4, cv);
+        this.initName = initName;
+        this.initDesc = initDesc;
+    }
+    
+    @Override
+    public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+        if (name.equals(initName) && desc.equals(initDesc)) {
+            // 不要委托至下一个访问器 -> 这样将移除该方法
+            return null;
+        }
+        return cv.visitField(access, name, desc, signature, value);
     }
 }
 

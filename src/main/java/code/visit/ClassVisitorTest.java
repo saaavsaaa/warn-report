@@ -3,6 +3,7 @@ package code.visit;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.ClassWriter;
+import util.ResourceUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,19 +61,8 @@ public class ClassVisitorTest {
         VisitClassLoader visitClassLoader = new VisitClassLoader();
         Class<?> c = visitClassLoader.defineClass("code.record.WaitClearCode", b);
         System.out.println(c.getTypeName());
-
-//        write(b);
-    }
     
-    private static void write(byte[] data) {
-        try {
-            File file = new File("ClassCode.class");
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(data);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ResourceUtil.write("ClassCode.class", b);
     }
 }
 

@@ -1,6 +1,9 @@
 package report.btrace;
 
+import com.sun.btrace.AnyType;
 import com.sun.btrace.annotations.*;
+
+import java.util.Vector;
 
 import static com.sun.btrace.BTraceUtils.*;
 import static com.sun.btrace.BTraceUtils.println;
@@ -11,9 +14,60 @@ import static com.sun.btrace.BTraceUtils.strcat;
  */
 @BTrace
 public class TraceAppRSA {
-    @TLS
+    /*@TLS
     private static long startTime = 0;
-    private static long initStartTime = 0;
+    
+    @OnMethod(clazz = "com.caijinquan.p2p.app.controller.filter.Test", method = "encryptA")
+    public static void startMethod(){
+        startTime = timeMillis();
+    }
+    
+    @OnMethod(clazz = "com.caijinquan.p2p.app.controller.filter.Test", method = "encryptA", location = @Location(Kind.RETURN))
+    public static void endMethod(){
+        println(strcat("execute time============", str(timeMillis()-startTime)));
+        println("-------------------------------------------");
+    }
+    
+    @OnMethod(clazz = "com.caijinquan.p2p.app.controller.filter.Test", method = "encryptA", location = @Location(Kind.RETURN))
+    public static void traceExecute(@ProbeClassName String name, @ProbeMethodName String method, String source, String publicKey, @Return String result){
+        println(strcat("trace class source ============", str(source)));
+        println(strcat("trace class source ============", str(publicKey)));
+        println(strcat("trace class return ============", str(result)));
+    }
+    
+    @OnMethod(clazz = "com.caijinquan.p2p.app.controller.filter.Test", method = "encryptA", location = @Location(Kind.ERROR))
+    public static void traceERRORExecute(@ProbeClassName String name,@ProbeMethodName String method){
+        println(strcat("ERROR class name ============", name));
+        println(strcat("ERROR class method ============", method));
+    }
+    
+    @OnMethod(clazz = "com.caijinquan.p2p.app.controller.filter.Test", method = "encryptA", location = @Location(Kind.ERROR))
+    public static void traceERRORExecute(@Self Object self, @Duration long dur, Throwable err){
+        println(strcat("ERROR throwable ============", str(err)));
+        println(strcat("ERROR throwable ============", str(self)));
+        println(strcat("ERROR throwable ============", str(dur)));
+    }
+    
+    @OnMethod(clazz = "com.caijinquan.p2p.app.controller.filter.Test", method = "encryptA", location = @Location(Kind.ERROR))
+    public static void traceERRORExecuteW(@ProbeClassName String name,@ProbeMethodName String method, String source, String publicKey){
+        println(strcat("ERROR name ============", name));
+        println(strcat("ERROR name ============", method));
+        println(strcat("ERROR source ============", source));
+        println(strcat("ERROR publicKey ============", publicKey));
+    }*/
+    
+
+    
+    @OnMethod(clazz = "com.caijinquan.p2p.app.controller.filter.Test", method = "encryptA", location = @Location(Kind.ERROR))
+    public static void traceERRORExecuteW(Throwable err, @Self Object self, @Duration long dur, String source, String publicKey){
+//        println(strcat("ERROR with ============", name));
+//        println(strcat("ERROR with ============", method));
+        println(strcat("ERROR with source ============", source));
+        println(strcat("ERROR with publicKey ============", publicKey));
+        println(strcat("ERROR with throwable ============", str(err)));
+    }
+    
+    /*private static long initStartTime = 0;
     private static long contrast = 100;
     
     @OnMethod(clazz = "com.***.common.util.cipher.AppRSA", method = "decryptBASE64")
@@ -70,5 +124,5 @@ public class TraceAppRSA {
             println(strcat("ERROR class name=>", name));
             println(strcat("ERROR class method=>", method));
         }
-    }
+    }*/
 }

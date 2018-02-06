@@ -26,9 +26,9 @@ public class ClassVisitorAddTest {
         ClassReader cr = new ClassReader(data);
         ClassWriter cw = new ClassWriter(0);
     
-        cw = deleteField(cr, cw);
+//        cw = deleteField(cr, cw);
 //        cw = addField(cr, cw);
-//        cw = ClassMethodVisitor.add(cr, cw);
+        cw = ClassMethodVisitor.add(cr, cw);
         byte[] b = cw.toByteArray();
         ResourceUtil.write("ClassCode.class", b);
     }
@@ -47,7 +47,7 @@ public class ClassVisitorAddTest {
         AddFieldAdapter cv = new AddFieldAdapter(cw, ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "ttt", "Ljava/lang/String;"); //Type.getObjectType("java/lang/String").getDescriptor()
         cv.visitField("Ljava/lang/String;", "AAA");
         cv.visitEnd();
-        cr.accept(cv, 0);
+//        cr.accept(cv, 0); // -> ClassMethodVisitor
 //        byte[] b = cw.toByteArray();
 //        ResourceUtil.write("ClassCode.class", b);
         return cw;

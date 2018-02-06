@@ -18,24 +18,24 @@ public class ClassMethodVisitor {
         ClassVisitor cv = new ChangeVersionAdapter(cw);
         
         cv.visit(V1_7, ACC_PUBLIC, "code/record/WaitClearCode", null, "java/lang/Object", null);
-        MethodVisitor get = cv.visitMethod(ACC_PUBLIC, "get", "()V", null, null); // ClassWriterTest
+        MethodVisitor get = cv.visitMethod(ACC_PUBLIC, "getTTT", "()Ljava/lang/String;", null, null); // ClassWriterTest
     
         get.visitCode();
         get.visitVarInsn(ALOAD, 0);
-        get.visitFieldInsn(GETFIELD, "code/record/WaitClearCode", "AAA", "I");
+        get.visitFieldInsn(GETFIELD, "code/record/WaitClearCode", "ttt", "I");
         get.visitInsn(IRETURN);
         get.visitMaxs(1, 1);
         get.visitEnd();
     
     
-        MethodVisitor set = cv.visitMethod(ACC_PUBLIC, "set", "(I)V", null, null);
+        MethodVisitor set = cv.visitMethod(ACC_PUBLIC, "setTTT", "(Ljava/lang/String;)V", null, null);
         set.visitCode();
         set.visitVarInsn(ILOAD, 1);
         Label label = new Label();
         set.visitJumpInsn(IFLT, label);
         set.visitVarInsn(ALOAD, 0);
         set.visitVarInsn(ILOAD, 1);
-        set.visitFieldInsn(PUTFIELD, "code/record/WaitClearCode", "AAA", "I");
+        set.visitFieldInsn(PUTFIELD, "code/record/WaitClearCode", "AAA", "Ljava/lang/String;");
         Label end = new Label();
         set.visitJumpInsn(GOTO, end);
         set.visitLabel(label);

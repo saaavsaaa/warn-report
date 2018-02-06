@@ -52,8 +52,8 @@ public class ClassWriterTest {
         第四个参数对应于泛型。在我们的例子中,它是 null,因为这个方法没有使用泛型。最后一个参
         数是一个数组,其中包括可由该方法抛出的异常,这些异常由其内部名指明。它在这里为 null,
                 因为这个方法没有声明任何异常。visitMethod 方法返回 MethodVisitor(见图 3.4),可用
-        于定义该方法的注释和属性,最重要的是这个方法的代码。这里,由于没有注释,而且这个方法
-        是抽象的,所以我们立即调用所返回的 MethodVisitor 的 visitEnd 方法。
+                于定义该方法的注释和属性,最重要的是这个方法的代码。这里,由于没有注释,而且这个方法
+                是抽象的,所以我们立即调用所返回的 MethodVisitor 的 visitEnd 方法。
         */
         cw.visitMethod(ACC_PUBLIC + ACC_ABSTRACT, "run", "(Ljava/lang/Object;)I", null, null).visitEnd();
         

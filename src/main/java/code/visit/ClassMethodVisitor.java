@@ -26,13 +26,12 @@ public class ClassMethodVisitor {
         get.visitInsn(IRETURN);
         get.visitMaxs(1, 1);
         get.visitEnd();
-    
-    
+        
         MethodVisitor set = cv.visitMethod(ACC_PUBLIC, "setTTT", "(Ljava/lang/String;)V", null, null);
         set.visitCode();
         set.visitVarInsn(ILOAD, 1);
         Label label = new Label();
-        set.visitJumpInsn(IFLT, label);
+        set.visitJumpInsn(IFNULL, label);
         set.visitVarInsn(ALOAD, 0);
         set.visitVarInsn(ILOAD, 1);
         set.visitFieldInsn(PUTFIELD, "code/record/WaitClearCode", "AAA", "Ljava/lang/String;");

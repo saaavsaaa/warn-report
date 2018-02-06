@@ -22,37 +22,35 @@ import static jdk.internal.org.objectweb.asm.Opcodes.*;
  */
 public class ClassVisitorAddTest {
     public static void main(String[] args) throws ClassNotFoundException, IOException, IllegalAccessException, InstantiationException, NoSuchFieldException {
-    
-        /*ClassParser classParser = new ClassParser(ResourceUtil.getInput("/home/aaa/Github/warn-report/target/classes/code/record/WaitClearCode.class"), "WaitClearCode");
-        JavaClass javaClass = classParser.parse();
-        System.out.println(javaClass.toString());*/
-        
         byte[] data = ResourceUtil.loadFile("ClassCode.class");
         ClassReader cr = new ClassReader(data);
         ClassWriter cw = new ClassWriter(0);
-        
-//        deleteField(cr, cw);
-        addField(cr, cw);
+    
+        cw = deleteField(cr, cw);
+//        cw = addField(cr, cw);
+//        cw = ClassMethodVisitor.add(cr, cw);
+        byte[] b = cw.toByteArray();
+        ResourceUtil.write("ClassCode.class", b);
     }
     
-    private static void deleteField(ClassReader cr, ClassWriter cw){
+    private static ClassWriter deleteField(ClassReader cr, ClassWriter cw){
         DeleteMethodAdapter cv = new DeleteMethodAdapter(cw, "ttt", "Ljava/lang/String;"); //Type.getObjectType("java/lang/String").getDescriptor()
         cv.visitField(ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "ttt", "Ljava/lang/String;", "Ljava/lang/String;" , "AAA");
         cv.visitEnd();
         cr.accept(cv, 0);
-        byte[] b = cw.toByteArray();
-        
-        ResourceUtil.write("ClassCode.class", b);
+//        byte[] b = cw.toByteArray();
+//        ResourceUtil.write("ClassCode.class", b);
+        return cw;
     }
     
-    private static void addField(ClassReader cr, ClassWriter cw){
+    private static ClassWriter addField(ClassReader cr, ClassWriter cw){
         AddFieldAdapter cv = new AddFieldAdapter(cw, ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "ttt", "Ljava/lang/String;"); //Type.getObjectType("java/lang/String").getDescriptor()
         cv.visitField("Ljava/lang/String;", "AAA");
         cv.visitEnd();
         cr.accept(cv, 0);
-        byte[] b = cw.toByteArray();
-    
-        ResourceUtil.write("ClassCode.class", b);
+//        byte[] b = cw.toByteArray();
+//        ResourceUtil.write("ClassCode.class", b);
+        return cw;
     }
 }
 

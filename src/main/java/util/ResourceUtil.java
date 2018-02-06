@@ -6,6 +6,8 @@ import java.io.*;
  * Created by aaa on 18-1-30.
  */
 public class ResourceUtil {
+    
+    //rm -rf ClassCode.class
     public static void write(String path, byte[] data) {
         try {
             File file = new File(path);

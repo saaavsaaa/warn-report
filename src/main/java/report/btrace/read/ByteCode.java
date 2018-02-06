@@ -234,5 +234,5 @@ public class ByteCode {
     int SHORTcode = 7;
     int VOIDcode = 8;
     int TypeCodeCount = 9;
-    String[] typecodeNames = new String[]{"int", "long", "float", "double", "object", "byte", "char", "short", "void", "oops"};
+//    String[] typecodeNames = new String[]{"int", "long", "float", "double", "object", "byte", "char", "short", "void", "oops"};
 }

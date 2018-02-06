@@ -27,7 +27,7 @@ public class ClassVisitorAddTest {
         ClassWriter cw = new ClassWriter(0);
     
 //        cw = deleteField(cr, cw);
-//        cw = addField(cr, cw);
+        cw = addField(cr, cw);
         cw = ClassMethodVisitor.add(cr, cw);
         byte[] b = cw.toByteArray();
         ResourceUtil.write("ClassCode.class", b);

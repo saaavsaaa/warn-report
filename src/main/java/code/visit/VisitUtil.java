@@ -21,6 +21,9 @@ public class VisitUtil {
         System.out.println(getRightOpcode(Type.LONG_TYPE, Opcodes.IADD));
     }
     
+    /*
+    * 在不确定类型是否匹配操作码时，获取当前操作码对应当前类型的正确的操作码
+    */
     public static String getRightOpcode(Type t, int opcode){
         return ReaderCode.Instance.get(t.getOpcode(opcode));
     }

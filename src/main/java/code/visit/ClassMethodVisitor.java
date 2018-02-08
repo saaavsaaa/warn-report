@@ -1,16 +1,39 @@
 package code.visit;
 
 import jdk.internal.org.objectweb.asm.*;
+import jdk.internal.org.objectweb.asm.util.Printer;
+import jdk.internal.org.objectweb.asm.util.Textifier;
+import jdk.internal.org.objectweb.asm.util.TraceMethodVisitor;
 import util.ResourceUtil;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
+import static sun.awt.geom.Crossings.debug;
 
 /**
  * Created by aaa on 18-2-6.
  */
 public class ClassMethodVisitor {
+    
+    public static MethodVisitor visitMethod(ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions) {
+        StringWriter sw = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(sw);
+        MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
+        if (mv != null) { // 如果必须跟踪此方法
+            Printer p = new Textifier(ASM5) {
+                @Override
+                public void visitMethodEnd() {
+                    print(printWriter); // 在其被访问后输出它
+                    System.out.println(sw.toString());
+                }
+            };
+            mv = new TraceMethodVisitor(mv, p);
+        }
+        return mv;
+    }
     
     public static ClassWriter add(ClassReader cr, ClassWriter cw) throws IOException {
 //        cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -18,7 +41,8 @@ public class ClassMethodVisitor {
         ClassVisitor cv = new ChangeVersionAdapter(cw);
         
         cv.visit(V1_7, ACC_PUBLIC, "code/record/WaitClearCode", null, "java/lang/Object", null);
-        MethodVisitor get = cv.visitMethod(ACC_PUBLIC, "getTTT", "()Ljava/lang/String;", null, null); // ClassWriterTest
+//        MethodVisitor get = cv.visitMethod(ACC_PUBLIC, "getTTT", "()Ljava/lang/String;", null, null); // ClassWriterTest
+        MethodVisitor get = visitMethod(cv, ACC_PUBLIC, "getTTT", "()Ljava/lang/String;", null, null);
     
         get.visitCode();
         get.visitVarInsn(ALOAD, 0); //读取局部变量 0(它在为这个方法调用创建帧期间被初始化为 this),并将这个值压入操作数栈中

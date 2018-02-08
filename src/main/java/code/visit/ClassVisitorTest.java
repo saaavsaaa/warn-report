@@ -69,7 +69,7 @@ public class ClassVisitorTest {
 
 class ChangeVersionAdapter extends ClassVisitor {
     public ChangeVersionAdapter(ClassVisitor cv) {
-        super(ASM4, cv);
+        super(ASM5, cv);
     }
     @Override
     public void visit(int version, int access, String name,
@@ -103,7 +103,7 @@ class MultiClassAdapter extends ClassVisitor {
     protected ClassVisitor[] cvs;
     
     public MultiClassAdapter(ClassVisitor[] cvs) {
-        super(ASM4);
+        super(ASM5);
         this.cvs = cvs;
     }
     

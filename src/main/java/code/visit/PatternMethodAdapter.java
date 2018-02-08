@@ -55,19 +55,10 @@ public abstract class PatternMethodAdapter extends MethodVisitor {
     }
 }
 
-
-
-
-
-
-
-
-
 /*
-删除对字段
-进行自我赋值的操作,这种操作通常是因为键入错误,比如 f = f;,或者是在字节代码中, ALOAD
-0 ALOAD 0 GETFIELD f PUTFIELD f。在实现这一转换之前,最好是将状态机设计为能够
-识别这一序列
+    删除对字段
+    进行自我赋值的操作,这种操作通常是因为键入错误,比如 ttt = ttt;,或者是在字节代码中, ALOAD0 ALOAD 0 GETFIELD ttt PUTFIELD ttt。
+    在实现这一转换之前,将状态机设计为能够识别这一序列
 */
 class RemoveGetFieldPutFieldAdapter extends PatternMethodAdapter {
     private final static int SEEN_ALOAD_0 = 1;
@@ -101,7 +92,7 @@ class RemoveGetFieldPutFieldAdapter extends PatternMethodAdapter {
                 }
             case SEEN_ALOAD_0ALOAD_0: // S2 -> S2
                 if (opcode == ALOAD && var == 0) { //三个或三个以上的连续 ALOAD 0 时
-                    mv.visitVarInsn(ALOAD, 0); //只需要保留两个ALOAD 0，多余的ALOAD 0照常执行
+                    mv.visitVarInsn(ALOAD, 0); //只需要保留两个ALOAD 0，多余的ALOAD 0直接转发执行就可以了
                     return;
                 }
                 break;
@@ -113,7 +104,7 @@ class RemoveGetFieldPutFieldAdapter extends PatternMethodAdapter {
     public void visitFieldInsn(int opcode, String owner, String name, String desc) {
         switch (state) {
             case SEEN_ALOAD_0ALOAD_0: // S2 -> S3
-                if (opcode == GETFIELD) {
+                if (opcode == GETFIELD) { //状态二时,判断指令并记录对象、属性及标记
                     state = SEEN_ALOAD_0ALOAD_0GETFIELD;
                     fieldOwner = owner;
                     fieldName = name;
@@ -122,6 +113,7 @@ class RemoveGetFieldPutFieldAdapter extends PatternMethodAdapter {
                 }
                 break;
             case SEEN_ALOAD_0ALOAD_0GETFIELD: // S3 -> S0
+                //状态三时，判断待赋值的字段如果是值的来源字段则忽略所有状态对应的指令，并将状态重置回初始状态
                 if (opcode == PUTFIELD && name.equals(fieldName)) {
                     state = SEEN_NOTHING;
                     return;
@@ -132,6 +124,7 @@ class RemoveGetFieldPutFieldAdapter extends PatternMethodAdapter {
         mv.visitFieldInsn(opcode, owner, name, desc);
     }
     @Override protected void visitInsn() {
+        //各状态下不符合条件，直接返回初始状态需要将拦截的指令转发出去
         switch (state) {
             case SEEN_ALOAD_0: // S1 -> S0
                 mv.visitVarInsn(ALOAD, 0);
@@ -149,25 +142,6 @@ class RemoveGetFieldPutFieldAdapter extends PatternMethodAdapter {
         state = SEEN_NOTHING;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 在访问 ICONST_0 时,只有当下一条指令是 IADD 时才必须将其删除。将是否删除它的决定推迟到下一

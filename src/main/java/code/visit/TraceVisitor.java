@@ -1,11 +1,10 @@
 package code.visit;
 
 import jdk.internal.org.objectweb.asm.ClassReader;
+import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.ClassWriter;
-import jdk.internal.org.objectweb.asm.util.ASMifier;
-import jdk.internal.org.objectweb.asm.util.CheckClassAdapter;
-import jdk.internal.org.objectweb.asm.util.Textifier;
-import jdk.internal.org.objectweb.asm.util.TraceClassVisitor;
+import jdk.internal.org.objectweb.asm.MethodVisitor;
+import jdk.internal.org.objectweb.asm.util.*;
 import util.ResourceUtil;
 
 import java.io.IOException;
@@ -52,6 +51,23 @@ public class TraceVisitor {
         cv.visitEnd();
         System.out.println(sw.toString());
     }
+    
+    public static MethodVisitor visitMethod(ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions) {
+        StringWriter sw = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(sw);
+        MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
+        if (mv != null) { // 如果必须跟踪此方法
+            Printer p = new Textifier(ASM5) {
+                @Override
+                public void visitMethodEnd() {
+                    print(printWriter); // 在其被访问后输出它
+                    System.out.println(sw.toString());
+                }
+            };
+            mv = new TraceMethodVisitor(mv, p);
+        }
+        return mv;
+    }
 }
 
 class CheckVisitor{
@@ -73,5 +89,38 @@ class CheckVisitor{
         cv.visit(V1_7, ACC_PUBLIC, "code/record/WaitClearCode", null, "java/lang/Object", null); // ClassWriterTest
         cv.visitField(ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "ttt", "Ljava/lang/String;", "Ljava/lang/String;" , "AAA");
         cv.visitEnd();
+    }
+}
+
+class MethodCheckVisitor extends ClassVisitor{
+    public MethodCheckVisitor(ClassVisitor cv) {
+        super(ASM5, cv);
+    }
+    
+    @Override
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
+        if (mv != null) {
+            /*
+            这一适配器并没有验证字节代码是正确的:例如,它没有检测出 ISTORE 1 ALOAD 1 是无效的。实际上,
+            如果使用 CheckMethodAdapter 的其他构造器(见 Javadoc),并且在 visitMaxs
+            中提供有效的 maxStack 和 maxLocals 参数,那这种错误是可以被检测出来的。
+            */
+            mv = new CheckMethodAdapter(mv);
+        }
+//        return new WaitCheckAdapter(mv);
+        return mv;
+    }
+}
+
+
+class WaitCheckAdapter extends MethodVisitor{
+    public WaitCheckAdapter(MethodVisitor methodVisitor) {
+        super(ASM5, methodVisitor);
+    }
+    
+    @Override
+    public void visitEnd(){
+        super.visitEnd();
     }
 }

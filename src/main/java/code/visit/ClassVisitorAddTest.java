@@ -58,7 +58,7 @@ class DeleteMethodAdapter extends ClassVisitor {
     private String initName;
     private String initDesc;
     public DeleteMethodAdapter(ClassVisitor cv, String initName, String initDesc) {
-        super(ASM4, cv);
+        super(ASM5, cv);
         this.initName = initName;
         this.initDesc = initDesc;
     }

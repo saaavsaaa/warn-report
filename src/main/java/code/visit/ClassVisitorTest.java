@@ -72,8 +72,7 @@ class ChangeVersionAdapter extends ClassVisitor {
         super(ASM5, cv);
     }
     @Override
-    public void visit(int version, int access, String name,
-                      String signature, String superName, String[] interfaces) {
+    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         cv.visit(V1_7, access, name, signature, superName, interfaces); //major version
     }
     

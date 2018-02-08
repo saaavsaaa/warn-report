@@ -1,7 +1,12 @@
 package code.visit;
 
+import com.sun.org.apache.xpath.internal.compiler.OpCodes;
 import jdk.internal.org.objectweb.asm.ClassReader;
+import jdk.internal.org.objectweb.asm.Opcodes;
+import jdk.internal.org.objectweb.asm.Type;
 import jdk.internal.org.objectweb.asm.util.CheckClassAdapter;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
+import report.btrace.read.ReaderCode;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -11,6 +16,14 @@ import java.lang.reflect.Field;
  * Created by aaa on 18-1-30.
  */
 public class VisitUtil {
+    
+    public static void main(String[] args){
+        System.out.println(getRightOpcode(Type.LONG_TYPE, Opcodes.IADD));
+    }
+    
+    public static String getRightOpcode(Type t, int opcode){
+        return ReaderCode.Instance.get(t.getOpcode(opcode));
+    }
     
     public static void display(byte[] data){
         ClassReader reader = new ClassReader(data);

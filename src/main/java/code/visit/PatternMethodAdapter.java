@@ -55,6 +55,120 @@ public abstract class PatternMethodAdapter extends MethodVisitor {
     }
 }
 
+
+
+
+
+
+
+
+
+/*
+删除对字段
+进行自我赋值的操作,这种操作通常是因为键入错误,比如 f = f;,或者是在字节代码中, ALOAD
+0 ALOAD 0 GETFIELD f PUTFIELD f。在实现这一转换之前,最好是将状态机设计为能够
+识别这一序列
+*/
+class RemoveGetFieldPutFieldAdapter extends PatternMethodAdapter {
+    private final static int SEEN_ALOAD_0 = 1;
+    private final static int SEEN_ALOAD_0ALOAD_0 = 2;
+    private final static int SEEN_ALOAD_0ALOAD_0GETFIELD = 3;
+    private String fieldOwner;
+    private String fieldName;
+    private String fieldDesc;
+    public RemoveGetFieldPutFieldAdapter(MethodVisitor mv) {
+        super(ASM5, mv);
+    }
+    
+    /*
+    每个转换都标有一个条件(当前指令的值)和一个操作(必须发出的指令序列)。
+    找到状态机之后,相应方法适配器的编写就简单了,状态机图片:
+    https://github.com/saaavsaaa/saaavsaaa.github.io/blob/master/ppp/ss112713.jpg
+    */
+    @Override
+    public void visitVarInsn(int opcode, int var) {
+        switch (state) {
+            case SEEN_NOTHING: // S0 -> S1
+                if (opcode == ALOAD && var == 0) { //初始状态时，判断当前指令是否是 ALOAD 0
+                    state = SEEN_ALOAD_0; //第一步条件符合，初始状态变为状态一
+                    return;
+                }
+                break;
+            case SEEN_ALOAD_0: // S1 -> S2
+                if (opcode == ALOAD && var == 0) { //状态一时，判断当前指令是否是 ALOAD 0
+                    state = SEEN_ALOAD_0ALOAD_0; //第二步条件符合，初始状态变为状态二
+                    return;
+                }
+            case SEEN_ALOAD_0ALOAD_0: // S2 -> S2
+                if (opcode == ALOAD && var == 0) { //三个或三个以上的连续 ALOAD 0 时
+                    mv.visitVarInsn(ALOAD, 0); //只需要保留两个ALOAD 0，多余的ALOAD 0照常执行
+                    return;
+                }
+                break;
+        }
+        visitInsn();
+        mv.visitVarInsn(opcode, var);
+    }
+    @Override
+    public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+        switch (state) {
+            case SEEN_ALOAD_0ALOAD_0: // S2 -> S3
+                if (opcode == GETFIELD) {
+                    state = SEEN_ALOAD_0ALOAD_0GETFIELD;
+                    fieldOwner = owner;
+                    fieldName = name;
+                    fieldDesc = desc;
+                    return;
+                }
+                break;
+            case SEEN_ALOAD_0ALOAD_0GETFIELD: // S3 -> S0
+                if (opcode == PUTFIELD && name.equals(fieldName)) {
+                    state = SEEN_NOTHING;
+                    return;
+                }
+                break;
+        }
+        visitInsn();
+        mv.visitFieldInsn(opcode, owner, name, desc);
+    }
+    @Override protected void visitInsn() {
+        switch (state) {
+            case SEEN_ALOAD_0: // S1 -> S0
+                mv.visitVarInsn(ALOAD, 0);
+                break;
+            case SEEN_ALOAD_0ALOAD_0: // S2 -> S0
+                mv.visitVarInsn(ALOAD, 0);
+                mv.visitVarInsn(ALOAD, 0);
+                break;
+            case SEEN_ALOAD_0ALOAD_0GETFIELD: // S3 -> S0
+                mv.visitVarInsn(ALOAD, 0);
+                mv.visitVarInsn(ALOAD, 0);
+                mv.visitFieldInsn(GETFIELD, fieldOwner, fieldName, fieldDesc);
+                break;
+        }
+        state = SEEN_NOTHING;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 在访问 ICONST_0 时,只有当下一条指令是 IADD 时才必须将其删除。将是否删除它的决定推迟到下一
 条指令:如果下一指令是 IADD,则删除两条指令,否则,发出 ICONST_0 和当前指令

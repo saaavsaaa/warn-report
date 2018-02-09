@@ -22,10 +22,13 @@ import static jdk.internal.org.objectweb.asm.Opcodes.*;
  */
 public class ClassVisitorAddTest {
     public static void main(String[] args) throws ClassNotFoundException, IOException, IllegalAccessException, InstantiationException, NoSuchFieldException {
+    
+        ClassVisitorTest.changeVersion();
+        
         byte[] data = ResourceUtil.loadFile("ClassCode.class");
         ClassReader cr = new ClassReader(data);
         ClassWriter cw = new ClassWriter(0);
-    
+        
 //        cw = deleteField(cr, cw);
         cw = addField(cr, cw);
         cw = ClassMethodVisitor.add(cr, cw);

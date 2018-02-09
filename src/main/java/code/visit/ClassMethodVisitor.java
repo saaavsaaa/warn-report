@@ -1,6 +1,7 @@
 package code.visit;
 
 import jdk.internal.org.objectweb.asm.*;
+import jdk.internal.org.objectweb.asm.commons.AdviceAdapter;
 import jdk.internal.org.objectweb.asm.commons.AnalyzerAdapter;
 import jdk.internal.org.objectweb.asm.commons.LocalVariablesSorter;
 import util.ResourceUtil;
@@ -73,8 +74,8 @@ public class ClassMethodVisitor {
     
         ClassVisitor add = new AddTimerAdapter(cw);
     
-        cr.accept(add, 0);
-//        cr.accept(add, EXPAND_FRAMES);
+//        cr.accept(add, 0);
+        cr.accept(add, EXPAND_FRAMES);
 
         byte[] b = cw.toByteArray();
         ResourceUtil.write("ClassCode.class", b);
@@ -103,7 +104,8 @@ class AddTimerAdapter extends ClassVisitor {
 //            mv = new AddTimerMethodAdapter(mv);
 //            mv = new AddTimerMethodAdapter2("code/record/WaitClearCode", ACC_PUBLIC, name, desc, mv);
 //            mv = new AddTimerLocalAdapter(ACC_PUBLIC, desc, mv);
-            mv = new AddTimerLocalAndAnalyzerAdapter(ACC_PUBLIC, name, desc, mv);
+//            mv = new AddTimerLocalAndAnalyzerAdapter(ACC_PUBLIC, name, desc, mv);
+            mv = new AddTimerAdviceAdapter(ACC_PUBLIC, name, desc, mv);
         }
         return mv;
     }
@@ -297,15 +299,41 @@ class AddTimerLocalAndAnalyzerAdapter extends MethodVisitor {
             mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
             mv.visitVarInsn(LLOAD, time);
             mv.visitInsn(LSUB);
-            mv.visitFieldInsn(GETSTATIC, owner, "timer", "J");
+            mv.visitFieldInsn(GETSTATIC, owner, "exec", "J");
             mv.visitInsn(LADD);
-            mv.visitFieldInsn(PUTSTATIC, owner, "timer", "J");
+            mv.visitFieldInsn(PUTSTATIC, owner, "exec", "J");
             maxStack = Math.max(analyzer.stack.size() + 4, maxStack);
         }
         mv.visitInsn(opcode);
     }
     @Override public void visitMaxs(int maxStack, int maxLocals) {
         mv.visitMaxs(Math.max(this.maxStack, maxStack), maxLocals);
+    }
+}
+
+/*
+AdviceAdapter 继承自 LocalVariablesSorter
+*/
+class AddTimerAdviceAdapter extends AdviceAdapter {
+    private String owner = "code/record/WaitClearCode";
+    
+    public AddTimerAdviceAdapter(int access, String name, String desc, MethodVisitor mv) {
+        super(ASM5, mv, access, name, desc);
+    }
+    @Override protected void onMethodEnter() {
+        mv.visitFieldInsn(GETSTATIC, owner, "exec", "J");
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+        mv.visitInsn(LSUB);
+        mv.visitFieldInsn(PUTSTATIC, owner, "exec", "J");
+    }
+    @Override protected void onMethodExit(int opcode) {
+        mv.visitFieldInsn(GETSTATIC, owner, "exec", "J");
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+        mv.visitInsn(LADD);
+        mv.visitFieldInsn(PUTSTATIC, owner, "exec", "J");
+    }
+    @Override public void visitMaxs(int maxStack, int maxLocals) {
+        super.visitMaxs(maxStack + 4, maxLocals);
     }
 }
 

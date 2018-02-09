@@ -37,7 +37,7 @@ public class ClassVisitorTest {
         byte[] b2 = cw.toByteArray();
     }
     
-    private static void changeVersion() throws IOException {
+    public static void changeVersion() throws IOException {
         String path = "code.record.WaitClearCode";
         VisitClassLoader classLoader = new VisitClassLoader(Thread.currentThread().getContextClassLoader());
     

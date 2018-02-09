@@ -107,20 +107,16 @@ class MethodCheckVisitor extends ClassVisitor{
             中提供有效的 maxStack 和 maxLocals 参数,那这种错误是可以被检测出来的。
             */
             mv = new CheckMethodAdapter(mv);
+            ((CheckMethodAdapter)mv).version = V1_7;
         }
 //        return new WaitCheckAdapter(mv);
         return mv;
     }
 }
 
-
-class WaitCheckAdapter extends MethodVisitor{
-    public WaitCheckAdapter(MethodVisitor methodVisitor) {
-        super(ASM5, methodVisitor);
-    }
-    
-    @Override
-    public void visitEnd(){
-        super.visitEnd();
+class CheckMethodTestAdapter extends CheckMethodAdapter{
+    public CheckMethodTestAdapter(MethodVisitor methodVisitor) {
+        super(methodVisitor);
+        this.version = V1_7;
     }
 }

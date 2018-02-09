@@ -2,6 +2,7 @@ package code.visit;
 
 import jdk.internal.org.objectweb.asm.*;
 import jdk.internal.org.objectweb.asm.commons.AnalyzerAdapter;
+import jdk.internal.org.objectweb.asm.commons.LocalVariablesSorter;
 import util.ResourceUtil;
 
 import java.io.IOException;
@@ -72,8 +73,8 @@ public class ClassMethodVisitor {
     
         ClassVisitor add = new AddTimerAdapter(cw);
     
-//        cr.accept(add, 0);
-        cr.accept(add, EXPAND_FRAMES);
+        cr.accept(add, 0);
+//        cr.accept(add, EXPAND_FRAMES);
 
         byte[] b = cw.toByteArray();
         ResourceUtil.write("ClassCode.class", b);
@@ -100,7 +101,9 @@ class AddTimerAdapter extends ClassVisitor {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
         if (!isInterface && mv != null && name.equals("setTTT")) {
 //            mv = new AddTimerMethodAdapter(mv);
-            mv = new AddTimerMethodAdapter2("code/record/WaitClearCode", ACC_PUBLIC, name, desc, mv);
+//            mv = new AddTimerMethodAdapter2("code/record/WaitClearCode", ACC_PUBLIC, name, desc, mv);
+//            mv = new AddTimerLocalAdapter(ACC_PUBLIC, desc, mv);
+            mv = new AddTimerLocalAndAnalyzerAdapter(ACC_PUBLIC, name, desc, mv);
         }
         return mv;
     }
@@ -163,10 +166,10 @@ class AddTimerMethodAdapter extends MethodVisitor {
 可用于获得操作数栈恰在 RETURN 指令之前的大小,从而允许为 visitMaxs 中的 maxStack 计算一个最优的已转换值(事实上,在
 实践中并不建议使用这一方法,因为它的效率要远低于使用 COMPUTE_MAXS)
 */
-class AddTimerMethodAdapter2 extends AnalyzerAdapter {
+class AddTimerMethodAdapter1 extends AnalyzerAdapter {
     private String owner;
     private int maxStack;
-    public AddTimerMethodAdapter2(String owner, int access, String name, String desc, MethodVisitor mv) {
+    public AddTimerMethodAdapter1(String owner, int access, String name, String desc, MethodVisitor mv) {
         super(ASM5, owner, access, name, desc, mv);
         this.owner = owner;
     }
@@ -207,32 +210,104 @@ class AddTimerMethodAdapter2 extends AnalyzerAdapter {
 AnalyzerAdapter 计算,由于这个适配器会根据它计算的帧来更新 visitMaxs 的参数,所
 以我们不需要自己来更新它们
 */
-class AddTimerMethodAdapter3 extends AnalyzerAdapter {
+class AddTimerMethodAdapter2 extends AnalyzerAdapter {
     private String owner;
-    public AddTimerMethodAdapter3(String owner, int access, String name, String desc, MethodVisitor mv) {
+    public AddTimerMethodAdapter2(String owner, int access, String name, String desc, MethodVisitor mv) {
         super(ASM5, owner, access, name, desc, mv);
         this.owner = owner;
     }
     @Override
     public void visitCode() {
         super.visitCode();
-        super.visitFieldInsn(GETSTATIC, owner, "timer", "J");
+        super.visitFieldInsn(GETSTATIC, owner, "exec", "J");
         super.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
         super.visitInsn(LSUB);
-        super.visitFieldInsn(PUTSTATIC, owner, "timer", "J");
+        super.visitFieldInsn(PUTSTATIC, owner, "exec", "J");
     }
     @Override
     public void visitInsn(int opcode) {
         if ((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW) {
-            super.visitFieldInsn(GETSTATIC, owner, "timer", "J");
+            super.visitFieldInsn(GETSTATIC, owner, "exec", "J");
             super.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
             super.visitInsn(LADD);
-            super.visitFieldInsn(PUTSTATIC, owner, "timer", "J");
+            super.visitFieldInsn(PUTSTATIC, owner, "exec", "J");
         }
         super.visitInsn(opcode);
     }
 }
 
+/*
+在对局部变量重新编号后,与该方法相关联的原帧变为无效,在插入新局部变量后更不必说了。
+幸好,还是可能避免从头重新计算这些帧的:事实上,并不存在必须添加或删除的帧,
+只需对原帧中局部变量的内容进行重新排序,为转换后的方法获得帧就“足够”了。
+LocalVariablesSorter 会自动负责完成。如果还需要为你的方法适配器进行增量栈映射帧
+更新,可以由这个类的源代码中获得灵感。
+*/
+class AddTimerLocalAdapter extends LocalVariablesSorter {
+    private String owner = "code/record/WaitClearCode";
+    private int time;
+    public AddTimerLocalAdapter(int access, String desc, MethodVisitor mv) {
+        super(ASM5, access, desc, mv);
+    }
+    @Override
+    public void visitCode() {
+        super.visitCode();
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+        time = newLocal(Type.LONG_TYPE); //生成一个局部变量存储，而不是直接在exec中减
+        mv.visitVarInsn(LSTORE, time);
+    }
+    @Override
+    public void visitInsn(int opcode) {
+        if ((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW) {
+            mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+            mv.visitVarInsn(LLOAD, time);
+            mv.visitInsn(LSUB);
+            mv.visitFieldInsn(GETSTATIC, owner, "exec", "J");
+            mv.visitInsn(LADD);
+            mv.visitFieldInsn(PUTSTATIC, owner, "exec", "J");
+        }
+        super.visitInsn(opcode);
+    }
+    @Override
+    public void visitMaxs(int maxStack, int maxLocals) {
+        super.visitMaxs(maxStack + 4, maxLocals);
+    }
+}
+
+class AddTimerLocalAndAnalyzerAdapter extends MethodVisitor {
+    private String owner = "code/record/WaitClearCode";
+    public LocalVariablesSorter lvs;
+    public AnalyzerAdapter analyzer;
+    private int time;
+    private int maxStack;
+    public AddTimerLocalAndAnalyzerAdapter(int access, String name, String desc, MethodVisitor mv) {
+        super(ASM5, mv);
+        lvs = new LocalVariablesSorter(access, desc, mv);
+        analyzer = new AnalyzerAdapter(owner, access, name, desc, mv);
+    }
+    @Override public void visitCode() {
+        mv.visitCode();
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+        time = lvs.newLocal(Type.LONG_TYPE);
+        mv.visitVarInsn(LSTORE, time);
+        maxStack = 4;
+    }
+    @Override public void visitInsn(int opcode) {
+        if ((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW) {
+            mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+            mv.visitVarInsn(LLOAD, time);
+            mv.visitInsn(LSUB);
+            mv.visitFieldInsn(GETSTATIC, owner, "timer", "J");
+            mv.visitInsn(LADD);
+            mv.visitFieldInsn(PUTSTATIC, owner, "timer", "J");
+            maxStack = Math.max(analyzer.stack.size() + 4, maxStack);
+        }
+        mv.visitInsn(opcode);
+    }
+    @Override public void visitMaxs(int maxStack, int maxLocals) {
+        mv.visitMaxs(Math.max(this.maxStack, maxStack), maxLocals);
+    }
+}
 
 //方法可以像类一样进行转换,也就是使用一个方法适配器将它收到的方法调用转发出去,并进行一些修改:改变参数可用于改变各具体指令;不转发某一收到的调用
 //将删除一条指令;在接收到的调用之间插入调用,将增加新的指令。MethodVisitor 类提供了这样一种方法适配器的基本实现,它只是转发它接收到的所有方法,而未做任何其他事情。

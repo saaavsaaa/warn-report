@@ -1,5 +1,6 @@
 package code.visit.unchecked;
 
+import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.tree.*;
 
 import java.util.Iterator;
@@ -147,16 +148,18 @@ class AddTimerTransformer extends ClassTransformer {
     }
 }
 
-class MethodTransformer extends ClassTransformer{
-    public MethodTransformer(RemoveMethodTransformer mt) {
+class TreeMethodTransformer extends ClassTransformer{
+    TreeMethodTransformer mt;
+    public TreeMethodTransformer(TreeMethodTransformer mt) {
         super(mt);
     }
     
-    protected void transform(MethodNode mn){}
+    protected void transform(MethodNode mn){
+    }
 }
 
-class RemoveGetFieldPutFieldTransformer extends MethodTransformer {
-    public RemoveGetFieldPutFieldTransformer(RemoveMethodTransformer mt) {
+class RemoveGetFieldPutFieldTransformer extends TreeMethodTransformer {
+    public RemoveGetFieldPutFieldTransformer(TreeMethodTransformer mt) {
         super(mt);
     }
     
@@ -226,8 +229,8 @@ class RemoveGetFieldPutFieldTransformer extends MethodTransformer {
     出来时,迭代器恰好位于它的后面,所以不再需要 while (i.next() != i4)循环。但这里
     再次出现了三个或多个连续 ALOAD 0 指令的特殊情况(见 while (i3 != null)循环)。
 */
-class RemoveGetFieldPutFieldTransformer2 extends MethodTransformer {
-    public RemoveGetFieldPutFieldTransformer2(RemoveMethodTransformer mt) {
+class RemoveGetFieldPutFieldTransformer2 extends TreeMethodTransformer {
+    public RemoveGetFieldPutFieldTransformer2(TreeMethodTransformer mt) {
         super(mt);
     }
     
@@ -280,5 +283,137 @@ class RemoveGetFieldPutFieldTransformer2 extends MethodTransformer {
             }
         }
         return null;
+    }
+}
+
+/*
+下面的转换就是这样一个例子:用向 label 的跳转代替向 GOTO label 指令的跳转,然后
+用一个 RETURN 指令代替指向这个 RETURN 指令的 GOTO。实际中,一个跳转指令的目标与这条
+指令的距离可能为任意远,可能在它的前面,也可能在其之后。
+ */
+class OptimizeJumpTransformer extends TreeMethodTransformer {
+    public OptimizeJumpTransformer(TreeMethodTransformer mt) {
+        super(mt);
+    }
+    @Override
+    public void transform(MethodNode mn) {
+        InsnList insns = mn.instructions;
+        Iterator<AbstractInsnNode> i = insns.iterator();
+        while (i.hasNext()) {
+            AbstractInsnNode in = i.next();
+            if (in instanceof JumpInsnNode) { //当找到一条跳转指令 in 时
+                LabelNode label = ((JumpInsnNode) in).label; // //当找到一条跳转指令 in 时
+                AbstractInsnNode target;
+                // 当 target == goto l,用 l 代替 label
+                while (true) {
+                    target = label;
+                    
+                    while (target != null && target.getOpcode() < 0) {
+                        //查找紧跟在这个标记之后出现的指令(不代表实际指令的AbstractInsnNode对象,比如 FrameNode 或 LabelNode,其“操作码”为负)
+                        target = target.getNext();
+                    }
+                    //只要这条指令是 GOTO,就用这条指令的目标代替 label,然后重复上述步骤
+                    if (target != null && target.getOpcode() == GOTO) {
+                        label = ((JumpInsnNode) target).label;
+                    } else {
+                        break;
+                    }
+                }
+// 更新目标
+                ((JumpInsnNode) in).label = label; //用这个更新后的label 值来代替 in 的目标标记
+// 在可能时,用目标指令代替跳转
+                if (in.getOpcode() == GOTO && target != null) { //如果 in 本身是一个 GOTO
+                    int op = target.getOpcode();
+                    if ((op >= IRETURN && op <= RETURN) || op == ATHROW) { //更新后的目标是一条 RETURN指令
+// replace ’in’ with clone of ’target’
+                        insns.set(in, target.clone(null)); //in 用这个返回指令的克隆副本代替(回想一下,一个指令对象在一个指令列表中不能出现一次以上)。
+                    }
+                }
+            }
+        }
+        super.transform(mn);
+    }
+    
+    /*
+    // 之前
+    ILOAD 1
+    IFLT label
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD ...
+    GOTO end
+    label:
+    F_SAME
+    NEW ...
+    DUP
+    INVOKESPECIAL ...
+    ATHROW
+    end:
+    F_SAME
+    RETURN
+    // 之后
+    ILOAD 1
+    IFLT label
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD ...
+    RETURN
+    label:
+    F_SAME
+    NEW ...
+    DUP
+    INVOKESPECIAL ...
+    ATHROW
+    end:
+    F_SAME
+    RETURN
+    */
+}
+
+//用于类的两种模式实际上对于方法也是有效的,其工作方式完全相同。基于继承的模式
+/*
+继承模式的一种变体是直接在 ClassAdapter 的 visitMethod 中将它与一个匿名内部类一起使用:
+MethodVisitor visitMethod(int access, String name,String desc, String signature, String[] exceptions) {
+    return new MethodNode(ASM4, access, name, desc, signature, exceptions)
+    {
+    @Override public void visitEnd() {
+    //将你的转换代码放在这儿
+    accept(cv);
+    }
+    };
+}
+
+AnnotationNode 类扩展了 AnnotationVisitor 类,还提供了一个 accept方法,它以一个这种类型的对象为参数,比如具有这个类和方法访问器类的 ClassNode 和
+MethodNode 类。可进行“匿名内部类”的变体,使其适用于注释
+public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+    return new AnnotationNode(ASM4, desc) {
+    @Override public void visitEnd() {
+    // 将注释转换代码放在这里
+    accept(cv.visitAnnotation(desc, visible));
+    }
+};
+
+*/
+class MethodAdapter1 extends MethodNode {
+    public MethodAdapter1(int access, String name, String desc, String signature, String[] exceptions, MethodVisitor mv) {
+        super(ASM5, access, name, desc, signature, exceptions);
+        this.mv = mv;
+    }
+    @Override public void visitEnd() {
+// 将你的转换代码放在这儿
+        accept(mv);
+    }
+}
+//基于委托的模式
+class MethodAdapter2 extends MethodVisitor {
+    MethodVisitor next;
+    public MethodAdapter2(int access, String name, String desc, String signature, String[] exceptions, MethodVisitor mv) {
+        super(ASM5, new MethodNode(access, name, desc, signature, exceptions));
+        next = mv;
+    }
+    @Override public void visitEnd() {
+        MethodNode mn = (MethodNode) mv;
+//将你的转换代码放在这儿
+        mn.accept(next);
     }
 }

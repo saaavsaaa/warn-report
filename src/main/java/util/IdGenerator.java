@@ -1,8 +1,14 @@
 package util;
 
+import org.apache.commons.lang3.StringUtils;
+import util.type.ByteUtil;
+import util.type.LongUtil;
+import util.type.StringCreator;
+
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.ResourceBundle;
 import java.util.concurrent.atomic.LongAdder;
 
 /**
@@ -14,6 +20,50 @@ public enum  IdGenerator {
     private String host;
     IdGenerator(){
         host = getHost();
+    }
+    
+    public static void main(String[] args){
+//        System.out.println(IdGenerator.INSTANCE.createNewKey());;
+        System.out.println(calculateKey());
+    }
+    
+    public static synchronized long calculateKey(){
+        long serverId = getServerId();
+        long incr = getIncr();
+        long tick = getTick();
+        long threadId = getThreadId();
+        
+        int serverIdSize = LongUtil.getSize(serverId);
+        int incrSize = LongUtil.getSize(incr);
+        int tickSize = LongUtil.getSize(tick);
+        int threadIdSize = LongUtil.getSize(threadId);
+        
+        long key = calculate(new long[]{serverId, incr, tick, threadId}, new long[]{serverIdSize, incrSize, tickSize, threadIdSize}, threadId, 0);
+        return key;
+    }
+    
+    private static long calculate(long[] values, long[] sizes, long step, int vi){
+        int length = values.length;
+        if (length > vi + 1){
+            step += power(values[vi + 1], sizes[vi]);
+            return calculate(values, sizes, step, vi + 1);
+        } else {
+            return step;
+        }
+    }
+    
+    private static long power(long v, long s){
+        return v * (long)Math.pow(10, s);
+    }
+    
+    public synchronized long createNewKey(){
+        KeyCreator stringBuilder = new KeyCreator();
+        stringBuilder.appendLong(getServerId());
+        stringBuilder.appendLong(getIncr());
+        stringBuilder.appendLong(getTick());
+        stringBuilder.appendLong(getThreadId());
+//        return stringBuilder.get();
+        return stringBuilder.getLong();
     }
     
     public synchronized String createNewId(){
@@ -40,6 +90,16 @@ public enum  IdGenerator {
     
     private static long getTick(){
         return System.currentTimeMillis();
+    }
+    
+    private static long getServerId(){
+        ResourceBundle bundle = ResourceBundle.getBundle("server");
+        String serverId = bundle.getString("server.id");
+        if (StringUtils.isEmpty(serverId)){
+            throw new IllegalArgumentException("server.id doesn't exist");
+        }
+        Long id = Long.valueOf(serverId);
+        return id.longValue();
     }
     
     private String getHost() {
@@ -69,5 +129,33 @@ public enum  IdGenerator {
         //与00001111作按位与运算以便读取当前字节低4位
         String low = Integer.toHexString(b&15);
         return high + low;
+    }
+}
+
+class KeyCreator {
+    private StringBuilder stringBuilder;
+    
+    public KeyCreator(){
+        stringBuilder = new StringBuilder();
+    }
+    
+    public KeyCreator appendLong(long value){
+//        stringBuilder.append(value);
+        System.out.println("value:" + value);
+        ByteUtil.put(value);
+        return this;
+    }
+    
+    public <T> KeyCreator append(T value){
+        stringBuilder.append(value);
+        return this;
+    }
+    
+    public long getLong(){
+        return ByteUtil.get();
+    }
+    
+    public String get(){
+        return stringBuilder.toString();
     }
 }

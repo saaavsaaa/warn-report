@@ -48,9 +48,12 @@ public class DateUtil {
         return "";
     }
     
-    public static long getTick(String day) throws ParseException {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        java.util.Date date = df.parse(day);
+    /*
+    * yyyy-MM-dd HH:mm:ss SSS
+    */
+    public static long getTick(String point) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
+        java.util.Date date = df.parse(point);
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         long timestamp = cal.getTimeInMillis();

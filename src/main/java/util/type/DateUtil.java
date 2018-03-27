@@ -1,6 +1,9 @@
 package util.type;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -43,6 +46,15 @@ public class DateUtil {
             e.printStackTrace();
         }
         return "";
+    }
+    
+    public static long getTick(String day) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        java.util.Date date = df.parse(day);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        long timestamp = cal.getTimeInMillis();
+        return timestamp;
     }
     
     /**

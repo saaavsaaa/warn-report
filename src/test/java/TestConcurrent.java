@@ -1,13 +1,16 @@
 import org.junit.Test;
 import run.CurrentTrace;
 import util.ConcurrentRun;
+import util.IdCreator;
 import util.IdGenerator;
 import util.size.ClassIntrospection;
 import util.size.ObjectInfo;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by root on 17-4-25.
@@ -17,16 +20,25 @@ public class TestConcurrent {
     public void testConcurrentCreate() throws InterruptedException {
         Runnable create = () -> {
             System.out.println(IdGenerator.INSTANCE.createNewId());
+//            UUID.randomUUID();
+            /*try {
+                System.out.println(IdCreator.INSTANCE.calculateKey());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
         };
         ConcurrentRun.executeTasks(10000, create);
     }
     
     @Test
-    public void testCreate(){
+    public void testCreate() throws ParseException, InterruptedException {
         long start = System.nanoTime();
         for (int i = 0; i < 1000000; i++) {
 //            IdGenerator.INSTANCE.createNewId();
-            System.out.println(IdGenerator.INSTANCE.createNewId());
+//            System.out.println(IdGenerator.INSTANCE.createNewId());
+//            IdGenerator.INSTANCE.createNewKey();
+            IdCreator.INSTANCE.calculateKey();
+//            System.out.println(IdGenerator.INSTANCE.calculateKey());
 //            UUID.randomUUID();
         }
         long end = System.nanoTime();

@@ -1,13 +1,15 @@
-package service;
+package server;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Created by aaa on 18-4-9.
- * https://www.cnblogs.com/520playboy/p/6384594.html?utm_source=itdadao&utm_medium=referral
  */
 public class ZookeeperTest {
     /** zookeeper地址 */
@@ -17,9 +19,11 @@ public class ZookeeperTest {
     /** 信号量，阻塞程序执行，用于等待zookeeper连接成功，发送成功信号 */
     static final CountDownLatch connectedSemaphore = new CountDownLatch(1);
     
-    public static void main(String[] args) throws Exception{
+    static ZooKeeper zk = null;
     
-        ZooKeeper zk = new ZooKeeper(CONNECT_ADDR, SESSION_OUTTIME, new Watcher(){
+    @BeforeClass
+    public static void start() throws IOException {
+        zk = new ZooKeeper(CONNECT_ADDR, SESSION_OUTTIME, new Watcher(){
             @Override
             public void process(WatchedEvent event) {
                 //获取事件的状态
@@ -35,6 +39,16 @@ public class ZookeeperTest {
                 }
             }
         });
+    }
+    
+    @Test
+    public void createRoot() throws KeeperException, InterruptedException {
+        createRoot("/config", "data", zk);
+    }
+    
+    public static void main(String[] args) throws Exception{
+    
+        start();
         
         //进行阻塞
         connectedSemaphore.await();

@@ -1,8 +1,11 @@
 package server;
 
 import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
+import java.util.*;
+import java.util.concurrent.*;
 
+import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.*;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 import org.junit.BeforeClass;
@@ -15,7 +18,7 @@ public class ZookeeperTest {
     /** zookeeper地址 */
     static final String CONNECT_ADDR = "192.168.2.44:2181";
     /** session超时时间 */
-    static final int SESSION_OUTTIME = 2000;//ms
+    static final int SESSION_OUTTIME = 200000;//ms
     /** 信号量，阻塞程序执行，用于等待zookeeper连接成功，发送成功信号 */
     static final CountDownLatch connectedSemaphore = new CountDownLatch(1);
     
@@ -46,6 +49,91 @@ public class ZookeeperTest {
         createRoot("/config", "data", zk);
     }
     
+    @Test
+    public void createChildNode() throws KeeperException, InterruptedException {
+        createChildNode("/config/datasource", "children data", zk);
+    }
+    
+    @Test
+    public void createNodes() throws KeeperException, InterruptedException {
+        createChildNode("/config/datasource/a/aa", "children data", zk);
+        createChildNode("/config/datasource/b/bb", "children data", zk);
+    }
+    
+    @Test
+    public void deleteNode() throws KeeperException, InterruptedException {
+        String path = "/orchestration-yaml-test/demo_ds_ms/state/instances/192.168.3.2@5369@891a8d42-a5e4-4276-8ccc-81d06571a4ba";
+        //同步
+        //zk.delete(path, -1);
+    
+        //异步
+        zk.delete(path, -1, (rc, p, ctx) -> {
+            System.out.println("rc=====" + rc);
+            System.out.println("path======" + p);
+            System.out.println("ctc======" + p);
+        }, "回调值");
+    
+        System.out.println("删除 :" + path);
+    }
+    
+    @Test
+    public void deleteAllNode() throws KeeperException, InterruptedException, ExecutionException {
+        String path = "/orchestration-yaml-test/demo_ds_ms/state/datasources";
+        Transaction transaction = zk.transaction();
+        //取全部节点，锁缓存
+        
+        Stack<String> pathStack = getPaths(path);
+        while (!pathStack.empty()){
+            String node = pathStack.pop();
+            if (null != existNode(node, zk)){
+                
+            }
+            delete(node);
+        }
+    
+        transaction.commit();
+        System.out.println("删除 :" + path);
+    }
+    
+    private Stack<String> getPaths(String path){
+        Stack<String> pathStack = new Stack<>();
+        int index = 1;
+        int position = path.indexOf('/', index);
+    
+        do{
+            pathStack.push(path.substring(0, position));
+            index = position + 1;
+            position = path.indexOf('/', index);
+        }
+        while (position > -1);
+        pathStack.push(path);
+        return pathStack;
+    }
+    
+
+    
+    private String delete(String path) {
+        try {
+            zk.delete(path, -1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return path;
+    }
+    
+    @Test
+    public void existNode() throws KeeperException, InterruptedException {
+        String path = "/orchestration-yaml-test/demo_ds_ms/state";
+        existNode(path, zk);
+    }
+    
+    @Test
+    public void getNode() throws KeeperException, InterruptedException {
+        String path = "/orchestration-yaml-test/demo_ds_ms";
+        List<String> childList = zk.getChildren(path, false);
+        childList.forEach(c -> System.out.println(c));
+    }
+    
     public static void main(String[] args) throws Exception{
     
         start();
@@ -56,7 +144,7 @@ public class ZookeeperTest {
         System.out.println("--------------------------------------------------");
     
         createRoot("/config", "data", zk);
-    
+
         createChildNode("/config/datasource", "children data", zk);
         getNodeData("/config/datasource", zk);
     
@@ -113,8 +201,60 @@ public class ZookeeperTest {
     }
     
     //判断节点是否存在
-    private static void existNode(String path, ZooKeeper zk) throws KeeperException, InterruptedException {
+    private static Object existNode(String path, ZooKeeper zk) throws KeeperException, InterruptedException {
         Stat result = zk.exists(path, false);
         System.out.println("判断节点是否存在:" + result);
+        return result;
+    }
+}
+
+/**
+ * 生产者线程
+ */
+class Producer implements Runnable{
+    private final ArrayBlockingQueue<String> nodes;
+    Producer(ArrayBlockingQueue<String> arrayBlockingQueue){
+        this.nodes = arrayBlockingQueue;
+    }
+    
+    @Override
+    public void run() {
+        while (true) {
+            Produce();
+        }
+    }
+    
+    private void Produce(){
+        try {
+            nodes.put("");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+/**
+ * 消费者线程
+ */
+class Consumer implements Runnable{
+    
+    private ArrayBlockingQueue<String> nodes;
+    private final ZooKeeper zk;
+    Consumer(ArrayBlockingQueue<String> arrayBlockingQueue, ZooKeeper zk){
+        this.nodes = arrayBlockingQueue;
+        this.zk = zk;
+    }
+    
+    @Override
+    public void run() {
+        while (true){
+            try {
+                zk.delete(nodes.take(), -1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (KeeperException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

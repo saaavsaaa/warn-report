@@ -12,9 +12,9 @@ import com.alibaba.rocketmq.common.message.MessageExt;
 import com.alibaba.rocketmq.common.message.MessageQueue;
 import com.alibaba.rocketmq.remoting.exception.RemotingException;
 import org.junit.Test;
-import rocket.Producer;
-import rocket.PullConsumer;
-import rocket.PushConsumer;
+import third.rocket.Producer;
+import third.rocket.PullConsumer;
+import third.rocket.PushConsumer;
 
 import java.util.HashMap;
 import java.util.List;

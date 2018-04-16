@@ -1,7 +1,7 @@
 package object;
 
 import org.junit.Test;
-import rocketDoubleWrite.ProducerClient;
+import third.rocketDoubleWrite.ProducerClient;
 import util.ConcurrentRun;
 
 public class TestDoubleClient {

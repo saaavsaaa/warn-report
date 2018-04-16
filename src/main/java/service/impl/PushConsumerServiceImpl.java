@@ -4,9 +4,9 @@ import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
-import rocketDoubleWrite.listener.MessageReceive;
-import rocketDoubleWrite.listener.RocketListener;
-import rocketDoubleWrite.listener.impl.BusinessRun;
+import third.rocketDoubleWrite.listener.MessageReceive;
+import third.rocketDoubleWrite.listener.RocketListener;
+import third.rocketDoubleWrite.listener.impl.BusinessRun;
 import service.PushConsumerService;
 
 import java.util.ResourceBundle;
@@ -21,7 +21,7 @@ public class PushConsumerServiceImpl implements PushConsumerService {
     private MessageReceive receive;
 
     public PushConsumerServiceImpl(){
-        ResourceBundle bundle = ResourceBundle.getBundle("rocket");
+        ResourceBundle bundle = ResourceBundle.getBundle("third/rocket");
         topic = bundle.getString("rocket.topic");
         subExpression = bundle.getString("rocket.subExpression");
         consumerGroup = bundle.getString("rocket.consumerGroup");

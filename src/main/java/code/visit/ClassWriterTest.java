@@ -2,12 +2,9 @@ package code.visit;
 
 import jdk.internal.org.objectweb.asm.ClassWriter;
 import jdk.internal.org.objectweb.asm.util.TraceClassVisitor;
-import util.UnicodeUtil;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
-import java.util.Arrays;
 
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
 
@@ -69,7 +66,7 @@ public class ClassWriterTest {
         StringWriter sw = new StringWriter();
         PrintWriter printWriter = new PrintWriter(sw);
         TraceClassVisitor cv = new TraceClassVisitor(cw, printWriter);
-        cv.visit(V1_5, ACC_PUBLIC, "rocketDoubleWrite/ProducerDouble", null, "java/lang/Object", new String[] { "rocketDoubleWrite/IProducer" });
+        cv.visit(V1_5, ACC_PUBLIC, "third/rocketDoubleWrite/ProducerDouble", null, "java/lang/Object", new String[] {"third/rocketDoubleWrite/IProducer"});
         cv.visitField(ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "LESS", "I", null, new Integer(-1)).visitEnd();
         cv.visitField(ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "EQUAL", "I", null, new Integer(0)).visitEnd();
         cv.visitField(ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "GREATER", "I", null, new Integer(1)).visitEnd();

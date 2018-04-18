@@ -37,7 +37,7 @@ public class ZookeeperTest {
                     if(Event.EventType.None == eventType){
                         //如果建立连接成功，则发送信号量，让后续阻塞程序向下执行
                         connectedSemaphore.countDown();
-                        System.out.println("zk 建立连接");
+                        System.out.println("已连接");
                     }
                 }
             }
@@ -61,17 +61,30 @@ public class ZookeeperTest {
     }
     
     @Test
+    public void existNode() throws KeeperException, InterruptedException {
+        String path = "/config";
+        existNode(path, zk);
+    }
+    
+    @Test
+    public void getNode() throws KeeperException, InterruptedException {
+        String path = "/orchestration-yaml-test/demo_ds_ms";
+        List<String> childList = zk.getChildren(path, false);
+        childList.forEach(c -> System.out.println(c));
+    }
+    
+    @Test
     public void deleteNode() throws KeeperException, InterruptedException {
-        String path = "/orchestration-yaml-test/demo_ds_ms/state/instances/192.168.3.2@5369@891a8d42-a5e4-4276-8ccc-81d06571a4ba";
+        String path = "/config";
         //同步
-        //zk.delete(path, -1);
+        zk.delete(path, -1);
     
         //异步
-        zk.delete(path, -1, (rc, p, ctx) -> {
+        /*zk.delete(path, -1, (rc, p, ctx) -> {
             System.out.println("rc=====" + rc);
             System.out.println("path======" + p);
             System.out.println("ctc======" + p);
-        }, "回调值");
+        }, "回调值");*/
     
         System.out.println("删除 :" + path);
     }
@@ -119,19 +132,6 @@ public class ZookeeperTest {
             e.printStackTrace();
         }
         return path;
-    }
-    
-    @Test
-    public void existNode() throws KeeperException, InterruptedException {
-        String path = "/orchestration-yaml-test/demo_ds_ms/state";
-        existNode(path, zk);
-    }
-    
-    @Test
-    public void getNode() throws KeeperException, InterruptedException {
-        String path = "/orchestration-yaml-test/demo_ds_ms";
-        List<String> childList = zk.getChildren(path, false);
-        childList.forEach(c -> System.out.println(c));
     }
     
     public static void main(String[] args) throws Exception{

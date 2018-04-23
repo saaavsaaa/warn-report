@@ -56,13 +56,83 @@ public class ZookeeperTest {
     
     @Test
     public void createNodes() throws KeeperException, InterruptedException {
-        createChildNode("/config/datasource/a/aa", "children data", zk);
-        createChildNode("/config/datasource/b/bb", "children data", zk);
+        Transaction transaction = zk.transaction();
+        createAll("/config/datasource/a/aa", "children data", transaction);
+//        createAll("/config/datasource/b/bb", "children data", transaction);
+        transaction.commit();
+//        useAsync = true;
+//        commit(transaction);
+    }
+    
+    private void createAll(String path, String data, Transaction transaction) throws KeeperException, InterruptedException {
+        //todo sync cache
+        List<String> paths = getPathNodes(path);
+        Iterator<String> nodes = paths.iterator();
+        while (nodes.hasNext()){
+            String node = nodes.next();
+            transaction.check(node, -1);
+            // contrast cache
+            if (null == existNode(node, zk)){
+                System.out.println(node);
+                transaction.create(node, data.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            }
+        }
+    }
+    
+    private List<String> getPathNodes(String path){
+        List<String> paths = new LinkedList<>();
+        int index = 1;
+        int position = path.indexOf('/', index);
+        
+        do{
+            paths.add(path.substring(0, position));
+            index = position + 1;
+            position = path.indexOf('/', index);
+        }
+        while (position > -1);
+        paths.add(path);
+        return paths;
+    }
+    
+    private boolean useAsync = false;
+    static class MultiResult {
+        int rc;
+        List<OpResult> results;
+        boolean finished = false;
+    }
+    private List<OpResult> commit(Transaction txn) throws KeeperException, InterruptedException {
+        if (useAsync) {
+            final MultiResult res = new MultiResult();
+            txn.commit(new AsyncCallback.MultiCallback() {
+                @Override
+                public void processResult(int rc, String path, Object ctx,
+                                          List<OpResult> opResults) {
+                    synchronized (res) {
+                        res.rc = rc;
+                        res.results = opResults;
+                        res.finished = true;
+                        res.notifyAll();
+                    }
+                }
+            }, null);
+            synchronized (res) {
+                while (!res.finished) {
+                    res.wait();
+                }
+            }
+            if (KeeperException.Code.OK.intValue() != res.rc) {
+                KeeperException ke = KeeperException.create(KeeperException.Code.get(res.rc));
+                throw ke;
+            }
+            return res.results;
+        } else {
+            return txn.commit();
+        }
     }
     
     @Test
     public void existNode() throws KeeperException, InterruptedException {
-        String path = "/config";
+        String path = "/test";
         existNode(path, zk);
     }
     
@@ -90,8 +160,18 @@ public class ZookeeperTest {
     }
     
     @Test
+    public void deleteCurrentBranch() {
+        String key = "";
+    }
+    
+    @Test
+    public void deleteAllChildren() {
+        String key = "";
+    }
+    
+    @Test
     public void deleteAllNode() throws KeeperException, InterruptedException, ExecutionException {
-        String path = "/orchestration-yaml-test/demo_ds_ms/state/datasources";
+        String path = "/config/datasource/a/aa";
         Transaction transaction = zk.transaction();
         //取全部节点，锁缓存
         
@@ -203,7 +283,7 @@ public class ZookeeperTest {
     //判断节点是否存在
     private static Object existNode(String path, ZooKeeper zk) throws KeeperException, InterruptedException {
         Stat result = zk.exists(path, false);
-        System.out.println("判断节点是否存在:" + result);
+        System.out.println("判断节点" + path + "是否存在:" + result);
         return result;
     }
 }

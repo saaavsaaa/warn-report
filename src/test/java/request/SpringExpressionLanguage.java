@@ -11,7 +11,7 @@ public class SpringExpressionLanguage {
     @Test
     public void test(){
         ExpressionParser parser=new SpelExpressionParser();
-        String expression = "T(java.lang.Runtime).getRuntime().exec('find . -name a*')";
+        String expression = "T(java.lang.Runtime).getRuntime().exec('touch aaaaaaaa')";
         String result = parser.parseExpression(expression).getValue().toString();
         System.out.println(result);
     }

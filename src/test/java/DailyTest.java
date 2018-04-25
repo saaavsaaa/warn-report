@@ -1,4 +1,6 @@
 import org.junit.Test;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,7 +17,10 @@ public class DailyTest {
     
     @Test
     public void test(){
-        
+        ExpressionParser parser=new SpelExpressionParser();
+        String expression = "T(java.lang.Runtime).getRuntime().exec('find . -name a*')";
+        String result = parser.parseExpression(expression).getValue().toString();
+        System.out.println(result);
     }
     
     public static void main(String[] args) {

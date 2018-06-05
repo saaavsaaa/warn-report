@@ -4,6 +4,9 @@ import org.junit.Test;
 import util.ConcurrentRun;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by aaa on 2016/10/9.
  */
@@ -349,6 +352,60 @@ public class DBTest {
         thread3.join();
         System.out.println("END");
     }
+    
+    @Test
+    public void testRollback() throws InterruptedException {
+        Runnable insert1 = () -> {
+            Connection conn = null;
+            try {
+                conn = DBUtils.getConnection();
+                conn.setAutoCommit(false);
+                execInsert(conn);
+                System.out.println("sleep1");
+                Thread.sleep(500);
+                throw new Exception("rollback");
+//                conn.commit();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            } finally {
+                try {
+                    conn.rollback();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    
+        Runnable insert2 = () -> {
+            Connection conn = null;
+            try {
+                conn = DBUtils.getConnection();
+                conn.setAutoCommit(false);
+                execInsert(conn);
+                System.out.println("sleep2");
+                Thread.sleep(1000);
+                conn.commit();
+                System.out.println("commit");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+    
+        List<Runnable> runnables = new ArrayList<>();
+        runnables.add(insert1);
+        runnables.add(insert2);
+        runnables.add(insert2);
+        ConcurrentRun.executeTasks(runnables);
+    }
+    
+    private void execInsert(Connection conn) throws SQLException {
+        String sql = "INSERT IGNORE INTO ttt ( `value` ) VALUES( '111' ),( '112' ),( '113' ),( '114' ),( '115' ),( '116' ),( '117' ),( '118' ),( '119' )";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        boolean success = ps.execute(sql);
+        System.out.println("TreadId : " + Thread.currentThread().getId() + " insert : " + success);
+    }
 
     private Thread createTask(final Runnable task){
         Thread thread = new Thread(){
@@ -405,8 +462,7 @@ public class DBTest {
         int r = ps.executeUpdate();
         System.out.println("TreadId : " + Thread.currentThread().getId() + " update : " + r);
     }
-
-
+    
     //方法：使用PreparedStatement插入数据、更新数据
     @Test
     public void insertAndQuery() throws SQLException {
@@ -492,7 +548,7 @@ class DBUtils {
 //        USERNAME = rb.getString("jdbc.username");
 //        PASSWORD = rb.getString("jdbc.password");
 //        DRIVER = rb.getString("jdbc.driver");
-        URL = "jdbc:mysql://192.168.2.46:3306/p2p";
+        URL = "jdbc:mysql://192.168.2.150:3306/test";
         USERNAME = "root";
         PASSWORD = "123456";
         DRIVER = "com.mysql.jdbc.Driver";

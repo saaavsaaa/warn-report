@@ -37,6 +37,7 @@ public class DailyTest {
     
     @Test
     public void daily() {
+        System.out.println("test");
     }
     
     private void testExec(int i){

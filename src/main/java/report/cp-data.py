@@ -51,7 +51,7 @@ with open(file,"r",encoding='utf-8') as f,open(file2,"w+",encoding='utf-8') as f
 
     sorted_key_list = sorted(dictSqls)
     for one in sorted_key_list:
-        print("%s --- %s" %(one ,dictSqls[one]))
+        print("%s --- %s --- %s" %(one ,dictSqls[one], dictionary[one]))
     # sorted_key_list = sorted(dictionary)
     #
     # for one in sorted_key_list:

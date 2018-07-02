@@ -189,6 +189,12 @@
             <artifactId>hadoop-auth</artifactId>
             <version>3.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.0.1.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 

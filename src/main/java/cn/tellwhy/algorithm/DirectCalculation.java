@@ -6,13 +6,13 @@ package cn.tellwhy.algorithm;
 public class DirectCalculation {
 
     //方差s^2 = [(x_1 - x_avg)^2 +...(x_n - x_avg)^2] / n
-    public static double doVariance(final double[] inputs) {
+    public static double calculateVariance(final double[] inputs) {
         return calculateSquareReduce(inputs) / inputs.length;
     }
 
     //标准差σ=sqrt(s^2)
-    public static double StandardDeviation(final double[] inputs) {
-        return Math.sqrt(doVariance(inputs));
+    public static double calculateStandardDeviation(final double[] inputs) {
+        return Math.sqrt(calculateVariance(inputs));
     }
 
     private static double calculateAverage(final double[] inputs){

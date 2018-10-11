@@ -1,4 +1,4 @@
-package cn.tellwhy.jRedis.cache;
+package cn.tellwhy.util.jRedis.cache;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.cache.annotation.AbstractCachingConfiguration;

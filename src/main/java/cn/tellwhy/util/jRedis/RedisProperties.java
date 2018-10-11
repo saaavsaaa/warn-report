@@ -1,4 +1,4 @@
-package cn.tellwhy.jRedis;
+package cn.tellwhy.util.jRedis;
 
 import java.util.ResourceBundle;
 

@@ -1,4 +1,4 @@
-package cn.tellwhy.jRedis.cache;
+package cn.tellwhy.util.jRedis.cache;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.cache.interceptor.CacheInterceptor;

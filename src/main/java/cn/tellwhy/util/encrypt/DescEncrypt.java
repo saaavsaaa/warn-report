@@ -1,4 +1,4 @@
-package cn.tellwhy.encrypt;
+package cn.tellwhy.util.encrypt;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

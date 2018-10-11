@@ -1,4 +1,4 @@
-package cn.tellwhy.ftp;
+package cn.tellwhy.code.ftp;
 
 import cn.tellwhy.third.rocketDoubleWrite.ProducerClient;
 import sun.net.TelnetOutputStream;

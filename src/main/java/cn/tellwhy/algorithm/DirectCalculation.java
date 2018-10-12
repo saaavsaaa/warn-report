@@ -10,24 +10,24 @@ public class DirectCalculation {
         return calculateSquareReduce(inputs) / inputs.length;
     }
 
-    //标准差σ=sqrt(s^2)
+    //标准差σ = sqrt(s^2)
     public static double calculateStandardDeviation(final double[] inputs) {
         return Math.sqrt(calculateVariance(inputs));
     }
 
     private static double calculateAverage(final double[] inputs){
         double accumulate = 0;
-        for (double each : inputs) {//求和
+        for (double each : inputs) {
             accumulate += each;
         }
-        return accumulate / inputs.length;//求平均值
+        return accumulate / inputs.length;
     }
 
     private static double calculateSquareReduce(final double[] inputs){
         double avg = calculateAverage(inputs);
         double squares = 0;
 
-        for (double each : inputs) {//求方差
+        for (double each : inputs) {
             squares += (each - avg) * (each - avg);
         }
         return squares;

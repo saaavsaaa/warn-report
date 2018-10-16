@@ -8,11 +8,11 @@ class ConditionProbability {
 
 public class Bayes {
 
-
 }
 
 
 class DishOrdered {
+
     // 初始情况，该对象被选择或不被选择在什么也不知道的情况下都是50%
     private final double Init_Probability = 0.5;
     private double priorProbability = Init_Probability;
@@ -34,7 +34,7 @@ class DishOrdered {
         double choice = chosen ? bias * target.getBiasChoiceProbability() : neutral * target.getNeutralChoiceProbability();
         this.postProbability = choice / totalProbability;
 
-        // 下一次bias类主体选择的先验概率
+        // 下一次选择的先验概率
         this.priorProbability = postProbability;
     }
 

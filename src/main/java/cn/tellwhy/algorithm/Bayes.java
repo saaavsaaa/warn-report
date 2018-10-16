@@ -18,11 +18,11 @@ class DishOrdered {
     private double priorProbability = Init_Probability;
     private double postProbability = Init_Probability;
 
-    /**
+    /*
+     * 选择或不选的概率和是1，既选又不选就算两次计算了
      * @param chosen 主体属于bias类型为true，否则是中立主体
      * @param target 参与选择的主体中倾向于选择的概率
      */
-    // 选择或不选的概率和是1，既选又不选就算两次计算了
     public void calculateProbability(final boolean chosen, final TargetCalculated target){
         // 先验概率是倾向选的主体选了+不倾向选择的主体选了，选择范围中主体选择了的概率
         // 这里没有不选的选择，如果是博客里那种选B(相当于不选)的情况，则bias和neutral的概率分别为：

@@ -25,7 +25,7 @@ class DishOrdered {
     // 选择或不选的概率和是1，既选又不选就算两次计算了
     public void calculateProbability(final boolean chosen, final TargetCalculated target){
         // 先验概率是倾向选的主体选了+不倾向选择的主体选了，选择范围中主体选择了的概率
-        // 这里不选的选择，如果是博客里那种选B(相当于不选)的情况，则bias和neutral的概率分别为：
+        // 这里没有不选的选择，如果是博客里那种选B(相当于不选)的情况，则bias和neutral的概率分别为：
         // (1 - target.getBiasChoiceProbability()) 和 (1 - target.getNeutralChoiceProbability())
         double bias = priorProbability * target.getBiasChoiceProbability();
         double neutral = (1 - priorProbability) * target.getNeutralChoiceProbability();

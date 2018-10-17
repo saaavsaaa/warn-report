@@ -6,8 +6,29 @@ package cn.tellwhy.algorithm;
 class ConditionProbability {
 }
 
+/*
+* 先验概率 × B条件下A发生的概率 / A发生的全概率
+*/
 public class Bayes {
 
+    // 用户咨询了某个产品 enquiry，最终购买了另外一个产品 choice
+    // 目标：在用户咨询了 enquiry 但没有购买意愿的时候，推荐 choice
+    // 在咨询 enquiry 后购买其他产品或可能的相关产品中，找出概率最大的 choice，求 P(C|E)
+
+    // P(C) 表示 choice 的概率，如果只考虑已有的购买记录，可以使用咨询后购买其他产品的频率
+    // 如果已有足够多的购买记录，那最终的购买产品 choice 在所有咨询且未购买 enquiry 后的购买记录中的分布情况，
+    // 就相当于它的概率，买的越多，P(C)越大
+
+    // P(E|C) 购买了C的情况中，咨询过E的情况
+
+    // P(C|E) = P(C) * P(E|C) / P(E)
+
+    // 先验概率，初始值根据历史记录已知
+    private double priorProbability;
+
+    public Bayes(final double priorProbability) {
+        this.priorProbability = priorProbability;
+    }
 }
 
 
@@ -29,6 +50,7 @@ class DishOrdered {
         // (1 - target.getBiasChoiceProbability()) 和 (1 - target.getNeutralChoiceProbability())
         double bias = priorProbability * target.getBiasChoiceProbability();
         double neutral = (1 - priorProbability) * target.getNeutralChoiceProbability();
+        // 全概率，数学期望
         double totalProbability = bias + neutral;
 
         double choice = chosen ? bias * target.getBiasChoiceProbability() : neutral * target.getNeutralChoiceProbability();

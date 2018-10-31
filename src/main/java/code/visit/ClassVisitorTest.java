@@ -1,9 +1,10 @@
 package code.visit;
 
+import cn.tellwhy.code.visit.VisitClassLoader;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.ClassWriter;
-import util.ResourceUtil;
+import cn.tellwhy.util.ResourceUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +40,7 @@ public class ClassVisitorTest {
     
     public static void changeVersion() throws IOException {
         String path = "code.record.WaitClearCode";
+
         VisitClassLoader classLoader = new VisitClassLoader(Thread.currentThread().getContextClassLoader());
     
         ClassReader cr = new ClassReader(path);

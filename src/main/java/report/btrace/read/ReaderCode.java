@@ -1,6 +1,8 @@
 package report.btrace.read;
 
-import util.type.BeanUtil;
+import cn.tellwhy.report.btrace.read.ByteCode;
+import cn.tellwhy.report.btrace.read.Opcodes;
+import cn.tellwhy.util.type.BeanUtil;
 
 import java.util.LinkedList;
 import java.util.Map;

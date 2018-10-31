@@ -1,6 +1,6 @@
 package cn.tellwhy.object;
 
-import cn.tellwhy.encrypt.DescEncrypt;
+import cn.tellwhy.util.encrypt.DescEncrypt;
 import org.junit.Test;
 
 public class TestDescEncrypt {

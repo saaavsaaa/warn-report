@@ -1,7 +1,7 @@
 package server;
 
-import jRedis.JRedisPool;
-import jRedis.RedisProperties;
+import cn.tellwhy.util.jRedis.JRedisPool;
+import cn.tellwhy.util.jRedis.RedisProperties;
 import org.junit.Before;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;

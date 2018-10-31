@@ -1,5 +1,6 @@
 package code.visit;
 
+import cn.tellwhy.code.visit.ClassMethodVisitor;
 import com.sun.org.apache.bcel.internal.classfile.ClassParser;
 import com.sun.org.apache.bcel.internal.classfile.JavaClass;
 import jdk.internal.org.objectweb.asm.ClassReader;
@@ -7,8 +8,8 @@ import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.ClassWriter;
 import jdk.internal.org.objectweb.asm.FieldVisitor;
 import jdk.internal.org.objectweb.asm.util.CheckClassAdapter;
-import util.ResourceUtil;
-import util.UnicodeUtil;
+import cn.tellwhy.util.ResourceUtil;
+import cn.tellwhy.util.UnicodeUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;

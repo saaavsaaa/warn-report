@@ -1,6 +1,8 @@
 package cn.tellwhy.algorithm.isodata;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /*
 * 类别
@@ -16,13 +18,19 @@ public class Cluster {
     * */
     public void updateCenterValue() {
         oldCenter = center;
-        Point possiblePoint = new Point();
+        Map<String, Double> values = new HashMap<>();
         //各维度数值平均
-        for (String eachTitle : ISODataConstants.Data_Value_Title) {
-        }
         for (Point eachPoint : points) {
-
+            for (String eachTitle : ISODataConstants.Data_Value_Title) {
+                if (values.containsKey(eachTitle)) {
+                    double oldValue = values.get(eachTitle);
+                    values.put(eachTitle, oldValue + eachPoint.getValues().get(eachTitle));
+                } else {
+                    values.put(eachTitle, eachPoint.getValues().get(eachTitle));
+                }
+            }
         }
+        Point possiblePoint = new Point();
     }
 
     private void calculateAverageDistance() {

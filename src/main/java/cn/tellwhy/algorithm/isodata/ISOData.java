@@ -19,6 +19,22 @@ public class ISOData {
     public void start() {
         List<Point> points = new ArrayList<>();
         init(points);
+        cancelTinyClusters();
+        updateClusterCenter();
+    }
+
+    /*
+    * 4.更新每个类别的中心位置
+    * */
+    private void updateClusterCenter() {
+        initClusters.forEach(eachCluster -> eachCluster.updateCenterValue());
+    }
+
+    /*
+    * 3.取消很小的分类，业务关系暂时不需要，先不实现
+    * */
+    private void cancelTinyClusters() {
+
     }
 
     /*
@@ -34,7 +50,7 @@ public class ISOData {
     }
 
     /*
-    * 循环所有节点，取距离最近的中心加入
+    * 2.循环所有节点，取距离最近的中心加入
     * */
     private void initClusterDistribution(final List<Point> points) {
         points.forEach(eachPoint -> {

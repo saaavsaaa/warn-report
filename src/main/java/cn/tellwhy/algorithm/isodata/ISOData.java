@@ -38,7 +38,12 @@ public class ISOData {
     * 取最大值
     * */
     private void calculateClusterStandardDeviation() {
+        for (Cluster eachCluster : initClusters) {
+            double standardDeviation = eachCluster.maxStandardDeviation();
+            if (standardDeviation > theta_S) {
 
+            }
+        }
     }
 
     /*

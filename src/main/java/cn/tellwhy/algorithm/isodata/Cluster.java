@@ -1,5 +1,6 @@
 package cn.tellwhy.algorithm.isodata;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,21 +16,29 @@ public class Cluster {
     private List<Point> points;
 
     private double averageDistance;
+    private List<Double> squaredErrors;
 
     /*
-    * 各维度到中心的标准差
+    * 最大标准差的分量值
     * */
-    private double standardDeviation() {
-        double squaredError = 0;
-        for (Point eachPoint : points) {
-            for (String eachTitle : ISODataConstants.Data_Value_Title) {
+    public double maxStandardDeviation() {
+        double result = 0;
+        squaredErrors = new ArrayList<>();
+        for (String eachTitle : ISODataConstants.Data_Value_Title) {
+            double eachSquaredError = 0;
+            for (Point eachPoint : points) {
                 Double centerValue = center.getValues().get(eachTitle);
                 Double curretValue = eachPoint.getValues().get(eachTitle);
-                squaredError += Math.pow(Math.abs(centerValue - curretValue), 2);
+                eachSquaredError += Math.pow(Math.abs(centerValue - curretValue), 2);
+            }
+            eachSquaredError = Math.sqrt(eachSquaredError / points.size());
+            squaredErrors.add(eachSquaredError);//应该没什么用，先存着玩
+            if (eachSquaredError > result) {
+                result = eachSquaredError;
             }
         }
-        squaredError = squaredError / ISODataConstants.Data_Value_Title.length;
-        return Math.sqrt(squaredError);
+        System.out.println("maxStandardDeviation:" + result);
+        return result;
     }
 
     /*

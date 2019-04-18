@@ -14,6 +14,19 @@ public class Cluster {
 
     private List<Point> points;
 
+    private double averageDistance;
+
+    /*
+    * 计算各点到中心的平均距离
+    * */
+    public void calculateAverageDistance() {
+        double totalDistance = 0;
+        for (Point eachPoint : points) {
+            totalDistance += eachPoint.distanceEuclidean(center);
+        }
+        averageDistance = totalDistance / points.size();
+    }
+
     /*
     * 计算中心位置，并更新值，这个中心位置值不一定有点?
     * */
@@ -38,6 +51,7 @@ public class Cluster {
             possiblePoint.getValues().put(eachTitle, value / points.size());
         }
         this.center = possiblePoint;
+        calculateAverageDistance();
     }
 
     public Cluster setCenter(Point center) {
@@ -56,5 +70,9 @@ public class Cluster {
 
     public List<Point> getPoints() {
         return points;
+    }
+
+    public double getAverageDistance() {
+        return averageDistance;
     }
 }

@@ -24,16 +24,30 @@ public class ISOData {
         init(points);
         cancelTinyClusters();
         updateClusterCenter();
+        double totalAverage = calculatePointsDistance();
     }
 
     /*
     * 5.计算样本到各聚类中心的距离
+    * 计算这些距离的平均值（我看有些是计算了聚类内平均值，再将平均值取平均的，我也算了先留着）
     * */
-    private void calculatePointsDistance() {
+    private double calculatePointsDistance() {
         List<Point> allPoints = new ArrayList<>();
-        initClusters.forEach(cluster -> allPoints.addAll(cluster.getPoints()));
+        double eachDistanceTotal = 0D;
+        for (Cluster eachCluster : initClusters) {
+            allPoints.addAll(eachCluster.getPoints());
+            eachDistanceTotal += eachCluster.getAverageDistance();
+        }
+        double eachDistanceAverage = eachDistanceTotal / initClusters.size();
 
-        allPoints.forEach(point -> point.calculateCenterDistances(initClusters));
+        List<Double> allDistances = new ArrayList<>();
+        allPoints.forEach(point -> allDistances.addAll(point.calculateCenterDistances(initClusters)));
+        double allDistanceValue = 0;
+        for (Double eachDistance : allDistances) {
+            allDistanceValue += eachDistance;
+        }
+        double averageDistance = allDistanceValue / allDistances.size();
+        return averageDistance;
     }
 
     /*

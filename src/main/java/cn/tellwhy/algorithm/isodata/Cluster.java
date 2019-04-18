@@ -11,6 +11,7 @@ public class Cluster {
 
     private Point center;
     private Point oldCenter;//不知道有没有用，先存着
+
     private List<Point> points;
 
     /*
@@ -30,11 +31,13 @@ public class Cluster {
                 }
             }
         }
+        // 除以 point个数
         Point possiblePoint = new Point();
-    }
-
-    private void calculateAverageDistance() {
-
+        for (String eachTitle : ISODataConstants.Data_Value_Title) {
+            double value = values.get(eachTitle);
+            possiblePoint.getValues().put(eachTitle, value / points.size());
+        }
+        this.center = possiblePoint;
     }
 
     public Cluster setCenter(Point center) {
@@ -42,11 +45,16 @@ public class Cluster {
         return this;
     }
 
-    public void setPoints(Point point) {
-        this.points.add(point);
-    }
-
     public Point getCenter() {
         return center;
+    }
+
+    public Cluster setPoints(Point point) {
+        this.points.add(point);
+        return this;
+    }
+
+    public List<Point> getPoints() {
+        return points;
     }
 }

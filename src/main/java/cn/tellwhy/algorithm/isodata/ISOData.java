@@ -3,6 +3,9 @@ package cn.tellwhy.algorithm.isodata;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+* 代码未做异常处理，为了获得错误
+* */
 public class ISOData {
     int K = 5;  // 预期的聚类中心数目；
     int theta_N = 1; //θN 每一聚类域中最少的样本数目，若少于此数即不作为一个独立的聚类；
@@ -24,10 +27,20 @@ public class ISOData {
     }
 
     /*
+    * 5.计算样本到各聚类中心的距离
+    * */
+    private void calculatePointsDistance() {
+        List<Point> allPoints = new ArrayList<>();
+        initClusters.forEach(cluster -> allPoints.addAll(cluster.getPoints()));
+
+        allPoints.forEach(point -> point.calculateCenterDistances(initClusters));
+    }
+
+    /*
     * 4.更新每个类别的中心位置
     * */
     private void updateClusterCenter() {
-        initClusters.forEach(eachCluster -> eachCluster.updateCenterValue());
+        initClusters.forEach(Cluster::updateCenterValue);
     }
 
     /*
@@ -44,7 +57,7 @@ public class ISOData {
         int size = points.size() - 3; //随便减一下，第一步不需要准确的结果
         for (int i = 0; i < K; i++) {
             Point centerCurrent = points.get(i % (size / K));
-            initClusters.add(new Cluster().setCenter(centerCurrent));
+            initClusters.add(new Cluster().setCenter(centerCurrent).setPoints(centerCurrent));
         }
         initClusterDistribution(points);
     }

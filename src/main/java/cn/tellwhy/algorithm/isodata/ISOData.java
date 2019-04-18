@@ -29,7 +29,7 @@ public class ISOData {
 
     /*
     * 5.计算样本到各聚类中心的距离
-    * 计算这些距离的平均值（我看有些是计算了聚类内平均值，再将平均值取平均的，我也算了先留着）
+    * 计算聚类内平均值，再将平均值加总取平均
     * */
     private double calculatePointsDistance() {
         List<Point> allPoints = new ArrayList<>();
@@ -40,14 +40,15 @@ public class ISOData {
         }
         double eachDistanceAverage = eachDistanceTotal / initClusters.size();
 
-        List<Double> allDistances = new ArrayList<>();
+        //计算所有距离的平均值，先留着
+        /*List<Double> allDistances = new ArrayList<>();
         allPoints.forEach(point -> allDistances.addAll(point.calculateCenterDistances(initClusters)));
         double allDistanceValue = 0;
         for (Double eachDistance : allDistances) {
             allDistanceValue += eachDistance;
         }
-        double averageDistance = allDistanceValue / allDistances.size();
-        return averageDistance;
+        double averageDistance = allDistanceValue / allDistances.size();*/
+        return eachDistanceAverage;
     }
 
     /*

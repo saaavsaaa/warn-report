@@ -17,6 +17,22 @@ public class Cluster {
     private double averageDistance;
 
     /*
+    * 各维度到中心的标准差
+    * */
+    private double standardDeviation() {
+        double squaredError = 0;
+        for (Point eachPoint : points) {
+            for (String eachTitle : ISODataConstants.Data_Value_Title) {
+                Double centerValue = center.getValues().get(eachTitle);
+                Double curretValue = eachPoint.getValues().get(eachTitle);
+                squaredError += Math.pow(Math.abs(centerValue - curretValue), 2);
+            }
+        }
+        squaredError = squaredError / ISODataConstants.Data_Value_Title.length;
+        return Math.sqrt(squaredError);
+    }
+
+    /*
     * 计算各点到中心的平均距离
     * */
     public void calculateAverageDistance() {

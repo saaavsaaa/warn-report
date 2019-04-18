@@ -13,6 +13,18 @@ public class Point {
     //字段名和值
     private Map<String, Double> values = new HashMap<>();
 
+    @Deprecated
+    private double standardDeviation(final Point anotherPoint) {
+        double squaredError = 0;
+        for (String eachTitle : ISODataConstants.Data_Value_Title) {
+            Double otherValue = anotherPoint.getValues().get(eachTitle);
+            Double curretValue = values.get(eachTitle);
+            squaredError += Math.pow(Math.abs(otherValue - curretValue), 2);
+        }
+        squaredError = squaredError / ISODataConstants.Data_Value_Title.length;
+        return Math.sqrt(squaredError);
+    }
+
     /*
     * 两点间欧式距离
     * */
@@ -21,7 +33,7 @@ public class Point {
         for (String eachTitle : ISODataConstants.Data_Value_Title) {
             Double otherValue = anotherPoint.getValues().get(eachTitle);
             Double curretValue = values.get(eachTitle);
-            powDistance += Math.pow(Math.abs(otherValue - curretValue), 2);
+            powDistance += Math.abs(Math.pow(otherValue, 2) + Math.pow(curretValue, 2));
         }
         return Math.sqrt(powDistance); //勾股定理求斜边
     }

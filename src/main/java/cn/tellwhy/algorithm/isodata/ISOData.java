@@ -21,14 +21,28 @@ public class ISOData {
 
     public void start() {
         List<Point> points = new ArrayList<>();
+        //1
         init(points);
+        //2
         cancelTinyClusters();
         updateClusterCenter();
         double totalAverage = calculatePointsDistance();
+
+        //此处判断迭代次数，回头再写 5|6|7
+        //3
+
     }
 
     /*
-    * 5.计算样本到各聚类中心的距离
+    * 3.1 计算类中各维度的标准差
+    * 取最大值
+    * */
+    private void calculateClusterStandardDeviation() {
+
+    }
+
+    /*
+    * 2.4 计算样本到各聚类中心的距离
     * 计算聚类内平均值，再将平均值加总取平均
     * */
     private double calculatePointsDistance() {
@@ -52,14 +66,14 @@ public class ISOData {
     }
 
     /*
-    * 4.更新每个类别的中心位置
+    * 2.3 更新每个类别的中心位置
     * */
     private void updateClusterCenter() {
         initClusters.forEach(Cluster::updateCenterValue);
     }
 
     /*
-    * 3.取消很小的分类，业务关系暂时不需要，先不实现
+    * 2.2 取消很小的分类，业务关系暂时不需要，先不实现
     * */
     private void cancelTinyClusters() {
 
@@ -78,7 +92,7 @@ public class ISOData {
     }
 
     /*
-    * 2.循环所有节点，取距离最近的中心加入
+    * 2.1 循环所有节点，取距离最近的中心加入
     * */
     private void initClusterDistribution(final List<Point> points) {
         points.forEach(eachPoint -> {

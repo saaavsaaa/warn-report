@@ -13,6 +13,23 @@ public class Point {
     //字段名和值
     private Map<String, Double> values = new HashMap<>();
 
+    public Point displaceAxisOpposite(final String key, final Double value) {
+        double newValue = value;
+        if (values.containsKey(key)) {
+            newValue += values.get(key);
+        }
+        values.put(key, newValue);
+        return this;
+    }
+
+    public Point Copy() {
+        Point point = new Point();
+        for (String each : values.keySet()) {
+            point.getValues().put(each, this.values.get(each));
+        }
+        return point;
+    }
+
     @Deprecated
     private double standardDeviation(final Point anotherPoint) {
         double squaredError = 0;

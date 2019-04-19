@@ -1,5 +1,8 @@
 package cn.tellwhy.algorithm.isodata;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,11 +21,19 @@ public class Cluster {
     private double averageDistance;
     private List<Double> squaredErrors;
 
+    public void Clear() {
+        points.clear();
+        squaredErrors.clear();
+        center = null;
+        oldCenter = null;
+    }
+
     /*
-    * 最大标准差的分量值
+    * 最大标准差的分量
     * */
-    public double maxStandardDeviation() {
-        double result = 0;
+    public Pair<Double, String> maxStandardDeviation() {
+        double resultStandardDeviation = 0;
+        String resultProperty = "";
         squaredErrors = new ArrayList<>();
         for (String eachTitle : ISODataConstants.Data_Value_Title) {
             double eachSquaredError = 0;
@@ -33,12 +44,13 @@ public class Cluster {
             }
             eachSquaredError = Math.sqrt(eachSquaredError / points.size());
             squaredErrors.add(eachSquaredError);//应该没什么用，先存着玩
-            if (eachSquaredError > result) {
-                result = eachSquaredError;
+            if (eachSquaredError > resultStandardDeviation) {
+                resultStandardDeviation = eachSquaredError;
+                resultProperty = eachTitle;
             }
         }
-        System.out.println("maxStandardDeviation:" + result);
-        return result;
+        System.out.println("maxStandardDeviation:" + resultStandardDeviation);
+        return new ImmutablePair<Double, String>(resultStandardDeviation, resultProperty);
     }
 
     /*

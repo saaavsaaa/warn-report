@@ -24,24 +24,29 @@ public class ISOData {
         //1
         init(points);
         //2
+        initClusterDistribution(points);
         cancelTinyClusters();
         updateClusterCenter();
         double totalAverage = calculatePointsDistance();
 
         //此处判断迭代次数，回头再写 5|6|7
         //3
-
+        calculateClusterStandardDeviation(totalAverage);
     }
 
     /*
-    * 3.1 计算类中各维度的标准差
-    * 取最大值
+    * 3.1 类分裂
     * */
-    private void calculateClusterStandardDeviation() {
+    private void calculateClusterStandardDeviation(double totalAverage) {
         for (Cluster eachCluster : initClusters) {
             double standardDeviation = eachCluster.maxStandardDeviation();
-            if (standardDeviation > theta_S) {
+            if (standardDeviation > theta_S &&
+                    ((eachCluster.getAverageDistance() > totalAverage) || (initClusters.size() < K / 2))) {
+                //分裂
 
+                //initClusterDistribution
+
+                //跳转到2
             }
         }
     }
@@ -85,28 +90,21 @@ public class ISOData {
     }
 
     /*
-    * 1.先随便选K个中心
-    * */
-    private void init(final List<Point> points) {
-        int size = points.size() - 3; //随便减一下，第一步不需要准确的结果
-        for (int i = 0; i < K; i++) {
-            Point centerCurrent = points.get(i % (size / K));
-            initClusters.add(new Cluster().setCenter(centerCurrent).setPoints(centerCurrent));
-        }
-        initClusterDistribution(points);
+     * 2.1 循环所有节点，取距离最近的中心加入
+     * */
+    private void initClusterDistribution(final List<Point> points) {
+        initClusterDistribution(initClusters, points);
     }
 
-    /*
-    * 2.1 循环所有节点，取距离最近的中心加入
-    * */
-    private void initClusterDistribution(final List<Point> points) {
+    private void initClusterDistribution(final List<Cluster> clusters, final List<Point> points) {
         points.forEach(eachPoint -> {
             double distance = Double.MAX_VALUE;
-            Cluster currentCluster = initClusters.get(0);
-            for (Cluster eachCluster : initClusters) {
+            Cluster currentCluster = clusters.get(0);//初始化
+            // 将当前点加入到所有聚类中欧式距离最短的
+            for (Cluster eachCluster : clusters) {
                 Point currentCenter = eachCluster.getCenter();
                 if (eachPoint.equals(currentCenter)) {
-                    return;
+                    return; //如果已经是当前类的中心，则循环下一个样本点
                 }
                 double currentDistance = currentCenter.distanceEuclidean(eachPoint);
                 if (currentDistance < 0) {
@@ -119,6 +117,18 @@ public class ISOData {
             }
             currentCluster.setPoints(eachPoint);
         });
+    }
+
+    /*
+    * 1.先随便选K个中心
+    * */
+    private void init(final List<Point> points) {
+        int size = points.size() - 3; //随便减一下，第一步不需要准确的结果
+        // TODO: 这里不是K，这里应该是K近邻聚类数
+        for (int i = 0; i < K; i++) {
+            Point centerCurrent = points.get(i % (size / K));
+            initClusters.add(new Cluster().setCenter(centerCurrent).setPoints(centerCurrent));
+        }
     }
 }
 

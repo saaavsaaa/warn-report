@@ -81,22 +81,27 @@ public class ISOData {
                     checkCenterDistanceExistTwo(currentDistance, clusterIndex1, clusterIndex1, i, j, centerDistances);
                     checkCenterDistanceExistTwo(currentDistance, clusterIndex2, clusterIndex2, i, j, centerDistances);
                     //再判断只存在一个的
+                    checkCenterDistanceExistOne(currentDistance, clusterIndex1, clusterIndex2, i, j, centerDistances);
+                    checkCenterDistanceExistOne(currentDistance, clusterIndex2, clusterIndex1, i, j, centerDistances);
+                    checkCenterDistanceExistOne(currentDistance, clusterIndex1, clusterIndex2, j, i, centerDistances);
+                    checkCenterDistanceExistOne(currentDistance, clusterIndex2, clusterIndex1, j, i, centerDistances);
                 }
             }
         }
     }
 
-    //调用两次传相反参数
-    private void checkCenterDistanceExistOne(final List<Integer> clusterIndex1, final List<Integer> clusterIndex2,
+    //调用四次传相反参数
+    private void checkCenterDistanceExistOne(final double currentDistance,
+                                             final List<Integer> clusterIndex1, final List<Integer> clusterIndex2,
                                              final int i1, final int i2, final Map<Integer, Double> centerDistances) {
-        // 两个都存在的已经判断过了
+        // 两个都存在的已经判断过了，只剩下存在一个的了
         if (clusterIndex1.contains(i1)) {
-
-        }
-
-        //
-        if (clusterIndex2.contains(i2)) {
-
+            int keyI1 = clusterIndex1.indexOf(i1);
+            double existDistanceI1 = centerDistances.get(keyI1);
+            if (existDistanceI1 > currentDistance) {
+                clusterIndex2.set(keyI1, i2); // 更新key1对应的后面中心的序号
+                centerDistances.put(keyI1, currentDistance);
+            }
         }
     }
 

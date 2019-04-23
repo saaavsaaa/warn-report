@@ -72,26 +72,65 @@ public class ISOData {
                         clusterIndex2.add(index, j);
                         centerDistances.put(index, currentDistance);
                         index++;
+                        continue;
                     }
                     //先判断两个都存在的
                     //因为循环顺序，还需要判断j是否在clusterIndex1的情况
-                    checkCenterDistanceExistTwo(currentDistance, clusterIndex1, clusterIndex2, i, j, centerDistances);
-                    checkCenterDistanceExistTwo(currentDistance, clusterIndex1, clusterIndex2, j, i, centerDistances);
+                    boolean needContinue = checkCenterDistanceExistTwo(currentDistance, clusterIndex1, clusterIndex2, i, j, centerDistances);
+                    if (needContinue) {
+                        continue;
+                    }
+                    needContinue = checkCenterDistanceExistTwo(currentDistance, clusterIndex1, clusterIndex2, j, i, centerDistances);
+                    if (needContinue) {
+                        continue;
+                    }
                     //同一列即包含i又包含j
-                    checkCenterDistanceExistTwo(currentDistance, clusterIndex1, clusterIndex1, i, j, centerDistances);
-                    checkCenterDistanceExistTwo(currentDistance, clusterIndex2, clusterIndex2, i, j, centerDistances);
+                    needContinue = checkCenterDistanceExistTwo(currentDistance, clusterIndex1, clusterIndex1, i, j, centerDistances);
+                    if (needContinue) {
+                        continue;
+                    }
+                    needContinue = checkCenterDistanceExistTwo(currentDistance, clusterIndex2, clusterIndex2, i, j, centerDistances);
+                    if (needContinue) {
+                        continue;
+                    }
                     //再判断只存在一个的
-                    checkCenterDistanceExistOne(currentDistance, clusterIndex1, clusterIndex2, i, j, centerDistances);
-                    checkCenterDistanceExistOne(currentDistance, clusterIndex2, clusterIndex1, i, j, centerDistances);
-                    checkCenterDistanceExistOne(currentDistance, clusterIndex1, clusterIndex2, j, i, centerDistances);
+                    needContinue = checkCenterDistanceExistOne(currentDistance, clusterIndex1, clusterIndex2, i, j, centerDistances);
+                    if (needContinue) {
+                        continue;
+                    }
+                    needContinue = checkCenterDistanceExistOne(currentDistance, clusterIndex2, clusterIndex1, i, j, centerDistances);
+                    if (needContinue) {
+                        continue;
+                    }
+                    needContinue = checkCenterDistanceExistOne(currentDistance, clusterIndex1, clusterIndex2, j, i, centerDistances);
+                    if (needContinue) {
+                        continue;
+                    }
                     checkCenterDistanceExistOne(currentDistance, clusterIndex2, clusterIndex1, j, i, centerDistances);
                 }
             }
         }
+        //合并
+        for (Integer eachKey : centerDistances.keySet()) {
+            int i1 = clusterIndex1.get(eachKey); // 保存了前面的节点索引
+            int i2 = clusterIndex2.get(eachKey); // 保存了后面的节点索引
+            Point center1 = initClusters.get(i1).getCenter();
+            Point center2 = initClusters.get(i2).getCenter();
+            Point newCenter = new Point();
+            for (String eachProperty : ISODataConstants.Data_Value_Title) {
+                double p = center1.getValues().get(eachProperty) * center1.getValues().size();
+                double s = center2.getValues().get(eachProperty) * center2.getValues().size();
+                newCenter.getValues().put(eachProperty, (p+s) / (center1.getValues().size()+center2.getValues().size()));
+            }
+            initClusters.get(i1).setCenter(newCenter);
+            initClusters.get(i1).setPoints(initClusters.get(i2).getPoints());
+            initClusters.get(i2).clear();
+            initClusters.remove(i2);
+        }
     }
 
     //调用四次传相反参数
-    private void checkCenterDistanceExistOne(final double currentDistance,
+    private boolean checkCenterDistanceExistOne(final double currentDistance,
                                              final List<Integer> clusterIndex1, final List<Integer> clusterIndex2,
                                              final int i1, final int i2, final Map<Integer, Double> centerDistances) {
         // 两个都存在的已经判断过了，只剩下存在一个的了
@@ -101,15 +140,19 @@ public class ISOData {
             if (existDistanceI1 > currentDistance) {
                 clusterIndex2.set(keyI1, i2); // 更新key1对应的后面中心的序号
                 centerDistances.put(keyI1, currentDistance);
+                return true;
             }
         }
+        return false;
     }
 
     //调用四次传，两次传相反参数，两次传两个List相同
     // added 是否加入新距离
-    private void checkCenterDistanceExistTwo(final double currentDistance,
+    // result 大范围处理后不再需要继续判断
+    private boolean checkCenterDistanceExistTwo(final double currentDistance,
                                              final List<Integer> clusterIndex1, final List<Integer> clusterIndex2,
                                              final int i1, final int i2, final Map<Integer, Double> centerDistances) {
+        boolean result = false;
         if (clusterIndex1.contains(i1) && clusterIndex2.contains(i2)) { // 新的距离的前面点用过，同时后面点再另外一个距离中用过
             int keyI1 = clusterIndex1.indexOf(i1); // 保存了前面的节点索引
             int keyI2 = clusterIndex2.indexOf(i2); // 保存了后面的节点索引
@@ -124,15 +167,18 @@ public class ISOData {
                 if (existDistanceI2 > currentDistance) { // 新加入的距离最短，更新key2的距离为新距离，中心索引为新中心索引
                     clusterIndex1.set(keyI2, i1); // 更新key2对应的前面中心的序号
                     centerDistances.put(keyI2, currentDistance);//替换key2为新距离
+                    result = true;
                 }
             } else {
                 deleteCenterDistance(clusterIndex1, clusterIndex2, keyI2, centerDistances);
                 if (existDistanceI1 > currentDistance) { // 新加入的距离最短
                     clusterIndex2.set(keyI1, i2); // 更新key1对应的后面中心的序号
                     centerDistances.put(keyI1, currentDistance);
+                    result = true;
                 }
             }
         }
+        return result;
     }
 
     private void deleteCenterDistance(final List<Integer> clusterIndex1, final List<Integer> clusterIndex2,
@@ -169,7 +215,7 @@ public class ISOData {
         }
 
         for (Cluster eachCluster : deleteCluster) {
-            eachCluster.Clear();
+            eachCluster.clear();
             initClusters.remove(eachCluster);
         }
         deleteCluster.clear();
@@ -241,7 +287,7 @@ public class ISOData {
                     currentCluster = eachCluster;
                 }
             }
-            currentCluster.setPoints(eachPoint);
+            currentCluster.setPoint(eachPoint);
         });
     }
 
@@ -253,7 +299,7 @@ public class ISOData {
         // TODO: 这里可以不是K，可以随便选个值做初始聚类数
         for (int i = 0; i < K; i++) {
             Point centerCurrent = points.get(i % (size / K));
-            initClusters.add(new Cluster().setCenter(centerCurrent).setPoints(centerCurrent));
+            initClusters.add(new Cluster().setCenter(centerCurrent).setPoint(centerCurrent));
         }
     }
 }

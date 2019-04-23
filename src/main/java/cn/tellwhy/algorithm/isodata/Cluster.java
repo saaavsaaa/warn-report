@@ -21,7 +21,7 @@ public class Cluster {
     private double averageDistance;
     private List<Double> squaredErrors;
 
-    public void Clear() {
+    public void clear() {
         points.clear();
         squaredErrors.clear();
         center = null;
@@ -100,8 +100,13 @@ public class Cluster {
         return center;
     }
 
-    public Cluster setPoints(Point point) {
+    public Cluster setPoint(Point point) {
         this.points.add(point);
+        return this;
+    }
+
+    public Cluster setPoints(List<Point> points) {
+        this.points.addAll(points);
         return this;
     }
 

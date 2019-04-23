@@ -11,36 +11,47 @@ import java.util.Map;
 * 代码未做异常处理，为了获得错误
 * */
 public class ISOData {
-    int K = 5;  // 预期的聚类中心数目；
+    int K = 15;  // 预期的聚类中心数目；
     int theta_N = 1; //θN 每一聚类域中最少的样本数目，若少于此数即不作为一个独立的聚类；
     double theta_S = 1; //θS 一个类中样本距离分布的标准差阈值。类内最大标准差分量应小于 θs
     double theta_c = 3; //θc 两个聚类中心间的最小距离，若小于此数，两个聚类需进行合并；
     int L = 100; // 在一次迭代运算中可以合并的聚类中心的最多对数；
     int I = 10000; // 迭代运算的次数。
 
-    int alreadyRunCount = 0;
-
     List<Cluster> initClusters = new ArrayList<>();
 
     // 商品小分类
     // 客户价值高且avg_interval与最后一次购买时间的差值
 
-    public void start() {
-        List<Point> points = new ArrayList<>();
+    public void start(List<Point> points) {
         //1
-        init(points);
-        initClusterDistribution(points);
+        init(7, points);
+        boolean update = false;
         //2
-        cancelTinyClusters();
-        updateClusterCenter();
-        double totalAverage = calculatePointsDistance();
 
-        //此处判断迭代次数，回头再写 5|6|7
-        //3
-        boolean splitted = splitCluster(totalAverage);
-        if (splitted) {
-            alreadyRunCount ++;
-            // 跳2，改递归
+        for (int loop = 0; loop < I; loop++) {
+            if (update) {
+                initClusters.forEach(cluster -> cluster.getPoints().clear());
+                update = false;
+            }
+            initClusterDistribution(points);
+            cancelTinyClusters();
+            updateClusterCenter();
+            double totalAverage = calculatePointsDistance();
+
+            //3
+            if (initClusters.size() <= K/2) {
+                boolean splitted = splitCluster(totalAverage);
+                if (splitted) {
+                    update = true;
+                    continue;
+                }
+            }
+
+            if (loop % 2 == 0 || initClusters.size() > 2*K) {
+                calculateCenterDistance();
+                update = true;
+            }
         }
     }
 
@@ -294,10 +305,9 @@ public class ISOData {
     /*
     * 1.先随便选K个中心
     * */
-    private void init(final List<Point> points) {
+    private void init(final int initK, final List<Point> points) {
         int size = points.size() - 3; //随便减一下，第一步不需要准确的结果
-        // TODO: 这里可以不是K，可以随便选个值做初始聚类数
-        for (int i = 0; i < K; i++) {
+        for (int i = 0; i < initK; i++) {
             Point centerCurrent = points.get(i % (size / K));
             initClusters.add(new Cluster().setCenter(centerCurrent).setPoint(centerCurrent));
         }

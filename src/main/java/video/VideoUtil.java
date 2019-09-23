@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 /**
  * 基于FFmpeg内核来编解码音视频信息；
  * 使用前需手动在运行环境中安装FFmpeg运行程序，然后正确设置FFmpeg运行路径后MediaUtil.java才能正常调用到FFmpeg程序去处理音视频；
- * https://www.cnblogs.com/Dreamer-1/p/10394011.html
+ *
  * Author: dreamer-1
  *
  * version: 1.0
@@ -516,6 +516,15 @@ public class VideoUtil {
         }
     }
 
+    private static long checkDuration(final Matcher durationMacher) {
+        long hours = (long)Integer.parseInt(durationMacher.group(1));
+        long minutes = (long)Integer.parseInt(durationMacher.group(2));
+        long seconds = (long)Integer.parseInt(durationMacher.group(3));
+        long dec = (long)Integer.parseInt(durationMacher.group(4));
+        long duration = dec * 100L + seconds * 1000L + minutes * 60L * 1000L + hours * 60L * 60L * 1000L;
+        return duration;
+    }
+
     /**
      * 解析视频的基本信息（从文件中）
      *
@@ -564,11 +573,7 @@ public class VideoUtil {
         try {
             // 匹配视频播放时长等信息
             if (durationMacher.find()) {
-                long hours = (long)Integer.parseInt(durationMacher.group(1));
-                long minutes = (long)Integer.parseInt(durationMacher.group(2));
-                long seconds = (long)Integer.parseInt(durationMacher.group(3));
-                long dec = (long)Integer.parseInt(durationMacher.group(4));
-                duration = dec * 100L + seconds * 1000L + minutes * 60L * 1000L + hours * 60L * 60L * 1000L;
+                duration = checkDuration(durationMacher);
                 //String startTime = durationMacher.group(5) + "ms";
                 videoBitrate = Integer.parseInt(durationMacher.group(6));
             }
@@ -664,11 +669,7 @@ public class VideoUtil {
         try {
             // 匹配音频播放时长等信息
             if (durationMacher.find()) {
-                long hours = (long)Integer.parseInt(durationMacher.group(1));
-                long minutes = (long)Integer.parseInt(durationMacher.group(2));
-                long seconds = (long)Integer.parseInt(durationMacher.group(3));
-                long dec = (long)Integer.parseInt(durationMacher.group(4));
-                duration = dec * 100L + seconds * 1000L + minutes * 60L * 1000L + hours * 60L * 60L * 1000L;
+                duration = checkDuration(durationMacher);
                 //String startTime = durationMacher.group(5) + "ms";
                 musicBitrate = Integer.parseInt(durationMacher.group(6));
             }

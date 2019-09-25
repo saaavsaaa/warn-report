@@ -63,8 +63,9 @@ public class VideoUtil {
      * FFmpeg程序执行路径
      * 当前系统安装好ffmpeg程序并配置好相应的环境变量后，值为ffmpeg可执行程序文件在实际系统中的绝对路径
      */
-    private static String FFMPEG_PATH = "/usr/bin/ffmpeg"; // /usr/bin/ffmpeg
+    private static String FFMPEG_PATH = "E:\\video\\bin\\ffmpeg.exe"; // /usr/bin/ffmpeg
 
+    //"C:\\Users\\lidongbo\\Desktop\\群图片\\WeChat_20190809171656.mp4"
 
     /**
      * 视频时长正则匹配式

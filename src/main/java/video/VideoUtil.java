@@ -387,6 +387,10 @@ public class VideoUtil {
      * @param isContinuty false - 静态图（只截取time时间点的那一帧图片），true - 动态图（截取从time时间点开始,timelength这段时间内的多张帧图）
      */
     private static void cutVideoFrame(File videoFile, String path, Time time, int width, int height, int timeLength, boolean isContinuty) {
+        cutVideoFrame(videoFile, path, time, width, height, timeLength, "3", isContinuty);
+    }
+
+    public static void cutVideoFrame(File videoFile, String path, Time time, int width, int height, int timeLength, String tbr, boolean isContinuty) {
         if (videoFile == null || !videoFile.exists()) {
             throw new RuntimeException("源视频文件不存在，源视频路径： ");
         }
@@ -421,7 +425,7 @@ public class VideoUtil {
             commond.add("image2");
             if (isContinuty) {
                 commond.add("-r");
-                commond.add("3");
+                commond.add(tbr);
             }
             commond.add("-s");
             commond.add(width + "*" + height);

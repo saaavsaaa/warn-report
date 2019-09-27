@@ -66,14 +66,15 @@ public class VideoExtracting {
 
     public static void main(String[] args) {
         //String exePath = "E:\\video\\bin\\ffmpeg.exe";
-        String videoPath = "C:\\Users\\lidongbo\\Desktop\\群图片\\WeChat_20190809171656.mp4";
         //VideoExtracting videoInfo = new VideoExtracting(exePath);
+        String videoPath = "C:\\Users\\lidongbo\\Desktop\\群图片\\WeChat_20190809171656.mp4";
         try {
+            //videoInfo.getCover(path,"E:\\tmp\\1.jpg");
             File video = new File(videoPath);
             File p = new File("E:\\tmp\\1.gif");
-            //System.out.println(VideoUtil.getVideoMetaInfo(video));
-            //videoInfo.getCover(path,"E:\\tmp\\1.jpg");
-            //VideoUtil.cutVideoFrame(video, p, new Time(0, 0, 3), 300);
+            //System.out.println(VideoUtil.getVideoMetaInfo(video)); //获取视频信息
+            //VideoUtil.cutVideoFrame(video, p, new Time(0, 0, 3), 300); //合成动图
+            //抽取图片 tbr每秒帧数（真实意义是帧率，这里就直接用了）
             VideoUtil.cutVideoFrame(video, "E:\\tmp", new Time(0, 0, 3), 640, 480, 30, "24",true);
         } catch (Exception e) {
             e.printStackTrace();

@@ -38,6 +38,7 @@ public class ElasticClient {
 
     @Test
     public void search() throws IOException {
+
         String elasticsearchHost = "sl010a-analysisdb1:9200,sl010a-analysisdb2:9200,sl010a-analysisdb3:9200";
         String[] elasticHosts = elasticsearchHost.split(",");
         HttpHost[] httpHosts = new HttpHost[elasticHosts.length];

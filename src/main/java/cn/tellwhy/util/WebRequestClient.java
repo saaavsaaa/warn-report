@@ -58,6 +58,10 @@ public class WebRequestClient {
 		setCookie(loginToken, loginUserID);
 		return opera(url, paras, false);
 	}
+
+	public static String testLinkPost(String url, HttpEntity paras) throws Exception {
+		return opera(url, paras, false);
+	}
 	
 	public static String testPostWithCookie(String url, String cookieKey, String cookieValue,
 									  HttpEntity paras) throws Exception {

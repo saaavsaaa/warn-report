@@ -70,4 +70,20 @@ public class TestSSH {
         String exeContent = "cd /usr/local/tomcat/;rm -rf webapps/portal-bos*";
         ssh.execute(exeContent);
     }
+
+    @Test
+    public void testAWS() throws IOException {
+        String keyPath = "D:\\share\\deep.pem";
+        String host = "ec2-52-82-22-125.cn-northwest-1.compute.amazonaws.com.cn";
+        LinuxExecUtil ssh = new LinuxExecUtil();
+        ssh.connect(host, "ubuntu" , "", keyPath);
+//        String exeContent = ". /home/ubuntu/anaconda3/etc/profile.d/conda.sh;conda activate dl;cd github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali;ls";
+        String exeContent = "sh /home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/run_with_conda.sh";
+        ssh.execute(exeContent);
+
+//        String exeContent = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/src/onlinebin/online-wav-gmm-decode-faster";
+//        ssh.execute(exeContent);
+
+        ssh.close();
+    }
 }

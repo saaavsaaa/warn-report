@@ -43,6 +43,7 @@ public class LinuxExecUtil {
             while (true) {
                 String line = br.readLine();
                 if (line == null) {
+                    System.out.println("Nothing output!");
                     break;
                 }
                 System.out.println(line);
@@ -50,8 +51,7 @@ public class LinuxExecUtil {
             System.out.println("ExitCode: " + sess.getExitStatus());
             sess.close();
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             e.printStackTrace(System.err);
             System.exit(2);
         }

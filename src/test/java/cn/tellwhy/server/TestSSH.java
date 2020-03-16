@@ -75,13 +75,27 @@ public class TestSSH {
     public void testAWS() throws IOException {
         String keyPath = "D:\\share\\deep.pem";
         String host = "ec2-52-82-22-125.cn-northwest-1.compute.amazonaws.com.cn";
+        String localWAV = "D:\\share\\chinese_speech\\collect\\target.wav";
+        String basePath = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali";
+        String audioPath = basePath + "/online-data/audio";
+
         LinuxExecUtil ssh = new LinuxExecUtil();
         ssh.connect(host, "ubuntu" , "", keyPath);
-//        String exeContent = ". /home/ubuntu/anaconda3/etc/profile.d/conda.sh;conda activate dl;cd github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali;ls";
-        String exeContent = "sh /home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/run_with_conda.sh";
+
+        ssh.upload(localWAV, audioPath);
+
+        String exeContent = "sh " + basePath + "/run_with_conda.sh";//shell脚本全都需要改为全路径
         ssh.execute(exeContent);
 
-//        String exeContent = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/src/onlinebin/online-wav-gmm-decode-faster";
+//        String exeContent = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/src/onlinebin/online-wav-gmm-decode-faster  --verbose=1 --rt-min=0.8 --rt-max=0.85 " +
+//                "--max-active=4000 --beam=12.0 --acoustic-scale=0.0769 --left-context=3 --right-context=3 " +
+//                "scp:/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/work/input.scp " +
+//                "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/online-data/models/tri4b/final.mdl " +
+//                "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/online-data/models/tri4b/HCLG.fst " +
+//                "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/online-data/models/tri4b/words.txt " +
+//                "'1:2:3:4:5' ark,t:/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/work/trans.txt " +
+//                "ark,t:/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/work/ali.txt " +
+//                "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/online-data/models/tri4b/final.mat" ;
 //        ssh.execute(exeContent);
 
         ssh.close();

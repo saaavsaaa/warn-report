@@ -43,7 +43,6 @@ public class LinuxExecUtil {
             while (true) {
                 String line = br.readLine();
                 if (line == null) {
-                    System.out.println("Nothing output!");
                     break;
                 }
                 System.out.println(line);

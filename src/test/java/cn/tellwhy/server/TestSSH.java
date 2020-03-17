@@ -2,7 +2,11 @@ package cn.tellwhy.server;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by ldb on 2016/6/2.
@@ -73,19 +77,22 @@ public class TestSSH {
 
     @Test
     public void testAWS() throws IOException {
-        String keyPath = "D:\\share\\deep.pem";
-        String host = "ec2-52-82-22-125.cn-northwest-1.compute.amazonaws.com.cn";
-        String localWAV = "D:\\share\\chinese_speech\\collect\\target.wav";
-        String basePath = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali";
-        String audioPath = basePath + "/online-data/audio";
-
-        LinuxExecUtil ssh = new LinuxExecUtil();
-        ssh.connect(host, "ubuntu" , "", keyPath);
-
-        ssh.upload(localWAV, audioPath);
-
-        String exeContent = "sh " + basePath + "/run_with_conda.sh";//shell脚本全都需要改为全路径
-        ssh.execute(exeContent);
+        List<String> waitRecognizations = new ArrayList<String>(
+                Arrays.asList("pcm_alaw","pcm_f32be","pcm_f32le","pcm_f64be","pcm_f64le","pcm_mulaw","pcm_s16be","pcm_s16le"
+                        ,"pcm_s24be","pcm_s24le","pcm_s32be","pcm_s32le","pcm_s8","pcm_u16be","pcm_u16le","pcm_u24be"
+                        ,"pcm_u24le","pcm_u32be","pcm_u32le","pcm_u8")
+        ) ;
+        String localPath = "D:\\share\\chinese_speech\\collect\\";
+        waitRecognizations = getFileList(localPath);
+        for (String each : waitRecognizations) {
+            try {
+                String target = each + "target.wav";
+                speechRecognization(localPath, target);
+            } catch (Exception e) {
+                System.out.println(each + ":" + e.getMessage());
+                e.printStackTrace();
+            }
+        }
 
 //        String exeContent = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/src/onlinebin/online-wav-gmm-decode-faster  --verbose=1 --rt-min=0.8 --rt-max=0.85 " +
 //                "--max-active=4000 --beam=12.0 --acoustic-scale=0.0769 --left-context=3 --right-context=3 " +
@@ -97,6 +104,61 @@ public class TestSSH {
 //                "ark,t:/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/work/ali.txt " +
 //                "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/online-data/models/tri4b/final.mat" ;
 //        ssh.execute(exeContent);
+    }
+
+    public void speechRecognization(String localPath, String target) throws IOException {
+        String keyPath = "D:\\share\\deep.pem";
+        String host = "ec2-52-82-22-125.cn-northwest-1.compute.amazonaws.com.cn";
+        String localWAV = localPath + target;
+        String basePath = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali";
+        String audioPath = basePath + "/online-data/audio";
+
+        LinuxExecUtil ssh = new LinuxExecUtil();
+        ssh.connect(host, "ubuntu" , "", keyPath);
+
+        ssh.upload(localWAV, audioPath);
+
+        System.out.println(target);
+        String exeContent = "sh " + basePath + "/run_with_conda.sh";//shell脚本全都需要改为全路径
+        ssh.execute(exeContent);
+
+        exeContent = "rm " + audioPath + "/" + target;
+        ssh.execute(exeContent);
+
+        ssh.close();
+    }
+
+    /*
+     * 读取指定路径下的文件名和目录名
+     */
+    public List<String> getFileList(String path) {
+        File file = new File(path);
+        File[] fileList = file.listFiles();
+        List<String> result = new ArrayList<>();
+        for (File each : fileList) {
+            if (each.isFile() && each.getName().endsWith(".wav") &&
+                    !each.getName().equals("3gdb.wav") && !each.getName().equals("三个代表.wav")) {
+                System.out.println(each.getName());
+                result.add(each.getName());
+            }
+        }
+        return result;
+    }
+
+    @Test
+    public void testDelAWS() throws IOException {
+        String keyPath = "D:\\share\\deep.pem";
+        String host = "ec2-52-82-22-125.cn-northwest-1.compute.amazonaws.com.cn";
+        String target = "pcm_alaw" + "target.wav";
+        String localWAV = "D:\\share\\chinese_speech\\collect\\" + target;
+        String basePath = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali";
+        String audioPath = basePath + "/online-data/audio";
+
+        LinuxExecUtil ssh = new LinuxExecUtil();
+        ssh.connect(host, "ubuntu" , "", keyPath);
+
+        String exeContent = "rm " + audioPath + "/" + target;
+        ssh.execute(exeContent);
 
         ssh.close();
     }

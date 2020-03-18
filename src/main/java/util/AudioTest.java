@@ -38,8 +38,9 @@ public class AudioTest {
                     ,"pcm_u24le","pcm_u32be","pcm_u32le","pcm_u8")
     ) ;
 
-    public static void main(String[] args) {
-        String sourcePath = "D:\\share\\chinese_speech\\collect\\三个代表.mp3";
+    public static void main(String[] args) throws EncoderException {
+        //String sourcePath = "D:\\share\\chinese_speech\\collect\\三个代表.mp3";
+        String sourcePath = "D:\\share\\chinese_speech\\collect\\callCenter\\1.wav";
         String targetPath = "D:\\share\\chinese_speech\\collect\\";
         String exePath = "D:\\big-data\\video\\bin\\ffmpeg.exe";
 
@@ -50,7 +51,9 @@ public class AudioTest {
             }
         };
 
-        for (String each : codecs) {
+        toWav16Hz(sourcePath, targetPath + "target1.wav", locator, "pcm_s16le");
+
+        /*for (String each : codecs) {
             try {
                 String target = targetPath + each + "target.wav";
                 toWav16Hz(sourcePath, target, locator, each);
@@ -58,7 +61,7 @@ public class AudioTest {
                 System.out.println(each + ":" + e.getMessage());
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     public static void toWav(String sourcePath, String targetPath, FFMPEGLocator locator) throws EncoderException {
@@ -78,9 +81,9 @@ public class AudioTest {
         File target = new File(targetPath);
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec(codec); // "pcm_s16le"
-        audio.setBitRate(new Integer(11025)); //kbit/s   44100*16kbps 11025 22050  512000
-        audio.setChannels(new Integer(1)); // 1=mono, 2=stereo, 4=quad
-        audio.setSamplingRate(new Integer(16000)); //Hz
+        audio.setBitRate(11025); //kbit/s   44100*16kbps 11025 22050  512000
+        audio.setChannels(2); // 1=mono, 2=stereo, 4=quad
+        audio.setSamplingRate(16000); //Hz
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setFormat("wav");
         attrs.setAudioAttributes(audio);

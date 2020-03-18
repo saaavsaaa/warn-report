@@ -76,6 +76,14 @@ public class TestSSH {
     }
 
     @Test
+    public void testUbuntuUpload() throws IOException {
+        String waitUpload = "D:\\share\\chinese_speech\\collect\\callCenter\\1.wav";
+        LinuxExecUtil ssh = new LinuxExecUtil();
+        ssh.connect("10.10.19.94", port, "aaa", "aaa111!!!");
+        ssh.upload(waitUpload, "/home/ubuntu/share/");
+    }
+
+    @Test
     public void testAWS() throws IOException {
         List<String> waitRecognizations = new ArrayList<String>(
                 Arrays.asList("pcm_alaw","pcm_f32be","pcm_f32le","pcm_f64be","pcm_f64le","pcm_mulaw","pcm_s16be","pcm_s16le"
@@ -87,7 +95,7 @@ public class TestSSH {
         for (String each : waitRecognizations) {
             try {
                 String target = each + "target.wav";
-                speechRecognization(localPath, target);
+                speechRecognization(localPath, each);
             } catch (Exception e) {
                 System.out.println(each + ":" + e.getMessage());
                 e.printStackTrace();
@@ -136,7 +144,7 @@ public class TestSSH {
         File[] fileList = file.listFiles();
         List<String> result = new ArrayList<>();
         for (File each : fileList) {
-            if (each.isFile() && each.getName().endsWith(".wav") &&
+            if (!each.isDirectory() && each.getName().endsWith(".wav") &&
                     !each.getName().equals("3gdb.wav") && !each.getName().equals("三个代表.wav")) {
                 System.out.println(each.getName());
                 result.add(each.getName());

@@ -94,7 +94,7 @@ public class TestSSH {
         waitRecognizations = getFileList(localPath);
         for (String each : waitRecognizations) {
             try {
-                String target = each + "target.wav";
+//                String target = each + "target.wav";
                 speechRecognization(localPath, each);
             } catch (Exception e) {
                 System.out.println(each + ":" + e.getMessage());

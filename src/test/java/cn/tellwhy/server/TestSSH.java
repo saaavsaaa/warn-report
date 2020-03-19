@@ -77,10 +77,10 @@ public class TestSSH {
 
     @Test
     public void testUbuntuUpload() throws IOException {
-        String waitUpload = "D:\\share\\chinese_speech\\collect\\callCenter\\1.wav";
+        String waitUpload = "D:\\share\\chinese_speech\\collect\\target1.wav";
         LinuxExecUtil ssh = new LinuxExecUtil();
         ssh.connect("10.10.19.94", port, "aaa", "aaa111!!!");
-        ssh.upload(waitUpload, "/home/ubuntu/share/");
+        ssh.upload(waitUpload, "/home/aaa/call-center/");
     }
 
     @Test

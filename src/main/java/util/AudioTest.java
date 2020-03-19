@@ -81,7 +81,7 @@ public class AudioTest {
         File target = new File(targetPath);
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec(codec); // "pcm_s16le"
-        audio.setBitRate(11025); //kbit/s   44100*16kbps 11025 22050  512000
+        audio.setBitRate(44100*16); //kbit/s   44100*16kbps 11025 22050  512000
         audio.setChannels(2); // 1=mono, 2=stereo, 4=quad
         audio.setSamplingRate(16000); //Hz
         EncodingAttributes attrs = new EncodingAttributes();

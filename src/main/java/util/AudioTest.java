@@ -40,7 +40,7 @@ public class AudioTest {
 
     public static void main(String[] args) throws EncoderException {
         //String sourcePath = "D:\\share\\chinese_speech\\collect\\三个代表.mp3";
-        String sourcePath = "D:\\share\\chinese_speech\\collect\\callCenter\\1.wav";
+        String sourcePath = "D:\\share\\chinese_speech\\collect\\callCenter\\";
         String targetPath = "D:\\share\\chinese_speech\\collect\\";
         String exePath = "D:\\big-data\\video\\bin\\ffmpeg.exe";
 
@@ -51,12 +51,26 @@ public class AudioTest {
             }
         };
 
-        toWav16Hz(sourcePath, targetPath + "target1.wav", locator, "pcm_s16le");
+        Encoder encoder = new Encoder(locator);
+        System.out.println(encoder.getSupportedEncodingFormats());
+
+        //toWav16Hz(sourcePath, targetPath + "target1.wav", locator, "pcm_s16le");
+
+        List<String> waitCodecs = FileUtil.list(sourcePath);
+        for (String each : waitCodecs) {
+            try {
+                String target = targetPath + "callCenter\\target" + each;
+                toWav16Hz(sourcePath + each, target, locator, "pcm_s16le");
+            } catch (Exception e) {
+                System.out.println(each + ":" + e.getMessage());
+                e.printStackTrace();
+            }
+        }
 
         /*for (String each : codecs) {
             try {
                 String target = targetPath + each + "target.wav";
-                toWav16Hz(sourcePath, target, locator, each);
+                toWav16Hz(sourcePath + "1.wav", target, locator, each);
             } catch (Exception e) {
                 System.out.println(each + ":" + e.getMessage());
                 e.printStackTrace();

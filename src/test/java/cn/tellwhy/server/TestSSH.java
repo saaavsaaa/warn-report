@@ -1,8 +1,8 @@
 package cn.tellwhy.server;
 
 import org.junit.Test;
+import util.FileUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,7 +91,7 @@ public class TestSSH {
                         ,"pcm_u24le","pcm_u32be","pcm_u32le","pcm_u8")
         ) ;
         String localPath = "D:\\share\\chinese_speech\\collect\\";
-        waitRecognizations = getFileList(localPath);
+        waitRecognizations = FileUtil.list(localPath);
         for (String each : waitRecognizations) {
             try {
 //                String target = each + "target.wav";
@@ -134,23 +134,6 @@ public class TestSSH {
         ssh.execute(exeContent);
 
         ssh.close();
-    }
-
-    /*
-     * 读取指定路径下的文件名和目录名
-     */
-    public List<String> getFileList(String path) {
-        File file = new File(path);
-        File[] fileList = file.listFiles();
-        List<String> result = new ArrayList<>();
-        for (File each : fileList) {
-            if (!each.isDirectory() && each.getName().endsWith(".wav") &&
-                    !each.getName().equals("3gdb.wav") && !each.getName().equals("三个代表.wav")) {
-                System.out.println(each.getName());
-                result.add(each.getName());
-            }
-        }
-        return result;
     }
 
     @Test

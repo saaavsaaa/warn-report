@@ -114,7 +114,7 @@ public class TestSSH {
 //        ssh.execute(exeContent);
     }
 
-    public void speechRecognization(String localPath, String target) throws IOException {
+    public void speechRecognization(final String localPath, final String target) throws IOException {
         String keyPath = "D:\\share\\deep.pem";
         String host = "ec2-52-82-22-125.cn-northwest-1.compute.amazonaws.com.cn";
         String localWAV = localPath + target;

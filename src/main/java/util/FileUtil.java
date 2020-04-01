@@ -8,7 +8,7 @@ public class FileUtil {
     /*
      * 读取指定路径下的文件名和目录名
      */
-    public static List<String> list(String path) {
+    public static List<String> list(final String path) {
         File file = new File(path);
         File[] fileList = file.listFiles();
         List<String> result = new ArrayList<>();

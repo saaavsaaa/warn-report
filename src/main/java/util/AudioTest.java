@@ -78,7 +78,7 @@ public class AudioTest {
         }*/
     }
 
-    public static void toWav(String sourcePath, String targetPath, FFMPEGLocator locator) throws EncoderException {
+    public static void toWav(final String sourcePath, final String targetPath, final FFMPEGLocator locator) throws EncoderException {
         File source = new File(sourcePath);
         File target = new File(targetPath);
         AudioAttributes audio = new AudioAttributes();
@@ -90,7 +90,7 @@ public class AudioTest {
         encoder.encode(new MultimediaObject(source, locator), target, attrs);
     }
 
-    public static void toWav16Hz(String sourcePath, String targetPath, FFMPEGLocator locator, String codec) throws EncoderException {
+    public static void toWav16Hz(final String sourcePath, final String targetPath, final FFMPEGLocator locator, final String codec) throws EncoderException {
         File source = new File(sourcePath);
         File target = new File(targetPath);
         AudioAttributes audio = new AudioAttributes();

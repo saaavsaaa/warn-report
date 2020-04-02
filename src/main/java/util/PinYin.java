@@ -11,8 +11,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 public class PinYin {
 
@@ -21,6 +19,8 @@ public class PinYin {
         String txt = readFileContent(path);
         System.out.println(toPinyin(txt));
         System.out.println(toPinyin("绿"));
+        System.out.println(toPinyin("略"));
+        System.out.println(toPinyin("云"));
     }
 
     /**
@@ -71,27 +71,5 @@ public class PinYin {
             }
         }
         return sbf.toString();
-    }
-
-    public static void toPhones(final String pinyin) {
-        Set<String> s = s_pinyin();
-
-    }
-
-    /*
-    * 声母
-b p m f d t n l g k h j q x zh ch sh r z c s y w
-单韵母
-a o e i u ü
-复韵母
-　　ai ei ui ao ou iu ie üe er
-鼻韵母
-an en in un ün ang eng ing ong
-    * */
-    private static Set<String> s_pinyin() {
-        Set<String> s = new HashSet<>();
-        s.add("");
-
-        return s;
     }
 }

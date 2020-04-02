@@ -1,0 +1,3 @@
+[submodule "src/main/resources/thchs30-phone"]
+	path = src/main/resources/thchs30-phone
+	url = https://github.com/DNSun/thchs30-pinyin2tone.git

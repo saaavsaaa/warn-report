@@ -14,13 +14,15 @@ import java.io.IOException;
 
 public class PinYin {
 
+//    l v4 sh ix4 ii iang2 ch un1 ii ian1 j ing3 d a4 k uai4 uu un2 zh ang1 d e5 d i3 s e4 s iy4 vv ve4 d e5 l in2 l uan2 g eng4 sh ix4 l v4 d e5 x ian1 h uo2 x iu4 m ei4 sh ix1 ii i4 aa ang4 r an2
+//    l v4 sh ix4 ii iang2 ch un1 ii ian1 j ing3 d a4 k uai4 uu un2 zh ang1 d e5 d i3 s e4 s iy4 vv ve4 d e5 l in2 l uan2 g eng4 sh ix4 l v4 d e2 x ian1 h uo2 x iu4 m ei4 sh ix1 ii i4 aa ang4 r an2
     public static void main(String[] args) {
         String path = "D:\\share\\chinese_speech\\thchs30\\data_thchs30\\data\\A2_0.wav.trn"; // "D:\\share\\chinese_speech\\test.txt"
         String txt = readFileContent(path);
         System.out.println(toPinyin(txt));
-        System.out.println(toPinyin("绿"));
-        System.out.println(toPinyin("略"));
-        System.out.println(toPinyin("云"));
+        System.out.println(Phones.toPhones(toPinyin("绿 是 阳春 烟 景 大块 文章 的 底色 四月 的 林 峦 更是 绿 得 鲜活 秀媚 诗意 盎然")));
+//        System.out.println(toPinyin("绿"));
+//        System.out.println(toPinyin("略"));
     }
 
     /**

@@ -1,20 +1,35 @@
 package util;
 
 import cn.tellwhy.structure.ArrayListExtend;
+import cn.tellwhy.util.type.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static util.PinYin.toPinyin;
 
 public class Phones {
 
+    final static Map<String,String> phones = FileUtil.readPhones(new Phones().getClass().getResource("/thchs30-phone/pinyin2phone.tone.txt").getPath());
+
     public static void main(String[] args) {
-        toPhones("");
+        String pinyin = toPinyin("绿");
+        System.out.println(toPhones(pinyin));
     }
 
-    public static void toPhones(final String pinyin) {
-        Set<String> s = s_pinyin();
-        System.out.println(s.contains("a"));
+    public static String toPhones(final String pinyin) {
+        String[] pinyin_s = pinyin.split(" ");
+        String result = "";
+        for (String each : pinyin_s) {
+            if (StringUtils.isNotBlank(each)) {
+                String phone = phones.get(each.toUpperCase());
+                if (phone == null) {
+                    throw new IllegalArgumentException("illegal pin yin!");
+                }
+                result += phone + " ";
+            }
+        }
+        return result;
     }
 
     // 声母 b p m f d t n l g k h j q x zh ch sh r z c s y w
@@ -54,8 +69,8 @@ public class Phones {
     //鼻韵母 an en in un ün ang eng ing ong
     private static Set<String> bi_pinyin() {
         Set<String> result = new HashSet<>();
-        List<String> list = new ArrayListExtend().addInThis("an").addInThis("en").addInThis("in")
-                .addInThis("un").addInThis("ang").addInThis("eng")
+        List<String> list = new ArrayListExtend().addInThis("an").addInThis("en").addInThis("in").addInThis("un")
+                .addInThis("ang").addInThis("eng")
                 .addInThis("ing").addInThis("ong"); // ün 只能与j q x y拼读
         result.addAll(list);
         return result;

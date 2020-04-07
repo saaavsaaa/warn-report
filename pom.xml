@@ -17,6 +17,23 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArguments>
+                        <extdirs>libs</extdirs>
+                        <!--  rt包没有打到项目中去 jdk.internal.org.objectweb.asm...报错，jdk、sun的not exist基本都可以通过这个方法解决-->
+                        <verbose />
+                        <!-- rt.jar等jar Windows分隔符英文分号,linux分隔符英文冒号  -->
+                        <bootclasspath>
+                            C:\Program Files\Java\jdk1.8.0_181/jre/lib/rt.jar;C:\Program Files\Java\jdk1.8.0_181/jre/lib/jce.jar;C:\Program Files\Java\jdk1.8.0_181/jre/lib/jsse.jar;C:\Program Files\Java\jdk1.8.0_181\jre\lib\ext\sunjce_provider.jar;C:\Program Files\Java\jdk1.8.0_181\jre\lib\ext\nashorn.jar
+                        </bootclasspath>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -26,6 +43,13 @@
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.10.7</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org/jaudiotagger -->
         <dependency>
             <groupId>org</groupId>

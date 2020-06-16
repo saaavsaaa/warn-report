@@ -210,11 +210,16 @@
             <version>3.4.14</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-        <dependency>
+<!--         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>23.0</version>
-        </dependency>
+        </dependency> -->
+         <dependency>
+           <groupId>com.google.guava</groupId>
+           <artifactId>guava</artifactId>
+           <version>[24.1.1,)</version>
+         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
         <dependency>

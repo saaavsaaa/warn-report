@@ -29,7 +29,8 @@
                         <verbose />
                         <!-- rt.jar等jar Windows分隔符英文分号,linux分隔符英文冒号  -->
                         <bootclasspath>
-                            C:\Program Files\Java\jdk1.8.0_181/jre/lib/rt.jar;C:\Program Files\Java\jdk1.8.0_181/jre/lib/jce.jar;C:\Program Files\Java\jdk1.8.0_181/jre/lib/jsse.jar;C:\Program Files\Java\jdk1.8.0_181\jre\lib\ext\sunjce_provider.jar;C:\Program Files\Java\jdk1.8.0_181\jre\lib\ext\nashorn.jar
+                            /usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar:/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/jce.jar:/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/jsse.jar:/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/ext/sunjce_provider.jar:/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/ext/nashorn.jar
+                            <!--C:\Program Files\Java\jdk1.8.0_181/jre/lib/rt.jar;C:\Program Files\Java\jdk1.8.0_181/jre/lib/jce.jar;C:\Program Files\Java\jdk1.8.0_181/jre/lib/jsse.jar;C:\Program Files\Java\jdk1.8.0_181\jre\lib\ext\sunjce_provider.jar;C:\Program Files\Java\jdk1.8.0_181\jre\lib\ext\nashorn.jar-->
                         </bootclasspath>
                     </compilerArguments>
                 </configuration>
@@ -43,6 +44,19 @@
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.carrotsearch/java-sizeof -->
+        <dependency>
+            <groupId>com.carrotsearch</groupId>
+            <artifactId>java-sizeof</artifactId>
+            <version>0.0.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>date.iterator.tools</groupId>
+            <artifactId>tools</artifactId>
+            <version>0.1</version>
+        </dependency>
+             
         <!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
         <dependency>
             <groupId>org.apache.ant</groupId>

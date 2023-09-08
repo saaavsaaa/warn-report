@@ -1,8 +1,12 @@
 package cn.tellwhy.server;
 
 import org.junit.Test;
+import util.FileUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by ldb on 2016/6/2.
@@ -69,5 +73,84 @@ public class TestSSH {
         //String exeContent = "/bin/sh -c netstat -anp";
         String exeContent = "cd /usr/local/tomcat/;rm -rf webapps/portal-bos*";
         ssh.execute(exeContent);
+    }
+
+    @Test
+    public void testUbuntuUpload() throws IOException {
+        String waitUpload = "D:\\share\\chinese_speech\\collect\\target1.wav";
+        LinuxExecUtil ssh = new LinuxExecUtil();
+        ssh.connect("10.10.19.94", port, "aaa", "aaa111!!!");
+        ssh.upload(waitUpload, "/home/aaa/call-center/");
+    }
+
+    @Test
+    public void testAWS() throws IOException {
+        List<String> waitRecognizations = new ArrayList<String>(
+                Arrays.asList("pcm_alaw","pcm_f32be","pcm_f32le","pcm_f64be","pcm_f64le","pcm_mulaw","pcm_s16be","pcm_s16le"
+                        ,"pcm_s24be","pcm_s24le","pcm_s32be","pcm_s32le","pcm_s8","pcm_u16be","pcm_u16le","pcm_u24be"
+                        ,"pcm_u24le","pcm_u32be","pcm_u32le","pcm_u8")
+        ) ;
+        String localPath = "D:\\share\\chinese_speech\\collect\\";
+        waitRecognizations = FileUtil.list(localPath);
+        for (String each : waitRecognizations) {
+            try {
+//                String target = each + "target.wav";
+                speechRecognization(localPath, each);
+            } catch (Exception e) {
+                System.out.println(each + ":" + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+//        String exeContent = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/src/onlinebin/online-wav-gmm-decode-faster  --verbose=1 --rt-min=0.8 --rt-max=0.85 " +
+//                "--max-active=4000 --beam=12.0 --acoustic-scale=0.0769 --left-context=3 --right-context=3 " +
+//                "scp:/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/work/input.scp " +
+//                "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/online-data/models/tri4b/final.mdl " +
+//                "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/online-data/models/tri4b/HCLG.fst " +
+//                "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/online-data/models/tri4b/words.txt " +
+//                "'1:2:3:4:5' ark,t:/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/work/trans.txt " +
+//                "ark,t:/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/work/ali.txt " +
+//                "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali/online-data/models/tri4b/final.mat" ;
+//        ssh.execute(exeContent);
+    }
+
+    public void speechRecognization(final String localPath, final String target) throws IOException {
+        String keyPath = "D:\\share\\deep.pem";
+        String host = "ec2-52-82-22-125.cn-northwest-1.compute.amazonaws.com.cn";
+        String localWAV = localPath + target;
+        String basePath = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali";
+        String audioPath = basePath + "/online-data/audio";
+
+        LinuxExecUtil ssh = new LinuxExecUtil();
+        ssh.connect(host, "ubuntu" , "", keyPath);
+
+        ssh.upload(localWAV, audioPath);
+
+        System.out.println(target);
+        String exeContent = "sh " + basePath + "/run_with_conda.sh";//shell脚本全都需要改为全路径
+        ssh.execute(exeContent);
+
+        exeContent = "rm " + audioPath + "/" + target;
+        ssh.execute(exeContent);
+
+        ssh.close();
+    }
+
+    @Test
+    public void testDelAWS() throws IOException {
+        String keyPath = "D:\\share\\deep.pem";
+        String host = "ec2-52-82-22-125.cn-northwest-1.compute.amazonaws.com.cn";
+        String target = "pcm_alaw" + "target.wav";
+        String localWAV = "D:\\share\\chinese_speech\\collect\\" + target;
+        String basePath = "/home/ubuntu/github/kaldi-ali/kaldi-trunk/egs/thchs30/online_demo_tri4b_ali";
+        String audioPath = basePath + "/online-data/audio";
+
+        LinuxExecUtil ssh = new LinuxExecUtil();
+        ssh.connect(host, "ubuntu" , "", keyPath);
+
+        String exeContent = "rm " + audioPath + "/" + target;
+        ssh.execute(exeContent);
+
+        ssh.close();
     }
 }

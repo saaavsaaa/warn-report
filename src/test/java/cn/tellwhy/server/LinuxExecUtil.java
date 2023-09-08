@@ -50,8 +50,7 @@ public class LinuxExecUtil {
             System.out.println("ExitCode: " + sess.getExitStatus());
             sess.close();
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             e.printStackTrace(System.err);
             System.exit(2);
         }
